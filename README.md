@@ -12,7 +12,7 @@ Internet para el desarrollo agrícola de Chile es una iniciativa desarrollada po
 * socket.io
 
 ### UI Framework 
-Angular Material
+Angular Material (bower install angular-material --save)
 
 ### Documentation tool
 ngDocs
