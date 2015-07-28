@@ -493,6 +493,9 @@ module.exports = function (grunt) {
         }
       }
     },
+    ngdocs: {
+      all: ['client/app/**/*.js']
+    },
   });
 
   // Used for delaying livereload until after server has restarted
@@ -610,4 +613,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask( 'ngDocs', ['ngdocs:all']);
 };
