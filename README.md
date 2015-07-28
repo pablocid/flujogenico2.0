@@ -12,10 +12,24 @@ Internet para el desarrollo agrícola de Chile es una iniciativa desarrollada po
 * socket.io
 
 ### UI Framework 
-Angular Material (bower install angular-material --save)
+Angular Material 
+> installation : bower install angular-material --save
 
 ### Documentation tool
 ngDocs
+> installation : npm install grunt-ngdocs --save-dev
+
+Configuration Gruntfile.js
+```
+    grunt.initConfig({
+      ...},
+      ngdocs: {
+            all: ['client/app/**/*.js']
+      },
+    })
+ 
+    grunt.registerTask( 'ngDocs', ['ngdocs:all']);
+```
 
 ### Test framework
 KarmaJS
