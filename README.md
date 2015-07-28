@@ -6,12 +6,16 @@ En Chile, como en otros países, el cultivo y manejo de especies genéticamente 
 Internet para el desarrollo agrícola de Chile es una iniciativa desarrollada por investigadores del Instituto de Investigaciones Agropecuarias donde se recopila el resultado de diversos trabajos, desarrollados en colaboración con otras instituciones chilenas del sector público, para proporcionar información local, metodologías y herramientas científicas que, de manera transparente, faciliten la toma de decisiones en dos áreas de interés: la evaluación de riesgo ambiental de las especies vegetales GM sobre la biodiversidad y la co-existencia entre distintos sistema agrícolas.
 
 ## Tecnologías utilizadas
+
 ###Instalacion con Yeoman
 * ui-router
 * socket.io
+
 ### UI Framework 
 Angular Material
+
 ### Documentation tool
 ngDocs
+
 ### Test framework
 KarmaJS
