@@ -5,7 +5,8 @@ angular.module('flujogenico20App')
     $stateProvider
       .state('main', {
         url: '/',
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'app/main/main/main.html',
+        controller: 'MainCtrl',
+        controllerAs:'mainCtrl'
       });
   });
