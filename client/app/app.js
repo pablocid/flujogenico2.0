@@ -7,6 +7,7 @@ angular.module('flujogenico20App', [
   'btford.socket-io',
   'ui.router',
   'ngMaterial',
+  'ngMessages'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
@@ -16,6 +17,44 @@ angular.module('flujogenico20App', [
     $httpProvider.interceptors.push('authInterceptor');
   })
   .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('other')
+      .primaryPalette('blue', {
+        'default': '500', // by default use shade 400 from the pink palette for primary intentions
+        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+        'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      });
+    $mdThemingProvider.theme('main')
+      .primaryPalette('blue', {
+        'default': '500', // by default use shade 400 from the pink palette for primary intentions
+        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+        'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      })
+      // If you specify less than all of the keys, it will inherit from the
+      // default shades
+      .accentPalette('purple', {
+        'default': '500' // use shade 200 for default, and keep all other shades the same
+      })
+      .backgroundPalette('blue',{
+        'default':'500'
+      });
+    $mdThemingProvider.theme('footer')
+      .primaryPalette('blue-grey', {
+        'default': '500', // by default use shade 400 from the pink palette for primary intentions
+        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+        'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      })
+      // If you specify less than all of the keys, it will inherit from the
+      // default shades
+      .accentPalette('purple', {
+        'default': '500' // use shade 200 for default, and keep all other shades the same
+      })
+      .backgroundPalette('blue-grey',{
+        'default':'500'
+      });
+
     $mdThemingProvider.theme('flora')
       .primaryPalette('light-green', {
         'default': '800', // by default use shade 400 from the pink palette for primary intentions
@@ -27,6 +66,9 @@ angular.module('flujogenico20App', [
       // default shades
       .accentPalette('purple', {
         'default': '200' // use shade 200 for default, and keep all other shades the same
+      })
+      .backgroundPalette('light-green',{
+        'default':'800'
       });
     $mdThemingProvider.theme('fauna')
       .primaryPalette('orange', {
@@ -39,6 +81,9 @@ angular.module('flujogenico20App', [
       // default shades
       .accentPalette('purple', {
         'default': '200' // use shade 200 for default, and keep all other shades the same
+      })
+      .backgroundPalette('orange',{
+        'default':'800'
       });
     $mdThemingProvider.theme('cira')
       .primaryPalette('red', {
@@ -46,6 +91,9 @@ angular.module('flujogenico20App', [
         'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
         'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
         'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      })
+      .backgroundPalette('red',{
+        'default':'500'
       })
       // If you specify less than all of the keys, it will inherit from the
       // default shades
@@ -65,6 +113,21 @@ angular.module('flujogenico20App', [
         'default': '500' // use shade 200 for default, and keep all other shades the same
       })
       .backgroundPalette('blue',{
+        'default':'500'
+      });
+    $mdThemingProvider.theme('settings')
+      .primaryPalette('purple', {
+        'default': '500', // by default use shade 400 from the pink palette for primary intentions
+        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+        'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      })
+      // If you specify less than all of the keys, it will inherit from the
+      // default shades
+      .accentPalette('purple', {
+        'default': '500' // use shade 200 for default, and keep all other shades the same
+      })
+      .backgroundPalette('purple',{
         'default':'500'
       });
   })

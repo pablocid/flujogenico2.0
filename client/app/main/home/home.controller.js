@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .controller('MainCtrl', function (IconService) {
+  .controller('HomeCtrl', function (IconService) {
     this.icons = IconService;
   });
