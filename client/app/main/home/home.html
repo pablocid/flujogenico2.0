@@ -1,86 +1,6 @@
-<style>
-  .indigo{
-    background-color: #3F51B5;
-  }
-  .electblue{
-    background-color: #2196f3;
-  }
-  .blue{
-    background-color: #1e88e5;
-  }
-  .bluegrey{
-    background-color: #607d8b;
-  }
-  .lightgray{
-    background-color: #f5f5f5;
-  }
-  .green{
-    background-color: #558B2F;
-  }
-  .amarillo{
-    background-color: #EF6C00;
-  }
-  .rojo{
-    background-color: #f44336;
-  }
-  button.md-raised.rojobotton{
-    background-color: #f44336;
-    color: #ffffff;
-  }
-  button.md-raised.rojobotton > .md-ripple-container {
-    background-color: #f44336;
-  }
-  .whitefont{
-    color:#ffffff;
-  }
-  .padding25{
-    padding: 25px;
-  }
-  .padding50{
-    padding: 50px;
-  }
-  .paddingbtn{
-    margin-top: 20px;
-    padding: 20px;
-  }
-  .putright{
-    text-align: right;
-  }
-  .ubuntu{
-    font-family:Ubuntu;
-  }
-  .title{
-    font-size: 50px;
-  }
-  .subtitle{
-    font-size: 25px;
-  }
-  .titlesec{
-    font-size: 35px;
-    padding: 15px;
-  }
-
-</style>
-
-
-<div layout="column" >
-  <md-toolbar
-    class="md-whiteframe-z2 blue" >
-    <div class="md-toolbar-tools" layout="row" layout-align="center">
-
-    </div>
-    <md-button class=" md-fab md-fab-top-left"style="background-color: #FFC107" >
-      <md-icon class="material-icons">menu</md-icon>
-    </md-button>
-  </md-toolbar>
-</div>
-
-
-
-
-<div
+<md-content
   layout="row"
-  class="electblue ubuntu">
+  md-theme="main">
   <div
     flex="33"
     flex-sm="20"
@@ -93,33 +13,33 @@
     <div class="title">CIRA</div>
     <div class="subtitle">Cálculo del Índice de Riesgo Ambiental</div>
   </div>
-</div>
+</md-content>
 
 
 
-<div layout="row" layout-align="center start" class="ubuntu">
+<div layout="row" layout-align="center start">
   <div flex-gt-lg="100" flex="100">
     <div layout="row"  layout-wrap>
       <!-- SECCIONES -->
 
       <!-- ? -->
-      <div flex="33" flex-sm="100" flex-md="50" class="bluegrey whitefont padding25">
+      <md-content flex-sm="100" flex-md="50" flex-gt-md="33" class="bluegrey whitefont padding25">
         <div layout="column" layout-align="start center">
           <div class="titlesec">¿Qué es CIRA?</div>
           <div layout="row" layout-align="center center">
             <vector-icon flex-gt-md="50" flex="50"  name="question" fill="#607d8b"></vector-icon>
           </div>
-          <div flex="100" flex-sm="75">
+          <div flex="100" flex-sm="75" >
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aliquid autem commodi ipsa ipsam laboriosam maiores neque nihil nobis possimus quae, reprehenderit similique, sint sit tempore veniam, voluptas voluptatum?
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised"> más información > </md-button>
+            <md-button > más información > </md-button>
           </div>
         </div>
-      </div>
+      </md-content>
 
       <!-- App -->
-      <div flex-gt-sm="66" flex-sm="100" class="lightgray padding25" md-theme="cira">
+      <md-content flex-sm="100" flex-md="50" flex-gt-md="66" class="lightgray padding25" >
         <div layout="column" layout-align="center center">
           <div class="titlesec">Herramienta</div>
           <div layout="row" layout-align="center center">
@@ -131,13 +51,13 @@
             </div>
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised md-primary">Entrar</md-button>
+            <md-button >Entrar</md-button>
           </div>
         </div>
-      </div>
+      </md-content>
 
       <!-- flora -->
-      <div flex="33" flex-sm="100" flex-md="50" class="green whitefont padding25" md-theme="flora">
+      <md-content flex-sm="100" flex-gt-sm="50"  flex-gt-md="25" class="green whitefont padding25" md-theme="flora">
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center">
             <vector-icon flex-gt-md="50" flex="50"  name="flora" fill="#558B2F"></vector-icon>
@@ -147,13 +67,13 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aliquid autem commodi ipsa ipsam laboriosam maiores neque nihil nobis possimus quae, reprehenderit similique, sint sit tempore veniam, voluptas voluptatum?
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised "> Entrar </md-button>
+            <md-button > Entrar </md-button>
           </div>
         </div>
-      </div>
+      </md-content>
 
       <!-- polinizador -->
-      <div flex="33" flex-sm="100" flex-md="50" class="amarillo whitefont padding25">
+      <md-content flex-sm="100" flex-gt-sm="50"  flex-gt-md="25" class=" whitefont padding25" md-theme="fauna">
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center">
             <vector-icon flex-gt-md="50" flex="50"  name="fauna" fill="#EF6C00"></vector-icon>
@@ -163,13 +83,13 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aliquid autem commodi ipsa ipsam laboriosam maiores neque nihil nobis possimus quae, reprehenderit similique, sint sit tempore veniam, voluptas voluptatum?
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised"> Entrar </md-button>
+            <md-button > Entrar </md-button>
           </div>
         </div>
-      </div>
+      </md-content>
 
       <!-- Escalas e índices -->
-      <md-content flex="33" flex-sm="100" flex-md="50" class="whitefont padding25" md-theme="escala">
+      <md-content flex-sm="100" flex-gt-sm="50"  flex-gt-md="25" class="whitefont padding25" md-theme="escala">
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center">
             <vector-icon flex-gt-md="50" flex="50"  name="escala" fill="#607d8b"></vector-icon>
@@ -179,13 +99,13 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aliquid autem commodi ipsa ipsam laboriosam maiores neque nihil nobis possimus quae, reprehenderit similique, sint sit tempore veniam, voluptas voluptatum?
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised"> Entrar </md-button>
+            <md-button > Entrar </md-button>
           </div>
         </div>
       </md-content>
 
-      <!-- polinizador -->
-      <div flex="33" flex-sm="100" flex-md="50" class="indigo whitefont padding25">
+      <!-- Settings -->
+      <md-content flex-sm="100" flex-gt-sm="50"  flex-gt-md="25" class=" whitefont padding25" md-theme="settings">
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center">
             <vector-icon flex-gt-md="50" flex="50"  name="settings" fill="#607d8b"></vector-icon>
@@ -195,10 +115,10 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias aliquid autem commodi ipsa ipsam laboriosam maiores neque nihil nobis possimus quae, reprehenderit similique, sint sit tempore veniam, voluptas voluptatum?
           </div>
           <div class="paddingbtn">
-            <md-button class="md-raised"> Entrar </md-button>
+            <md-button > Entrar </md-button>
           </div>
         </div>
-      </div>
+      </md-content>
 
 
 

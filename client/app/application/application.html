@@ -1,0 +1,46 @@
+<md-content layout="row" layout-align="center start" md-theme="cira">
+  <div flex-gt-lg="100" flex="100">
+    <div layout="row"  layout-wrap>
+      <!-- SECCIONES -->
+
+      <!-- side -->
+      <div flex="33" flex-sm="100" flex-md="40" class="whitefont padding25">
+        <div layout="column" layout-align="start center">
+          <div layout="row" layout-align="center center" layout-wrap>
+
+            <vector-icon flex="30"  name="cira" fill="#f44336"></vector-icon><div class="titlesec">CIRA</div>
+          </div>
+          <div flex="100" flex-sm="75">
+            <ul>
+              <li>Tipo de evaluación</li>
+              <li>Especie seleccionada</li>
+              <li>Alcance del análisis</li>
+            </ul>
+          </div>
+          <div flex="100" flex-sm="75">
+            <div ui-view="info"></div>
+          </div>
+          <div class="paddingbtn">
+            <md-button> Realizar otro análisis </md-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- main -->
+      <div flex-gt-sm="66" flex-sm="100" flex-md="60" class="lightgray padding25" md-theme="cira">
+        <div layout="column" layout-align="center center">
+          <div layout="row" layout-align="center center">
+            <div flex="100" class="titlesec" ui-view="title"></div>
+          </div>
+          <div layout="row" layout-align="center center">
+            <div flex="100" ui-view="description"></div>
+          </div>
+          <div layout="row" layout-align="center start">
+            <div ui-view="content"></div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN SECCIONES -->
+    </div>
+  </div>
+</md-content>
