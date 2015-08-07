@@ -1,36 +1,8 @@
-.indigo{
-  background-color: #3F51B5;
-}
-.electblue{
-  background-color: #2196f3;
-}
-.blue{
-  background-color: #1e88e5;
-}
-.bluegrey{
-  background-color: #607d8b;
-}
-.lightgray{
-  background-color: #f5f5f5;
-}
-.green{
-  background-color: #558B2F;
-}
-.amarillo{
-  background-color: #EF6C00;
-}
-.rojo{
-  background-color: #f44336;
-}
-button.md-raised.rojobotton{
-  background-color: #f44336;
-  color: #ffffff;
-}
-button.md-raised.rojobotton > .md-ripple-container {
-  background-color: #f44336;
-}
 .whitefont{
   color:#ffffff;
+}
+.padding15{
+  padding: 15px;
 }
 .padding25{
   padding: 25px;
@@ -39,8 +11,8 @@ button.md-raised.rojobotton > .md-ripple-container {
   padding: 50px;
 }
 .paddingbtn{
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 10px;
+  padding: 10px;
 }
 .putright{
   text-align: right;
@@ -49,12 +21,16 @@ button.md-raised.rojobotton > .md-ripple-container {
   font-family: 'Ubuntu', sans-serif;
 }
 .title{
-  font-size: 50px;
+  font-size: 45px;
 }
 .subtitle{
-  font-size: 25px;
+  font-size: 18px;
 }
 .titlesec{
-  font-size: 35px;
+  font-size: 20px;
   padding: 15px;
+}
+.paragraphsec{
+  font-size: 13px;
+  padding: 10px;
 }

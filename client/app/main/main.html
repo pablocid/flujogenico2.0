@@ -1,9 +1,21 @@
 <!--Barra de menú-->
 <md-toolbar
   md-theme="main"
-  class="md-whiteframe-z2 " >
+  class="md-whiteframe-z2">
   <div class="md-toolbar-tools" layout="row" layout-align="center">
-
+    <md-menu md-theme="other">
+      <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <vector-icon name="translate" fill="#2196F3"></vector-icon>
+      </md-button>
+      <md-menu-content width="2">
+        <md-menu-item>
+          <md-button ng-click="mainCtrl.setLang('es')">Español</md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="mainCtrl.setLang('en')">English</md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </div>
   <md-button
     ng-click="mainCtrl.toggleLeft()"
@@ -13,6 +25,7 @@
     <md-icon class="material-icons">menu</md-icon>
 
   </md-button>
+
 </md-toolbar>
 
 <!--Main content-->
@@ -20,54 +33,52 @@
 
 <!-- footer -->
 <md-content md-theme="footer">
-  <footer>
-    <h1></h1>
+  <footer layout="row">
+    <div style="height: 100px"></div>
+    <!--
+    <md-button class="md-primary md-hue-1">Primary 1</md-button>
+    <md-button class="md-primary md-hue-2">Primary 2</md-button>
+    <md-button class="md-primary md-hue-3">Primary 3</md-button>
+    <md-button class="md-warn md-hue-1 md-raised">Warn 1</md-button>
+    <md-button class="md-warn md-hue-2 md-raised">Warn 2</md-button>
+    <md-button class="md-warn md-hue-3">Warn 3</md-button>
+    <md-button class="md-accent md-hue-1">Accent 1</md-button>
+    <md-button class="md-accent md-hue-2">Accent 2</md-button>
+    <md-button class="md-accent md-hue-3">Accent 3</md-button>-->
   </footer>
 </md-content>
 
+
 <!-- sidenav -->
-<md-sidenav
-  class=" md-whiteframe-z2"
-  md-component-id="left"
-  md-swipe-left="mainCtrl.toggleLeft()"><!-- md-is-locked-open="$mdMedia('gt-md')"-->
+  <md-sidenav
+    id="misidenav"
+    class="md-sidenav-left md-whiteframe-z2"
+    md-component-id="left"
+    md-swipe-left="mainCtrl.toggleLeft()">
 
-  <md-toolbar md-theme="main" layout="row" layout-align="center center">
-    <p class="md-title">Menú</p>
+    <md-toolbar md-theme="main" layout="row" layout-align="center center">
+      <p class="md-title">Menú</p>
 
-    <md-button ng-click="mainCtrl.toggleLeft()" hide-gt-md>
-      <md-icon md-font-library="material-icons" >close</md-icon>
-    </md-button>
-  </md-toolbar>
+      <md-button ng-click="mainCtrl.toggleLeft()" hide-gt-md>
+        <md-icon md-font-library="material-icons" >close</md-icon>
+      </md-button>
+    </md-toolbar>
 
-  <md-content layout-padding >
+    <md-content layout-padding >
 
-    <md-list>
-      <!--<md-subheader class="md-no-sticky">Secciones</md-subheader>-->
-      <md-list-item
-        ng-repeat="item in mainCtrl.todos"
-        alt="{{item.title}}"
-        class="md-2-line"
-        >
-        <md-button class="md-no-style md-button" ui-sref-active="md-whiteframe-z1" ui-sref="{{item.sref}}" ng-click="mainCtrl.close('left')">
-          <div layout="row" layout-align="start center" layout-margin>
-            <div flex="25">
-              <vector-icon layout="row" layout-align="center center" name="{{item.icon}}" fill="{{item.color}}"></vector-icon>
-            </div>
-            <div
-              flex
-              class="md-list-item-text">
-              <p>{{item.title}}</p>
-            </div>
+      <md-list>
+        <md-list-item md-no-ink="false" class="md-2-line" ng-repeat="item in mainCtrl.todos" ui-sref-active="md-whiteframe-z1" ng-click="mainCtrl.close('left'); mainCtrl.goToState(item.sref)">
+          <vector-icon layout="row" class="md-avatar" layout-align="center center" name="{{item.icon}}" fill="{{item.color}}"></vector-icon>
+          <div class="md-list-item-text">
+            <p>{{ item.title }}</p>
           </div>
-        </md-button>
-      </md-list-item>
+        </md-list-item>
+      </md-list>
 
-    </md-list>
+      <md-button ng-click="mainCtrl.close('left')" class=" md-raised" hide-gt-md>
+        Close
+      </md-button>
 
-    <md-button ng-click="mainCtrl.close('left')" class=" md-raised" hide-gt-md>
-      Close
-    </md-button>
+    </md-content>
 
-  </md-content>
-
-</md-sidenav>
+  </md-sidenav>
