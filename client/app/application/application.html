@@ -8,20 +8,18 @@
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center" layout-wrap>
 
-            <vector-icon flex="30"  name="cira" fill="#f44336"></vector-icon><div class="titlesec">{{mainCtrl.tc.std.cira}}</div>
+            <vector-icon flex="30"  name="cira" fill="{{mainCtrl.colors.cira}}"></vector-icon><div class="titlesec">{{mainCtrl.tc.std.cira}}</div>
           </div>
           <div flex="100" flex-sm="75">
-            <ul>
-              <li>Tipo de evaluación</li>
-              <li>Especie seleccionada</li>
-              <li>Alcance del análisis</li>
-            </ul>
+            <ol>
+              <li ng-repeat="paso in appCtrl.dc.steps">{{mainCtrl.tc.app[paso.title]}}: <b>{{paso.name || mainCtrl.tc.app[paso.nameVar]}}</b> </li>
+            </ol>
           </div>
           <div flex="100" flex-sm="75">
             <div ui-view="info"></div>
           </div>
           <div class="paddingbtn">
-            <md-button> Realizar otro análisis </md-button>
+            <md-button ng-click="appCtrl.starAgain()">{{mainCtrl.tc.app.newStart}}</md-button>
           </div>
         </div>
       </div>

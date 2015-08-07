@@ -3,6 +3,9 @@
 angular.module('flujogenico20App')
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('other')
+      .primaryPalette('grey',{
+        'default':'800'
+      })
       .backgroundPalette('grey',{
         'default':'100'
       });
