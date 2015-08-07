@@ -1,18 +1,18 @@
-<div layout="row" >
+<md-content layout="row">
   <div flex layout="column" >
     <div layout="row" layout-align="center center" >
-      <vector-icon flex="33" name="nacional" fill="#424242"></vector-icon>
+      <vector-icon flex="33" name="nacional" fill="{{mainCtrl.colors.reachIcon}}"></vector-icon>
     </div>
 
-    <md-button flex class="md-primary md-button" ng-click="reachCtrl.selectedReach('Nacional')">Nivel Nacional</md-button>
+    <md-button flex class="md-primary md-button" ng-click="appCtrl.selectedReach('reachCtry')">{{mainCtrl.tc.app.reachCtry}}</md-button>
   </div>
 
   <div flex layout="column" >
     <div layout="row" layout-align="center center" >
-      <vector-icon flex="33" name="local" fill="#424242"></vector-icon>
+      <vector-icon flex="33" name="local" fill="{{mainCtrl.colors.reachIcon}}"></vector-icon>
     </div>
 
-    <md-button flex class="md-primary" ng-click="reachCtrl.selectedReach('Local')">Nivel Local</md-button>
+    <md-button flex class="md-primary" ng-click="appCtrl.selectedReach('reachLocal')">{{mainCtrl.tc.app.reachLocal}}</md-button>
   </div>
 
-</div>
+</md-content>

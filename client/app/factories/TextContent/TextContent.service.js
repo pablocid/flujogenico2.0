@@ -30,12 +30,19 @@ angular.module('flujogenico20App')
       {section:'app',name:'evalTitle',es:'Tipo de Evaluación',en:'Evaluation type'},
       {section:'app',name:'evalDescript',es:'Puedes elegir entre dos tipos de evaluaciones. El análisis de "Coexistencia" es una evaluación que analiza el potencial de cruzamiento entre especies que se encuentran dentro de un sistema agrícola. Por otro lado, el análisis de "Biodiversidad" consiste en evaluar el potencial de cruzamiento y la posible pérdida de biodiversidad asociada a una especie agrícola que se introduce y otra especie que se encuentra fuera del sistema agrícola. ',en:'You can choose between two types of evaluations. The analysis of "Coexistence" is an assessment that analyzes the out-crossing potential between species found within a farming system. On the other hand, the analysis of "Biodiversity" is evaluating the out-crossing potential and the possible loss of biodiversity associated with agricultural species and other introduced or native species found outside of the farming system.'},
       {section:'app',name:'spSearchTitle',es:'Busca una especie de uso agrícola',en:'Search a farming species'},
+      {section:'app',name:'evalTypeStep',es:'Tipo de análisis',en:'Type of analysis'},
       {section:'app',name:'spSearchDescript',es:'Elige una especie',en:'Search a farming species'},
+      {section:'app',name:'spSearchStep',es:'Especie seleccionada',en:'Selected species'},
       {section:'app',name:'scientificname',es:'nombre científico',en:'scientific name'},
       {section:'app',name:'required',es:'<b>Debes</b> ingresar un nombre cientifico',en:'You <b>must</b> a scientific name.'},
       {section:'app',name:'reachTitle',es:'¿A qué nivel deseas analizar la especie cultivada?',en:'What level you want to analyze the cultivated species?'},
-      {section:'app',name:'reachDescript',es:'',en:''}
-
+      {section:'app',name:'reachDescript',es:'',en:''},
+      {section:'app',name:'reachStep',es:'Alcance del análisis',en:'Reach of analysis'},
+      {section:'app',name:'reachCtry',es:'Nivel nacional',en:'National scale'},
+      {section:'app',name:'reachLocal',es:'Nivel local',en:'Locally result'},
+      {section:'app',name:'newStart',es:'Realiza otro análisis',en:'Make another analysis'},
+      {section:'app',name:'resultTitle',es:'Resultado del análisis', en:'Analysis results'},
+      {section:'app',name:'resultTitleCountry',es:'Resultado a nivel nacional', en:'National scale result'}
 
     ];
 

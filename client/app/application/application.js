@@ -6,7 +6,8 @@ angular.module('flujogenico20App')
       .state('main.application', {
         url: '/application',
         templateUrl: 'app/application/application.html',
-        controller: 'ApplicationCtrl'
+        controller: 'ApplicationCtrl',
+        controllerAs:'appCtrl'
       })
       .state('main.application.evalType', {
         url: '/eval-type',
@@ -60,49 +61,47 @@ angular.module('flujogenico20App')
           }
         }
       })
-      .state('main.application.resultLocal', {
+      .state('main.application.result', {
+        url: '/result',
+        views:{
+          content:{
+            controller:function(DataSession){
+              DataSession.goToResult();
+            }
+          }
+        }
+      })
+      .state('main.application.result-nationalscale', {
+        url: '/result-national-scale',
+        views:{
+          info:{
+            //template:'<h2>Info view</h2>'
+          },
+          title:{
+            template:'{{mainCtrl.tc.app.resultTitleCountry}}'
+          },
+          description:{
+            template:'<div class="padding25"></div>'
+          },
+          content:{
+            templateUrl:'app/application/results/results.national.html'
+          }
+        }
+      })
+      .state('main.application.result-local', {
         url: '/result-local',
         views:{
           info:{
             //template:'<h2>Info view</h2>'
           },
           title:{
-            template:'Resultados locales'
+            template:'{{mainCtrl.tc.app.resultTitleLocal}}'
           },
           description:{
             template:'<div class="padding25"></div>'
           },
           content:{
-            template:'<ul>' +
-            '<li>Especie</li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '</ul>'
-          }
-        }
-      })
-      .state('main.application.resultCountry', {
-        url: '/result-country',
-        views:{
-          info:{
-            //template:'<h2>Info view</h2>'
-          },
-          title:{
-            template:'Resultados nacionales'
-          },
-          description:{
-            template:'<div class="padding25"></div>'
-          },
-          content:{
-            template:'<ul>' +
-            '<li>Especie</li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '<li></li>' +
-            '</ul>'
+            templateUrl:'app/application/results/results.local.html'
           }
         }
       });

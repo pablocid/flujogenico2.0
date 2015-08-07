@@ -26,7 +26,8 @@ angular.module('flujogenico20App')
       other:mdThemeColors.getColorFactory('background','settings').default,
       about:mdThemeColors.getColorFactory('background','about').default,
       tool:mdThemeColors.getColorFactory('background','tool').default,
-      escala:mdThemeColors.getColorFactory('background','escala').default
+      escala:mdThemeColors.getColorFactory('background','escala').default,
+      reachIcon:mdThemeColors.getColorFactory('primary','other').default
     };
 
     console.log(self.colors);

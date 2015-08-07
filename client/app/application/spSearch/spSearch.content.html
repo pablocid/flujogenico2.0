@@ -1,18 +1,18 @@
 <md-content class="md-padding" >
-  <form ng-submit="$event.preventDefault()" name="searchForm">
+  <form ng-submit="appCtrl.submitSpSearch()" name="searchForm">
     <div layout="row" layout-align="center center" layout-wrap>
       <md-autocomplete flex=100 flex-gt-md="50"
                        required
                        md-input-name="autocompleteField"
-                       md-no-cache="ctrl.noCache"
-                       md-selected-item="ctrl.selectedItem"
-                       md-search-text="ctrl.searchText"
+                       md-no-cache="appCtrl.noCache"
+                       md-selected-item="appCtrl.spDonorSelected"
+                       md-search-text="appCtrl.searchText"
                        md-search-text-change="null"
-                       md-items="item in ctrl.querySearch(ctrl.searchText)"
-                       md-item-text="item.display"
+                       md-items="item in appCtrl.querySearch(appCtrl.searchText)"
+                       md-item-text="item.name"
                        md-floating-label="{{mainCtrl.tc.app.scientificname}}">
         <md-item-template>
-          <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+          <span md-highlight-text="appCtrl.searchText">{{item.name}}</span>
         </md-item-template>
         <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
           <div ng-message="required"><span ng-bind-html="mainCtrl.tc.app.required"></span></div>
