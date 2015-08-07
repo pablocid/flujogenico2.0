@@ -1,8 +1,36 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .controller('MainCtrl', function ($mdIcon,$mdSidenav,$mdUtil, $timeout, $log, $http, $q,$state) {
+  .controller('MainCtrl', function ($mdIcon,$mdSidenav,$mdUtil, $timeout, $log, $http, $q,$state, TextContent, $mdTheming,mdThemeColors) {
     var self = this;
+
+    self.isOpen = false;
+    self.demo = {
+      isOpen: false,
+      count: 0,
+      selectedAlignment: 'md-left'
+    };
+    //content
+    TextContent.setLang();
+
+    self.tc = TextContent;
+
+    // colors
+    self.colors = {
+      footer:mdThemeColors.getColorFactory('background','footer').default,
+      flora:mdThemeColors.getColorFactory('background','flora').default,
+      fauna:mdThemeColors.getColorFactory('background','fauna').default,
+      settings:mdThemeColors.getColorFactory('background','settings').default,
+      main:mdThemeColors.getColorFactory('background','main').default,
+      cira:mdThemeColors.getColorFactory('background','cira').default,
+      other:mdThemeColors.getColorFactory('background','settings').default,
+      about:mdThemeColors.getColorFactory('background','about').default,
+      tool:mdThemeColors.getColorFactory('background','tool').default,
+      escala:mdThemeColors.getColorFactory('background','escala').default
+    };
+
+    console.log(self.colors);
+
     self.toggleLeft = buildToggler('left');
     self.toggleRight = buildToggler('right');
 
@@ -27,16 +55,16 @@ angular.module('flujogenico20App')
       $mdSidenav('left').toggle();
     };
     self.goToState = function(state){
-      $state.go('landing'+state);
+      $state.go(state);
     };
 
     self.todos = [
-      {title:'Home', description:'', icon:'home',sref:'.home', color:'#31beff'},
-      {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'.application.evalType', color:'#f44336'},
-      {title:'Flora vascular chilena', description:'La descripcion', icon:'flora',sref:'.flora', color:'#8bc34a'},
-      {title:'Fauna de polinizadores chilenos', description:'La descripcion', icon:'fauna',sref:'.polinizadores', color:'#fbb531'},
-      {title:'Clasificaciones y escala de riesgo', description:'La descripcion', icon:'escala',sref:'.escalas', color:'#f50057'},
-      {title:'Sobre el sistema computacional', description:'La descripcion', icon:'settings',sref:'.sistema', color:'#0091ea'}
+      {title:'Home', description:'', icon:'home',sref:'main.home', color:self.colors.main},
+      {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
+      {title:'Flora vascular chilena', description:'La descripcion', icon:'flora',sref:'main.flora', color:self.colors.flora},
+      {title:'Fauna de polinizadores chilenos', description:'La descripcion', icon:'fauna',sref:'main.polinizadores', color:self.colors.fauna},
+      {title:'Clasificaciones y escala de riesgo', description:'La descripcion', icon:'escala',sref:'main.escalas', color:self.colors.escala},
+      {title:'Sobre el sistema computacional', description:'La descripcion', icon:'settings',sref:'main.sistema', color:self.colors.settings}
     ];
 
     self.close = function (id) {
@@ -45,4 +73,10 @@ angular.module('flujogenico20App')
           $log.debug("close LEFT is done");
         });
     };
+    console.log(TextContent);
+    self.setLang = function (lang) {
+      TextContent.setLang(lang);
+      console.log(TextContent);
+    };
+
   });

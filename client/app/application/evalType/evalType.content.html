@@ -6,7 +6,7 @@
       </div>
 
       <md-button  class="" ng-click="tipoEvalCtrl.selectedTipoEval('Coexistencia')">
-        Coexistencia <span hide-sm>agrícola</span>
+        {{mainCtrl.tc.app.coex}}
       </md-button>
     </div>
     <div layout="column" >
@@ -14,7 +14,7 @@
         <vector-icon flex="50"  name="biodiversidad" fill="#424242"></vector-icon>
       </div>
       <md-button flex class="" ng-click="tipoEvalCtrl.selectedTipoEval('Biodiversidad')">
-        Biodiversidad
+        {{mainCtrl.tc.app.bio}}
       </md-button>
     </div>
   </div>

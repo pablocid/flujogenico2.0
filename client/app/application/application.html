@@ -8,7 +8,7 @@
         <div layout="column" layout-align="start center">
           <div layout="row" layout-align="center center" layout-wrap>
 
-            <vector-icon flex="30"  name="cira" fill="#f44336"></vector-icon><div class="titlesec">CIRA</div>
+            <vector-icon flex="30"  name="cira" fill="#f44336"></vector-icon><div class="titlesec">{{mainCtrl.tc.std.cira}}</div>
           </div>
           <div flex="100" flex-sm="75">
             <ul>
@@ -27,19 +27,17 @@
       </div>
 
       <!-- main -->
-      <div flex-gt-sm="66" flex-sm="100" flex-md="60" class="lightgray padding25" md-theme="cira">
+      <md-content flex-gt-sm="66" flex-sm="100" flex-md="60" class="padding25" md-theme="tool">
         <div layout="column" layout-align="center center">
           <div layout="row" layout-align="center center">
             <div flex="100" class="titlesec" ui-view="title"></div>
           </div>
-          <div layout="row" layout-align="center center">
+          <md-content layout="row" layout-align="center center">
             <div flex="100" ui-view="description"></div>
-          </div>
-          <div layout="row" layout-align="center start">
-            <div ui-view="content"></div>
-          </div>
+          </md-content>
+          <div style="width: 100% !important;" ui-view="content"></div>
         </div>
-      </div>
+      </md-content>
       <!-- FIN SECCIONES -->
     </div>
   </div>

@@ -12,13 +12,13 @@ angular.module('flujogenico20App')
         url: '/eval-type',
         views:{
           info:{
-            template:'<h2>Info view</h2>'
+            //template:'<h2>Info view</h2>'
           },
           title:{
-            template:'Tipo de Evaluación'
+            template:'{{mainCtrl.tc.app.evalTitle}}'
           },
           description:{
-            template:'<div class="padding25">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto atque, aut beatae corporis doloremque ducimus eos error magnam mollitia nihil odio perferendis quas sequi, suscipit totam voluptate? Eos, magnam?</div>'
+            template:'<div class="padding25">{{mainCtrl.tc.app.evalDescript}}</div>'
           },
           content:{
             templateUrl:'app/application/evalType/evalType.content.html'
@@ -29,16 +29,17 @@ angular.module('flujogenico20App')
         url: '/sp-search',
         views:{
           info:{
-            template:'<h2>Info view</h2>'
+            //template:'<h2>Info view</h2>'
           },
           title:{
-            template:'Busca una especie de uso agrícola'
+            template:'{{mainCtrl.tc.app.spSearchTitle}}'
           },
           description:{
-            template:'<div class="padding25">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto atque, aut beatae corporis doloremque ducimus eos error magnam mollitia nihil odio perferendis quas sequi, suscipit totam voluptate? Eos, magnam?</div>'
+            template:'<div class="padding25">{{mainCtrl.tc.app.spSearchDescript}}</div>'
           },
           content:{
-            templateUrl:'app/application/spSearch/spSearch.content.html'
+            templateUrl:'app/application/spSearch/spSearch.content.html',
+
           }
         }
       })
@@ -46,30 +47,53 @@ angular.module('flujogenico20App')
         url: '/reach',
         views:{
           info:{
-            template:'<h2>Info view</h2>'
+            //template:'<h2>Info view</h2>'
           },
           title:{
-            template:'¿A qué nivel deseas analizar la especie cultivada?'
+            template:'{{mainCtrl.tc.app.reachTitle}}'
           },
           description:{
-            template:'<div class="padding25">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto atque, aut beatae corporis doloremque ducimus eos error magnam mollitia nihil odio perferendis quas sequi, suscipit totam voluptate? Eos, magnam?</div>'
+            template:'<div class="padding25"></div>'
           },
           content:{
             templateUrl:'app/application/reach/reach.content.html'
           }
         }
       })
-      .state('main.application.result', {
-        url: '/result',
+      .state('main.application.resultLocal', {
+        url: '/result-local',
         views:{
           info:{
-            template:'<h2>Info view</h2>'
+            //template:'<h2>Info view</h2>'
           },
           title:{
-            template:'Resultados'
+            template:'Resultados locales'
           },
           description:{
-            template:'<div class="padding25">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto atque, aut beatae corporis doloremque ducimus eos error magnam mollitia nihil odio perferendis quas sequi, suscipit totam voluptate? Eos, magnam?</div>'
+            template:'<div class="padding25"></div>'
+          },
+          content:{
+            template:'<ul>' +
+            '<li>Especie</li>' +
+            '<li></li>' +
+            '<li></li>' +
+            '<li></li>' +
+            '<li></li>' +
+            '</ul>'
+          }
+        }
+      })
+      .state('main.application.resultCountry', {
+        url: '/result-country',
+        views:{
+          info:{
+            //template:'<h2>Info view</h2>'
+          },
+          title:{
+            template:'Resultados nacionales'
+          },
+          description:{
+            template:'<div class="padding25"></div>'
           },
           content:{
             template:'<ul>' +
