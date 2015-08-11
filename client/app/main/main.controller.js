@@ -30,7 +30,6 @@ angular.module('flujogenico20App')
       reachIcon:mdThemeColors.getColorFactory('primary','other').default
     };
 
-    console.log(self.colors);
 
     self.toggleLeft = buildToggler('left');
     self.toggleRight = buildToggler('right');
@@ -74,10 +73,8 @@ angular.module('flujogenico20App')
           $log.debug("close LEFT is done");
         });
     };
-    console.log(TextContent);
     self.setLang = function (lang) {
       TextContent.setLang(lang);
-      console.log(TextContent);
     };
-
+    self.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
   });

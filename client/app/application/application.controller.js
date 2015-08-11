@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .controller('ApplicationCtrl', function (DataSession, Flora) {
+  .controller('ApplicationCtrl', function (DataSession, Flora, $state) {
     var self = this;
+    self.state = $state;
 
     self.starAgain = function(){
       self.spDonorSelected='';
@@ -10,7 +11,7 @@ angular.module('flujogenico20App')
       DataSession.eraseSteps();
     };
 
-    self.dc = DataSession;
+    self.DS = DataSession;
 
     if(DataSession.steps.length===0){self.starAgain();}
 
@@ -20,6 +21,7 @@ angular.module('flujogenico20App')
 
     this.submitSpSearch = function(){
       var item = self.spDonorSelected;
+      console.log(item);
       DataSession.pushStep({id:2,title:'spSearchStep', name:item.name,nameVar:item,to:'main.application.reach'});
     };
 
@@ -32,5 +34,7 @@ angular.module('flujogenico20App')
     this.selectedReach = function(string){
       DataSession.pushStep({id:3,title:'reachStep', nameVar:string, to:'main.application.result'});
     };
+
+    this.DS = DataSession;
 
   });

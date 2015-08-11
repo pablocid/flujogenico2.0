@@ -19,7 +19,7 @@
             <div ui-view="info"></div>
           </div>
           <div class="paddingbtn">
-            <md-button ng-click="appCtrl.starAgain()">{{mainCtrl.tc.app.newStart}}</md-button>
+            <md-button ng-show="appCtrl.state.is('main.application.result-nationalscale') || appCtrl.state.is('main.application.result-local')" ng-click="appCtrl.starAgain()">{{mainCtrl.tc.app.newStart}}</md-button>
           </div>
         </div>
       </div>
