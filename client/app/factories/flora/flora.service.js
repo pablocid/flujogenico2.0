@@ -23,6 +23,19 @@ angular.module('flujogenico20App')
             console.error(msg,code);
           });
         return deferred.promise;
+      },
+      getMatchSp : function(id,type){
+
+        var deferred = $q.defer();
+        $http.get('/api/flora/match/'+id+'/'+type)
+          .success(function(data){
+            deferred.resolve(data);
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.error(msg,code);
+          });
+        return deferred.promise;
       }
     };
   });

@@ -1,5 +1,7 @@
 <ul>
-  <li>Hola</li>
-  <li>como</li>
-  <li>estas</li>
+  <li ng-repeat="item in appCtrl.DS.results">{{item.name}}</li>
 </ul>
+
+<h1 ng-hide="appCtrl.DS.resultMatch">{{mainCtrl.tc.app.noResults}}</h1>
+
+<md-progress-circular ng-show="appCtrl.DS.progressBar" md-mode="indeterminate"></md-progress-circular>

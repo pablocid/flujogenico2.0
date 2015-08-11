@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var q = require('q');
 var Flora = require('./flora.model');
 
 // Get list of floras
@@ -69,6 +70,306 @@ exports.search = function(req, res) {
 
 };
 
+exports.matchById = function(req, res) {
+  // 3 tipos de match bio, coex y all
+  var id = req.params.id;
+  console.log(id);
+  var typeVar = req.params.type;
+  console.log(typeVar);
+  var type = evalTypeToPropertyQuery(typeVar);
+  console.log(type);
+
+  Flora.findById(id)
+    .exec(function(err,flora){
+      if(err) { return handleError(res, err); }
+      if(!flora) { return res.status(404).send('Not Found sp with this _id: '+id); }
+      console.log(flora.name);
+
+      return flora;
+    })
+    .then(function(flora,err){
+      if(err) { return handleError(res, err); }
+      if(!flora) { return res.status(404).send('Not Found sp with this _id: '+id); }
+
+      var genus = flora.toObject().general.taxonomy.local.filter(function(s){
+        return s.id=="gen";
+      })[0].name;
+      console.log(genus);
+      return genus;
+    })
+    .then(function(genus){
+      var query =  [
+        {
+          "$match" : type
+        },
+        {
+          "$unwind":"$general.taxonomy.local"
+        },
+        {
+          "$match" : {"general.taxonomy.local.id":"gen"}
+        },
+        {
+          "$match" : {"general.taxonomy.local.name":genus}
+        },
+        {
+          "$group":{_id:"$_id"}
+        }
+      ];
+      console.log(query);
+      //return res.json(query);
+      return query;
+
+    })
+    .then(function(query,err){
+      if(err){return handleError(res,err);}
+      //console.log(query);
+      return  Flora.aggregate(query).exec();
+    })
+    .then(function(ids, err){
+      console.log(ids.length);
+      var ides = ids;
+      if(err){return handleError(res,err);}
+      if(!ides) { res.status(404).send('The variable is false, not set or undefined'); }
+      if(ides.length==0){
+        res.status(200).json([]);
+        return 'empty';
+      }else{
+        return {"$or":ids};
+      }
+    })
+    .then(function(query){
+      if(query==='empty'){return};
+      if(!query) { return res.send(404); }
+      Flora.find(query).exec(function(err, flora){
+
+        if(err){return handleError(res,err);}
+        if(!flora) { return res.send(404); }
+
+        return res.json(flora);
+      });
+    });
+
+
+/*
+  function getGenus(id){
+    var deferred = q.defer();
+
+    Flora.findById(id,function(err,flora){
+      if(err) { return handleError(res, err); }
+      if(!flora) { return res.status(404).send('Not Found sp with this _id: '+id); }
+
+      var genus = flora.toObject().general.taxonomy.local.filter(function(s){
+        return s.id=="gen";
+      })[0].name;
+      deferred.resolve(genus);
+    });
+    return deferred.promise;
+  }
+
+  function idRelatives (genus){
+    var deferred = q.defer();
+    var query = Flora.aggregate(
+      [
+        {
+          "$match" : type
+        },
+        {
+          "$unwind":"$general.taxonomy.local"
+        },
+        {
+          "$match" : {"general.taxonomy.local.id":"gen"}
+        },
+        {
+          "$match" : {"general.taxonomy.local.name":genus}
+        },
+        {
+          "$group":{_id:"$_id"}
+        }
+      ]
+    );
+    query.exec(function(err, flora){
+      if(err){return handleError(res,err);}
+      if(!flora) { return res.send(404); }
+      deferred.resolve(flora);
+    });
+    return deferred.promise;
+  }
+
+  function findRelatives (arrayIds){
+    if(!arrayIds) { return res.send(404); }
+    if(arrayIds.length===0) { return res.json([]); }
+
+    var deferred = q.defer();
+    var query = {"$or":arrayIds};
+
+    Flora.find(query).exec(function(err, flora){
+      if(err){return handleError(res,err);}
+      if(!flora) { return res.send(404); }
+      deferred.resolve(flora);
+    });
+    return deferred.promise;
+  }
+
+  function makeResponse(){
+    return id;
+  }
+
+  q.fcall(makeResponse)
+    .then(getGenus)
+    .then(idRelatives)
+    .then(findRelatives)
+    .then(function(flora){
+    res.json(flora);
+
+  });
+*/
+
+};
+
+exports.matchByGenus = function(req, res) {
+  // 3 tipos de match bio, coex y all
+  var genus = req.params.genus;
+  var typeVar = req.params.type;
+  var type = evalTypeToPropertyQuery(typeVar);
+
+  if(!type){ res.status(404).send('Is not set the evaluation type');}
+  if(!genus){ res.status(404).send('Is not set the genus');}
+
+  var query = [
+    {
+      "$match" : type
+    },
+    {
+      "$unwind":"$general.taxonomy.local"
+    },
+    {
+      "$match" : {"general.taxonomy.local.id":"gen"}
+    },
+    {
+      "$match" : {"general.taxonomy.local.name":genus}
+    },
+    {
+      "$group":{_id:"$_id"}
+    }
+  ];
+
+  Flora.aggregate(query)
+    .exec(function(err, flora){
+
+      if(err){return handleError(res,err);}
+      if(!flora) { res.status(404).send('The variable is false, not set or undefined'); }
+      if(flora.length===0){return res.status(404).send('No match with this genus: ' + genus);}
+
+      return flora;
+    })
+    .then(function (flora,err){
+
+      if(err){return handleError(res,err);}
+      if(!flora) { return res.send(404); }
+
+      return {"$or":flora};
+    })
+    .then(function(query){
+
+      return Flora.find(query).exec();
+    })
+    .then(function(err, flora){
+
+      if(err){return handleError(res,err);}
+      if(!flora) { return res.send(404); }
+
+      return res.json(flora);
+    });
+};
+
+
 function handleError(res, err) {
+  console.log('Se ha ejecutado el handleError');
   return res.status(500).send(err);
 }
+/*
+
+
+
+
+function MainConsult(Modelo){
+  this.modelo = Modelo;
+}
+
+MainConsult.prototype.evalTypeToPropertyQuery = function (et){
+  var type = {};
+  if(et==='coex'){
+    type = {"properties.id":"cultc"};
+  }else if(et==='bio'){
+    type = {$or:[
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else if(et ==='all'){
+    type = {$or:[
+      {"properties.id":"cultc"},
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else{
+    return false;
+  }
+
+  return type;
+};
+
+
+var MatchByGenus = function(req, res){
+  var genus = req.params.genus;
+  var typeVar = req.params.type;
+  //var type = this.evalTypeToPropertyQuery(typeVar);
+
+  return res.json(this.__proto__);
+};
+
+MatchByGenus.prototype.pepe = 'pepe';
+MatchByGenus.prototype.evalTypeToPropertyQuery = function (et){
+  var type = {};
+  if(et==='coex'){
+    type = {"properties.id":"cultc"};
+  }else if(et==='bio'){
+    type = {$or:[
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else if(et ==='all'){
+    type = {$or:[
+      {"properties.id":"cultc"},
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else{
+    return false;
+  }
+
+  return type;
+};
+
+exports.matchByGenus = MatchByGenus;
+*/
+var evalTypeToPropertyQuery = function (et){
+  var type = {};
+  if(et==='coex'){
+    type = {"properties.id":"cultc"};
+  }else if(et==='bio'){
+    type = {$or:[
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else if(et ==='all'){
+    type = {$or:[
+      {"properties.id":"cultc"},
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else{
+    return false;
+  }
+
+  return type;
+};
