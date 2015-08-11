@@ -4,14 +4,17 @@ function Modelo (config){
 
 //Receptor Risk Index
 Modelo.prototype.RRI = function RRI (Receptor){
-  console.log(Receptor.name);
 	//fitro de las propiedades presentes
 	var propiedades = this.tiposReceptorFilter(Receptor);
-  console.log(propiedades);
 	//calculo con las propiedades presentes
 	var resultado = this.calculoRRI(propiedades);
 
-	return resultado;
+  if(!resultado){ return 0;}
+  if(resultado ==='noProp'){
+    return 'noProp';
+  }
+
+	return resultado.toFixed(2);
 };
 
 Modelo.prototype.tiposReceptorFilter = function tiposReceptorFilter(Receptor){

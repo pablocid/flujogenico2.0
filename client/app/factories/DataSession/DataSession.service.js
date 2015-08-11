@@ -57,6 +57,7 @@ angular.module('flujogenico20App')
             }
             self.results = a;
             self.progressBar = false;
+            //console.log(a)
         });
 
         if(resultType=='reachCtry'){ goTo('main.application.result-nationalscale');}

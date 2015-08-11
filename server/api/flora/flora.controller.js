@@ -81,18 +81,18 @@ exports.search = function(req, res) {
 exports.matchById = function(req, res) {
   // 3 tipos de match bio, coex y all
   var id = req.params.id;
-  console.log(id);
+  //console.log(id);
   var typeVar = req.params.type;
-  console.log(typeVar);
+  //console.log(typeVar);
   var type = evalTypeToPropertyQuery(typeVar);
-  console.log(type);
+  //console.log(type);
 
   Flora.findById(id)
     .exec(function(err,flora){
       if(err) { return handleError(res, err); }
       if(!flora) { return res.status(404).send('Not Found sp with this _id: '+id); }
-      console.log(flora.name);
-
+      //console.log(flora.name);
+      //return res.json(flora);
       return flora;
     })
     .then(function(flora,err){
@@ -102,7 +102,8 @@ exports.matchById = function(req, res) {
       var genus = flora.toObject().general.taxonomy.local.filter(function(s){
         return s.id=="gen";
       })[0].name;
-      console.log(genus);
+      //console.log(genus);
+      //return res.json(genus);
       return genus;
     })
     .then(function(genus){
@@ -123,10 +124,9 @@ exports.matchById = function(req, res) {
           "$group":{_id:"$_id"}
         }
       ];
-      console.log(query);
+      //console.log(query);
       //return res.json(query);
       return query;
-
     })
     .then(function(query,err){
       if(err){return handleError(res,err);}
@@ -134,7 +134,8 @@ exports.matchById = function(req, res) {
       return  Flora.aggregate(query).exec();
     })
     .then(function(ids, err){
-      console.log(ids.length);
+      //console.log(ids.length);
+      //res.json(ids);
       var ides = ids;
       if(err){return handleError(res,err);}
       if(!ides) { res.status(404).send('The variable is false, not set or undefined'); }
@@ -154,10 +155,14 @@ exports.matchById = function(req, res) {
 
       if(!flora){return;}
       if(err){return handleError(res,err);}
+
       var RRI = flora.map(function(sp){
         var espe= sp.toObject();
+       console.log(espe.name);
         return setRRI(espe);
       });
+
+      //return res.json(flora);
       return res.json(RRI);
 
     });
@@ -240,18 +245,18 @@ exports.matchById = function(req, res) {
 };
 
 function setRRI(sp){
-  sp.RRI = {};
+  //sp.RRI = {};
 
   if(sp.properties.filter(function(p){return p.id=='in'}).length==1){
-    sp.RRI.introducida = Introducida.RRI(sp);
-  }
+    sp.introducida = Introducida.RRI(sp);
+  }else{sp.introducida =0;}
 
   if(sp.properties.filter(function(p){return p.id=='cultc'}).length==1){
-    sp.RRI.cultivada = Cultivo.RRI(sp);
-  }
+    sp.cultivada = Cultivo.RRI(sp);
+  }else{sp.cultivada =0;}
   if(sp.properties.filter(function(p){return p.id=='nati';}).length ==1){
-    sp.RRI.nativa = Nativa.RRI(sp);
-  }
+    sp.nativa = Nativa.RRI(sp);
+  }else{sp.nativa =0;}
 
   return sp;
 }
