@@ -3,6 +3,14 @@
 var _ = require('lodash');
 var q = require('q');
 var Flora = require('./flora.model');
+var RiskModel = require('./RiskCalc/calc/modelo.js');
+var CultCult = require('./RiskCalc/models/cultivo-cultivo.js');
+var IntroCult = require('./RiskCalc/models/cultivo-introducida.js');
+var NatCult = require('./RiskCalc/models/cultivo-nativa.js');
+
+var Cultivo = new RiskModel(CultCult);
+var Introducida = new RiskModel(IntroCult);
+var Nativa = new RiskModel(NatCult);
 
 // Get list of floras
 exports.index = function(req, res) {
@@ -59,8 +67,8 @@ exports.destroy = function(req, res) {
 // Get a single flora
 exports.search = function(req, res) {
   var name = new RegExp(req.params.name, "i");
-  var query = Flora.find({name: name});
-  query.limit(5);
+  var query = Flora.find({name: name,"properties.id":"cult"});
+  query.limit(8);
   query.select('_id name');
   query.exec(function(err, flora){
     if(err){return handleError(res,err);}
@@ -140,13 +148,18 @@ exports.matchById = function(req, res) {
     .then(function(query){
       if(query==='empty'){return};
       if(!query) { return res.send(404); }
-      Flora.find(query).exec(function(err, flora){
+      return Flora.find(query).exec();
+    })
+    .then(function(flora, err){
 
-        if(err){return handleError(res,err);}
-        if(!flora) { return res.send(404); }
-
-        return res.json(flora);
+      if(!flora){return;}
+      if(err){return handleError(res,err);}
+      var RRI = flora.map(function(sp){
+        var espe= sp.toObject();
+        return setRRI(espe);
       });
+      return res.json(RRI);
+
     });
 
 
@@ -226,6 +239,23 @@ exports.matchById = function(req, res) {
 
 };
 
+function setRRI(sp){
+  sp.RRI = {};
+
+  if(sp.properties.filter(function(p){return p.id=='in'}).length==1){
+    sp.RRI.introducida = Introducida.RRI(sp);
+  }
+
+  if(sp.properties.filter(function(p){return p.id=='cultc'}).length==1){
+    sp.RRI.cultivada = Cultivo.RRI(sp);
+  }
+  if(sp.properties.filter(function(p){return p.id=='nati';}).length ==1){
+    sp.RRI.nativa = Nativa.RRI(sp);
+  }
+
+  return sp;
+}
+
 exports.matchByGenus = function(req, res) {
   // 3 tipos de match bio, coex y all
   var genus = req.params.genus;
@@ -287,71 +317,7 @@ function handleError(res, err) {
   console.log('Se ha ejecutado el handleError');
   return res.status(500).send(err);
 }
-/*
 
-
-
-
-function MainConsult(Modelo){
-  this.modelo = Modelo;
-}
-
-MainConsult.prototype.evalTypeToPropertyQuery = function (et){
-  var type = {};
-  if(et==='coex'){
-    type = {"properties.id":"cultc"};
-  }else if(et==='bio'){
-    type = {$or:[
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else if(et ==='all'){
-    type = {$or:[
-      {"properties.id":"cultc"},
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else{
-    return false;
-  }
-
-  return type;
-};
-
-
-var MatchByGenus = function(req, res){
-  var genus = req.params.genus;
-  var typeVar = req.params.type;
-  //var type = this.evalTypeToPropertyQuery(typeVar);
-
-  return res.json(this.__proto__);
-};
-
-MatchByGenus.prototype.pepe = 'pepe';
-MatchByGenus.prototype.evalTypeToPropertyQuery = function (et){
-  var type = {};
-  if(et==='coex'){
-    type = {"properties.id":"cultc"};
-  }else if(et==='bio'){
-    type = {$or:[
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else if(et ==='all'){
-    type = {$or:[
-      {"properties.id":"cultc"},
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else{
-    return false;
-  }
-
-  return type;
-};
-
-exports.matchByGenus = MatchByGenus;
-*/
 var evalTypeToPropertyQuery = function (et){
   var type = {};
   if(et==='coex'){
@@ -373,3 +339,14 @@ var evalTypeToPropertyQuery = function (et){
 
   return type;
 };
+
+
+
+
+
+
+
+
+
+
+
