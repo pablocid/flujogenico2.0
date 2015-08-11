@@ -1,6 +1,32 @@
-<ul>
-  <li ng-repeat="item in appCtrl.DS.results">{{item.name}}</li>
+<!--<ul>
+  <li ng-repeat="item in appCtrl.DS.results | orderBy:'-cultivada' ">
+    <div layout="row">
+      <vector-icon flex="5" name="warn" fill="black" style="width: 50px"></vector-icon>
+      <span flex>{{item.name}}: {{item.cultivada}}</span>
+    </div>
+  </li>
 </ul>
+-->
+
+<md-content ng-show="appCtrl.DS.resultMatch">
+  <md-list>
+    <md-subheader class="md-no-sticky">Hay {{appCtrl.DS.results.length}} resultados</md-subheader>
+    <md-divider ></md-divider>
+    <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.results | orderBy:'-introducida' ">
+      <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.introducida)}}"></vector-icon>
+      <div class="md-list-item-text" layout="column">
+        <h3>{{item.name}}</h3>
+        <h4>Indice de riesgo:{{item.introducida *100 | number:0}}</h4>
+        <p>Escala de riego: {{mainCtrl.tc.app[appCtrl.indexScale(item.introducida)]}}</p>
+        <p>Esta es una especie Cultivada</p>
+        <p>{{item.introducida}}</p>
+      </div>
+    </md-list-item>
+    <md-divider ></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>
+
 
 <h1 ng-hide="appCtrl.DS.resultMatch">{{mainCtrl.tc.app.noResults}}</h1>
 

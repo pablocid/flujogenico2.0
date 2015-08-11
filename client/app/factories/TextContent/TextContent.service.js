@@ -43,8 +43,13 @@ angular.module('flujogenico20App')
       {section:'app',name:'newStart',es:'Realiza otro análisis',en:'Make another analysis'},
       {section:'app',name:'resultTitle',es:'Resultado del análisis', en:'Analysis results'},
       {section:'app',name:'resultTitleCountry',es:'Resultado a nivel nacional', en:'National scale result'},
-      {section:'app',name:'noResults',es:'No coincide ninguna especie',en:'No match for this species'}
-
+      {section:'app',name:'noResults',es:'No coincide ninguna especie',en:'No match for this species'},
+      {section:'app',name:'veryLow',es:'muy bajo',en:'very low'},
+      {section:'app',name:'low',es:'bajo',en:'low'},
+      {section:'app',name:'medium',es:'medio',en:'medium'},
+      {section:'app',name:'high',es:'alto',en:'alto'},
+      {section:'app',name:'veryHigh',es:'muy alto',en:'very high'},
+      {section:'app',name:'noData',es:'sin datos',en:'no data'}
     ];
 
     // Public API here

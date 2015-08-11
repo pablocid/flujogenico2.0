@@ -18,6 +18,7 @@ module.exports = {
     uri:    process.env.MONGOLAB_URI ||
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
-            'mongodb://localhost/flujogenico20'
+            //'mongodb://localhost/flujogenico20'
+            'mongodb://'+process.env.MONGOUSER+':'+process.env.MONGOPASS+'@localhost/'+process.env.MONGODB
   }
 };

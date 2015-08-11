@@ -21,7 +21,7 @@ angular.module('flujogenico20App')
 
     this.submitSpSearch = function(){
       var item = self.spDonorSelected;
-      console.log(item);
+      //console.log(item);
       DataSession.pushStep({id:2,title:'spSearchStep', name:item.name,nameVar:item,to:'main.application.reach'});
     };
 
@@ -36,5 +36,22 @@ angular.module('flujogenico20App')
     };
 
     this.DS = DataSession;
+
+    this.indexColor = function(idx){
+      if(idx<=0.2){return "#0b620a"}
+      if(idx>0.2 && idx<=0.4){return "#97ca04";}
+      if(idx>0.4 && idx<=0.6){return "#edd910"}
+      if(idx>0.6 && idx<=0.8){return "#fdbe01"}
+      if(idx<0.8 ){return "#f70602"}
+    };
+    this.indexScale = function(idx){
+      if(idx<=0.2){return 'veryLow'}
+      if(idx>0.2 && idx<=0.4){return 'low';}
+      if(idx>0.4 && idx<=0.6){return 'medium'}
+      if(idx>0.6 && idx<=0.8){return 'high'}
+      if(idx<0.8 ){return 'veryHigh'}else{
+        return 'noData'
+      }
+    };
 
   });

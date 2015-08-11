@@ -12,14 +12,14 @@
           </div>
           <div flex="100" flex-sm="75">
             <ol>
-              <li ng-repeat="paso in appCtrl.dc.steps">{{mainCtrl.tc.app[paso.title]}}: <b>{{paso.name || mainCtrl.tc.app[paso.nameVar]}}</b> </li>
+              <li ng-repeat="paso in appCtrl.DS.steps">{{mainCtrl.tc.app[paso.title]}}: <b>{{paso.name || mainCtrl.tc.app[paso.nameVar]}}</b> </li>
             </ol>
           </div>
           <div flex="100" flex-sm="75">
             <div ui-view="info"></div>
           </div>
           <div class="paddingbtn">
-            <md-button ng-show="appCtrl.state.is('main.application.result-nationalscale') || appCtrl.state.is('main.application.result-local')" ng-click="appCtrl.starAgain()">{{mainCtrl.tc.app.newStart}}</md-button>
+            <md-button ng-hide="appCtrl.state.is('main.application.evalType')" ng-click="appCtrl.starAgain()">{{mainCtrl.tc.app.newStart}}</md-button>
           </div>
         </div>
       </div>
