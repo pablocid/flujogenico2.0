@@ -10,13 +10,25 @@ Modelo.prototype.RRI = function RRI (Receptor){
 	var resultado = this.calculoRRI(propiedades);
 
   if(!resultado){ return 0;}
-  if(resultado ==='noProp'){
-    return 'noProp';
-  }
+  if(resultado ==='noProp'){ return 'noProp';}
 
 	return resultado.toFixed(2);
 };
 
+/*
+Modelo.prototype.DRI = function(donor){
+  function filterPropDonor(p){return p.id==='fg';}
+  var flujo = donor.properties.filter(filterPropDonor);
+  var ScaleMaxValue = 5;
+  if(flujo.length===0){return 1/ScaleMaxValue;}
+
+  return flujo[0].weight/ScaleMaxValue;
+};
+
+Modelo.prototype.RI = function(){
+
+};
+*/
 Modelo.prototype.tiposReceptorFilter = function tiposReceptorFilter(Receptor){
 	var tipos = this.config.tipos;
 	var propiedades = Receptor.properties;
@@ -40,7 +52,7 @@ Modelo.prototype.tiposReceptorFilter = function tiposReceptorFilter(Receptor){
 	};
 
 	return tipos.map(fitroProp).filter(function(t){ return t});
-}
+};
 
 Modelo.prototype.calculoRRI = function calculoRRI (propiedades){
 	//formula
@@ -87,7 +99,7 @@ Modelo.prototype.calculoRRI = function calculoRRI (propiedades){
 	var sumPond = propiedades.map(typePondMap).reduce(sumar);
 
 	return sum/sumPond;
-}
+};
 
 // funcion auxiliar
 function isInArrayObjById(array,value){
@@ -98,5 +110,5 @@ function isInArrayObjById(array,value){
 	}
 	return false
 }
-console.log('ooooo')
+
 module.exports = Modelo;

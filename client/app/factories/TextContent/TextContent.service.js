@@ -47,9 +47,11 @@ angular.module('flujogenico20App')
       {section:'app',name:'veryLow',es:'muy bajo',en:'very low'},
       {section:'app',name:'low',es:'bajo',en:'low'},
       {section:'app',name:'medium',es:'medio',en:'medium'},
-      {section:'app',name:'high',es:'alto',en:'alto'},
+      {section:'app',name:'high',es:'alto',en:'high'},
       {section:'app',name:'veryHigh',es:'muy alto',en:'very high'},
-      {section:'app',name:'noData',es:'sin datos',en:'no data'}
+      {section:'app',name:'noData',es:'Sin información en la base de datos',en:'No information in the data base'},
+      {section:'app',name:'riskScale',es:'Escala de riesgo',en:'Risk scale'},
+      {section:'app',name:'riskIndex',es:'Índice de riesgo',en:'Risk index'}
     ];
 
     // Public API here
