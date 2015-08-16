@@ -3,14 +3,7 @@
 var _ = require('lodash');
 var q = require('q');
 var Flora = require('./flora.model');
-var RiskModel = require('./RiskCalc/calc/modelo.js');
-var CultCult = require('./RiskCalc/models/cultivo-cultivo.js');
-var IntroCult = require('./RiskCalc/models/cultivo-introducida.js');
-var NatCult = require('./RiskCalc/models/cultivo-nativa.js');
-
-var Cultivo = new RiskModel(CultCult);
-var Introducida = new RiskModel(IntroCult);
-var Nativa = new RiskModel(NatCult);
+var RiskIndex = require('./RiskCalc/risk-index');
 
 // Get list of floras
 exports.index = function(req, res) {
@@ -86,6 +79,7 @@ exports.matchById = function(req, res) {
   //console.log(typeVar);
   var type = evalTypeToPropertyQuery(typeVar);
   //console.log(type);
+  var donor ={};
 
   Flora.findById(id)
     .exec(function(err,flora){
@@ -99,7 +93,8 @@ exports.matchById = function(req, res) {
       if(err) { return handleError(res, err); }
       if(!flora) { return res.status(404).send('Not Found sp with this _id: '+id); }
 
-      var genus = flora.toObject().general.taxonomy.local.filter(function(s){
+      donor = flora.toObject();
+      var genus = donor.general.taxonomy.local.filter(function(s){
         return s.id=="gen";
       })[0].name;
       //console.log(genus);
@@ -147,23 +142,17 @@ exports.matchById = function(req, res) {
       }
     })
     .then(function(query){
-      if(query==='empty'){return};
+      if(query==='empty'){return; }
       if(!query) { return res.send(404); }
       return Flora.find(query).exec();
     })
-    .then(function(flora, err){
+    .then(function(receptors, err){
 
-      if(!flora){return;}
+      if(!receptors){return;}
       if(err){return handleError(res,err);}
 
-      var RRI = flora.map(function(sp){
-        var espe= sp.toObject();
-       console.log(espe.name);
-        return setRRI(espe);
-      });
-
-      //return res.json(flora);
-      return res.json(RRI);
+      //return res.json(receptors);
+      return res.json(RiskIndex(donor,receptors));
 
     });
 
@@ -243,23 +232,6 @@ exports.matchById = function(req, res) {
 */
 
 };
-
-function setRRI(sp){
-  //sp.RRI = {};
-
-  if(sp.properties.filter(function(p){return p.id=='in'}).length==1){
-    sp.introducida = Introducida.RRI(sp);
-  }else{sp.introducida =0;}
-
-  if(sp.properties.filter(function(p){return p.id=='cultc'}).length==1){
-    sp.cultivada = Cultivo.RRI(sp);
-  }else{sp.cultivada =0;}
-  if(sp.properties.filter(function(p){return p.id=='nati';}).length ==1){
-    sp.nativa = Nativa.RRI(sp);
-  }else{sp.nativa =0;}
-
-  return sp;
-}
 
 exports.matchByGenus = function(req, res) {
   // 3 tipos de match bio, coex y all

@@ -7,24 +7,97 @@
   </li>
 </ul>
 -->
-
 <md-content ng-show="appCtrl.DS.resultMatch">
-  <md-list>
+
+  <!-- IF is Coex analysis -->
+  <md-list ng-show="appCtrl.DS.getEvalType()==='coex'">
+    <h3>Análisis de coexistencia agrícola</h3>
     <md-subheader class="md-no-sticky">Hay {{appCtrl.DS.results.length}} resultados</md-subheader>
     <md-divider ></md-divider>
-    <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.results | orderBy:'-introducida' ">
-      <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.introducida)}}"></vector-icon>
+    <md-subheader class="md-no-sticky">Especies cultivadas emparentadas: {{cultivated.length}} resultados </md-subheader>
+    <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.results | orderBy:'-indexes.RI.cultivada' | filter:{indexes:{RI:{cultivada:'!noProp'}}} as cultivated ">
+      <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{item.name}}</h3>
-        <h4>Indice de riesgo:{{item.introducida *100 | number:0}}</h4>
-        <p>Escala de riego: {{mainCtrl.tc.app[appCtrl.indexScale(item.introducida)]}}</p>
-        <p>Esta es una especie Cultivada</p>
-        <p>{{item.introducida}}</p>
+        <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.cultivada *100 | number:0}}</h4>
+        <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</p>
+        <p>{{item.indexes.RI.cultivada}}</p>
+      </div>
+    </md-list-item>
+    <!-- no props -->
+    <md-subheader
+      ng-show="cultivatedNoProp.length>0"
+      class="md-no-sticky">
+      Especies cultivadas emparentadas sin información: {{cultivatedNoProp.length}} resultados
+    </md-subheader>
+    <md-list-item
+      class="md-3-line"
+      ng-show="cultivatedNoProp.length>0"
+      ng-repeat="item in appCtrl.DS.results | orderBy:'name' | filter:{indexes:{RI:{cultivada:'noProp'}}} as cultivatedNoProp">
+      <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
+      <div class="md-list-item-text" layout="column">
+        <h3>{{item.name}}</h3>
+        <h4>Indice de riesgo:{{item.indexes.RI.cultivada *100 | number:0}}</h4>
+        <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</p>
+        <p>{{item.indexes.RI.cultivada}}</p>
       </div>
     </md-list-item>
     <md-divider ></md-divider>
     </md-list-item>
   </md-list>
+
+  <!-- IF is Bio analysis -->
+  <div ng-show="appCtrl.DS.getEvalType()==='bio'">
+    <h3>Análisis de riesgo para la biodiversidad</h3>
+    <md-list >
+      <md-divider ></md-divider>
+      <md-subheader class="md-no-sticky">Especies introducidas: {{introduced.length}} resultados </md-subheader><!--| filter:{introducida:'!noProp'}-->
+      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsIntroducidas | orderBy:'-indexes.RI.introducida' | filter:{indexes:{RI:{introducida:'!noProp'}}} as introduced ">
+        <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.introducida)}}"></vector-icon>
+        <div class="md-list-item-text" layout="column">
+          <h3>{{item.name}}</h3>
+          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.introducida *100 | number:0}}</h4>
+          <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.introducida)]}}</p>
+          <p>{{item.indexes.RI.introducida}}</p>
+        </div>
+      </md-list-item>
+
+      <md-subheader class="md-no-sticky">Especies introducidas emparentadas sin información: {{introducedNoProp.length}} resultados</md-subheader>
+      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsIntroducidas | orderBy:'name' | filter:{indexes:{RI:{introducida:'noProp'}}} as introducedNoProp">
+        <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.introducida)}}"></vector-icon>
+        <div class="md-list-item-text" layout="column">
+          <h3>{{item.name}}</h3>
+          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.introducida *100 | number:0}}</h4>
+          <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.introducida)]}}</p>
+          <p>{{item.indexes.RI.introducida}}</p>
+        </div>
+      </md-list-item>
+
+      <md-divider ></md-divider>
+      <md-subheader class="md-no-sticky">Especies nativas: {{natives.length}} resultados </md-subheader><!--| filter:{introducida:'!noProp'}-->
+      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsNativas | orderBy:'-indexes.RI.nativa' | filter:{indexes:{RI:{nativa:'!noProp'}}} as natives ">
+        <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
+        <div class="md-list-item-text" layout="column">
+          <h3>{{item.name}}</h3>
+          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.nativa *100 | number:0}}</h4>
+          <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.nativa)]}}</p>
+          <p>{{item.indexes.RI.nativa}}</p>
+        </div>
+      </md-list-item>
+
+      <md-subheader class="md-no-sticky">Especies nativas emparentadas sin información: {{nativesNoProp.length}} resultados</md-subheader>
+      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsNativas | orderBy:'name' | filter:{indexes:{RI:{nativa:'noProp'}}} as nativesNoProp">
+        <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
+        <div class="md-list-item-text" layout="column">
+          <h3>{{item.name}}</h3>
+          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.nativa *100 | number:0}}</h4>
+          <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.nativa)]}}</p>
+          <p>{{item.indexes.RI.nativa}}</p>
+        </div>
+      </md-list-item>
+
+    </md-list>
+  </div>
 </md-content>
 
 

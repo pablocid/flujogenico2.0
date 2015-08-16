@@ -56,6 +56,24 @@ angular.module('flujogenico20App')
               self.resultMatch= true;
             }
             self.results = a;
+            console.log( self.results)
+
+            self.resultsIntroducidas = a.filter(function(b){
+              var r = b.properties.filter(function(c){
+                return c.id==='in';
+              }).length;
+
+              if(r==1){return true}else{return false;}
+
+            });
+            self.resultsNativas = a.filter(function(b){
+              var r = b.properties.filter(function(c){
+                return c.id==='nati';
+              }).length;
+
+              if(r==1){return true}else{return false;}
+
+            });
             self.progressBar = false;
             //console.log(a)
         });
