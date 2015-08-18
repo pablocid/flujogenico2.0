@@ -51,7 +51,10 @@ angular.module('flujogenico20App')
       {section:'app',name:'veryHigh',es:'muy alto',en:'very high'},
       {section:'app',name:'noData',es:'Sin información en la base de datos',en:'No information in the data base'},
       {section:'app',name:'riskScale',es:'Escala de riesgo',en:'Risk scale'},
-      {section:'app',name:'riskIndex',es:'Índice de riesgo',en:'Risk index'}
+      {section:'app',name:'riskIndex',es:'Índice de riesgo',en:'Risk index'},
+      {section:'app',name:'resultTitleLocal',es:'Resultados a nivel local',en:'Local scale results'}
+
+
     ];
 
     // Public API here

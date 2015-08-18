@@ -22,6 +22,7 @@ exports.show = function(req, res) {
   });
 };
 
+/*
 // Creates a new flora in the DB.
 exports.create = function(req, res) {
   Flora.create(req.body, function(err, flora) {
@@ -55,7 +56,7 @@ exports.destroy = function(req, res) {
     });
   });
 };
-
+*/
 // Search in name field
 // Get a single flora
 exports.search = function(req, res) {
