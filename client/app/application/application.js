@@ -101,7 +101,11 @@ angular.module('flujogenico20App')
             template:'<div class="padding25"></div>'
           },
           content:{
-            templateUrl:'app/application/results/results.local.html'
+            templateUrl:'app/application/results/results.local.html',
+            controller:function(){
+              this.species = ['agrostis_capillaris', 'agrostis_leptotricha', 'agrostis_magellanica'];
+            },
+            controllerAs:'resultLocalCtrl'
           }
         }
       });
