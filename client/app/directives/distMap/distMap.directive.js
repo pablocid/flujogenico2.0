@@ -9,7 +9,8 @@ angular.module('flujogenico20App')
       scope:{
         dmWidth:"@dmWidth",
         dmHeight:"@dmHeight",
-        species:"=species"
+        species:"=species",
+        selection:'='
       },
       link: function (scope, element, attrs) {
         var map, species;
@@ -28,14 +29,13 @@ angular.module('flujogenico20App')
         species = scope.species;
 
          map.on('selectionChange', function(e) {
-         console.log(new Date(), e.species);
+           scope.selection = e.species;
+           scope.$apply();
+           //console.log(new Date(), e.species);
          });
 
          map.setSpecies(species);
          map.show('max');
-        map.on("dblclick",function(a){
-          console.log(a);
-        })
       }
     };
   });

@@ -5206,7 +5206,7 @@ L.Marker = L.Class.extend({
 			if (options.title) {
 				icon.title = options.title;
 			}
-			
+
 			if (options.alt) {
 				icon.alt = options.alt;
 			}
@@ -6696,7 +6696,7 @@ L.Path = (L.Path.SVG && !window.L_PREFER_CANVAS) || !L.Browser.canvas ? L.Path :
 		}
 
 		this._requestUpdate();
-		
+
 		this.fire('remove');
 		this._map = null;
 	},
@@ -9744,7 +9744,7 @@ L.Control.Attribution = L.Control.extend({
 				this.addAttribution(map._layers[i].getAttribution());
 			}
 		}
-		
+
 		map
 		    .on('layeradd', this._onLayerAdd, this)
 		    .on('layerremove', this._onLayerRemove, this);
@@ -11268,19 +11268,19 @@ module.exports = getNative;
 module.exports = function (point, vs) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-    
+
     var x = point[0], y = point[1];
-    
+
     var inside = false;
     for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
         var xi = vs[i][0], yi = vs[i][1];
         var xj = vs[j][0], yj = vs[j][1];
-        
+
         var intersect = ((yi > y) != (yj > y))
             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
         if (intersect) inside = !inside;
     }
-    
+
     return inside;
 };
 
@@ -11757,7 +11757,7 @@ module.exports = L.TileLayer.Canvas.extend({
     rectangles = this.selectedRectangles;
     visibles = this.options.visibleSpecies;
 
-    values = [];
+    values = {};
     for (i = 0, n = visibles.length; i < n; i++) {
       values[visibles[i]] = [];
     }

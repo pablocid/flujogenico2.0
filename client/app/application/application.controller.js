@@ -9,6 +9,7 @@ angular.module('flujogenico20App')
       self.spDonorSelected='';
       self.searchText = '';
       DataSession.eraseSteps();
+      self.localResults =false;
     };
 
     self.DS = DataSession;
