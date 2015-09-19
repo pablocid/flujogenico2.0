@@ -9,17 +9,18 @@ angular.module('flujogenico20App')
         colorFill:'@fill',
         circleColor:'@circleColor'
       },
-      link: function (scope, element, attrs) {
-        var xmlns = "http://www.w3.org/2000/svg";
+      link: function (scope, element) {
+        var xmlns = 'http://www.w3.org/2000/svg';
         var svg = document.createElementNS(xmlns,'svg');
 
         var circleColor = scope.circleColor || 'white';
         var colorFill = scope.colorFill || 'white';
         var d = IconService.get(scope.name).d;
 
-        svg.setAttribute('viewBox',"0 0 140 140");
+        svg.setAttribute('viewBox','0 0 140 140');
         svg.setAttribute('width','100%');
         svg.setAttribute('height','100%');
+        svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
 
         var circle = document.createElementNS(xmlns,'circle');
         circle.setAttribute('cx','50%');

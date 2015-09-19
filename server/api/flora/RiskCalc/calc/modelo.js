@@ -49,7 +49,7 @@ Modelo.prototype.tiposReceptorFilter = function tiposReceptorFilter(Receptor){
 			tipo.properties = properties;
 			return tipo;
 		}
-	};
+	}
 
 	return tipos.map(fitroProp).filter(function(t){ return t});
 };
@@ -57,7 +57,7 @@ Modelo.prototype.tiposReceptorFilter = function tiposReceptorFilter(Receptor){
 Modelo.prototype.calculoRRI = function calculoRRI (propiedades){
 	//formula
 	// sum / sumPond
-  if(propiedades.length==0){return 'noProp';}
+  if(propiedades.length===0){return 'noProp';}
 
 	function sumar (a,b){
 		return a+b;

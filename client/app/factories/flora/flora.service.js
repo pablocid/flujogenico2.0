@@ -12,6 +12,46 @@ angular.module('flujogenico20App')
       someMethod: function () {
         return meaningOfLife;
       },
+      paginate:function(type,p, i){
+        var deferred = $q.defer();
+        $http.get('/api/flora/'+type+'/pagination/'+p+'/'+i)
+          .success(function(data){
+            deferred.resolve(data);
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.log('Error en FLora.paginate');
+            console.error(msg,code);
+          });
+        return deferred.promise;
+      },
+      all:function(){
+        var deferred = $q.defer();
+        $http.get('/api/flora')
+          .success(function(data){
+            deferred.resolve(data);
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.log('Error en FLora.all');
+            console.error(msg,code);
+          });
+        return deferred.promise;
+      },
+      get:function(id3){
+        var id =id3.id;
+        var deferred = $q.defer();
+        $http.get('/api/flora/'+id)
+          .success(function(data){
+            deferred.resolve(data);
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.error(msg,code);
+          });
+        return deferred.promise;
+
+      },
       searchSN : function(name){
         var deferred = $q.defer();
         $http.get('/api/flora/search/'+name)

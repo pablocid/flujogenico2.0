@@ -1,30 +1,30 @@
 'use strict';
-
+//TODO agregar id dinamico al mapa
 angular.module('flujogenico20App')
   .directive('distMap', function () {
     return {
       //templateUrl: 'app/directives/distMap/distMap.html',
-      template:"<div id='map'></div>",
+      template:'<div id="map"></div>',
       restrict: 'EA',
       scope:{
-        dmWidth:"@dmWidth",
-        dmHeight:"@dmHeight",
-        species:"=species",
+        dmWidth:'@dmWidth',
+        dmHeight:'@dmHeight',
+        species:'=species',
         selection:'='
       },
-      link: function (scope, element, attrs) {
+      link: function (scope, element) {
         var map, species;
-        var num = "distribution-map-"+Math.floor((Math.random() * 10000) + 1);
-        var width = scope.dmWidth || "100%";
-        var height = scope.dmHeight || "350px";
+        //var num = "distribution-map-"+Math.floor((Math.random() * 10000) + 1);
+        var width = scope.dmWidth || '100%';
+        var height = scope.dmHeight || '350px';
 
-         map = new DMap({
+         map = new window.DMap({
          container: 'map',
          host: 'http://flujogenico.cswlabs.cl'  // donde se encuentran los modelos
          });
 
-        element.find("#map").css("height",height);
-        element.find("#map").css("width",width);
+        element.find('#map').css('height',height);
+        element.find('#map').css('width',width);
 
         species = scope.species;
 

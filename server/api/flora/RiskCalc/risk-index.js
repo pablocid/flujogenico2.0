@@ -51,7 +51,7 @@ function setRIresult(RRI,DRI,SS){
 
 
 function setRRI(sp){
-  ReceptorIndex ={};
+  var ReceptorIndex ={};
 
   if(_.some(sp.properties, {id:'in'})){
     ReceptorIndex.introducida = Introducida.RRI(sp);

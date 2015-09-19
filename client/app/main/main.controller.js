@@ -30,7 +30,16 @@ angular.module('flujogenico20App')
       reachIcon:mdThemeColors.getColorFactory('primary','other').default
     };
 
-
+    function buildToggler(navID) {
+      var debounceFn =  $mdUtil.debounce(function(){
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug('toggle ' + navID + ' is done');
+          });
+      },300);
+      return debounceFn;
+    }
     self.toggleLeft = buildToggler('left');
     self.toggleRight = buildToggler('right');
 
@@ -40,28 +49,20 @@ angular.module('flujogenico20App')
      * Build handler to open/close a SideNav; when animation finishes
      * report completion in console
      */
-    function buildToggler(navID) {
-      var debounceFn =  $mdUtil.debounce(function(){
-        $mdSidenav(navID)
-          .toggle()
-          .then(function () {
-            $log.debug("toggle " + navID + " is done");
-          });
-      },300);
-      return debounceFn;
-    }
+
 
     self.openMenu = function(){
       $mdSidenav('left').toggle();
     };
     self.goToState = function(state){
+      console.log('active');
       $state.go(state);
     };
 
     self.todos = [
       {title:'Home', description:'', icon:'home',sref:'main.home', color:self.colors.main},
       {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
-      {title:'Flora vascular chilena', description:'La descripcion', icon:'flora',sref:'main.flora', color:self.colors.flora},
+      {title:'Flora vascular chilena', description:'La descripcion', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
       {title:'Fauna de polinizadores chilenos', description:'La descripcion', icon:'fauna',sref:'main.polinizadores', color:self.colors.fauna},
       {title:'Clasificaciones y escala de riesgo', description:'La descripcion', icon:'escala',sref:'main.escalas', color:self.colors.escala},
       {title:'Sobre el sistema computacional', description:'La descripcion', icon:'settings',sref:'main.sistema', color:self.colors.settings}
@@ -70,7 +71,7 @@ angular.module('flujogenico20App')
     self.close = function (id) {
       $mdSidenav(id).close()
         .then(function () {
-          $log.debug("close LEFT is done");
+          $log.debug('close LEFT is done');
         });
     };
     self.setLang = function (lang) {

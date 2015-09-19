@@ -1,6 +1,7 @@
+/*
 'use strict';
 
-angular.module('flujogenico20App')
+angular.module('mdThemeColors')
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('other')
       .primaryPalette('grey',{
@@ -9,7 +10,7 @@ angular.module('flujogenico20App')
       .backgroundPalette('grey',{
         'default':'100'
       });
-    /*********MAIN*********/
+    /!*********MAIN*********!/
     $mdThemingProvider.theme('main')
       .primaryPalette('blue', {
         'default': '500',
@@ -20,16 +21,16 @@ angular.module('flujogenico20App')
       .backgroundPalette('blue',{
         'default':'500'
       });
-    /*********END MAIN*********/
+    /!*********END MAIN*********!/
 
-    /*********TOOL*********/
+    /!*********TOOL*********!/
     $mdThemingProvider.theme('tool')
       .backgroundPalette('grey',{
         'default':'200'
       });
-    /*********END TOOL*********/
+    /!*********END TOOL*********!/
 
-    /*********FOOTER*********/
+    /!*********FOOTER*********!/
     $mdThemingProvider.theme('footer')
       .primaryPalette('blue', {
         'default': '500',
@@ -48,9 +49,9 @@ angular.module('flujogenico20App')
       .backgroundPalette('blue-grey',{
         'default':'500'
       });
-    /*********END FOOTER*********/
+    /!*********END FOOTER*********!/
 
-    /*********ABOUT*********/
+    /!*********ABOUT*********!/
     $mdThemingProvider.theme('about')
       .primaryPalette('blue-grey', {
         'default': '800',
@@ -61,16 +62,16 @@ angular.module('flujogenico20App')
       .backgroundPalette('blue-grey',{
         'default':'600'
       });
-    /*********END ABOUT*********/
+    /!*********END ABOUT*********!/
 
-    /*********FLORA*********/
+    /!*********FLORA*********!/
     $mdThemingProvider.theme('flora')
       .backgroundPalette('light-green',{
         'default':'800'
       });
-    /*********END FLORA*********/
+    /!*********END FLORA*********!/
 
-    /*********FAUNA*********/
+    /!*********FAUNA*********!/
     $mdThemingProvider.theme('fauna')
       .primaryPalette('orange', {
         'default': '800',
@@ -84,9 +85,9 @@ angular.module('flujogenico20App')
       .backgroundPalette('orange',{
         'default':'800'
       });
-    /*********FAUNA*********/
+    /!*********FAUNA*********!/
 
-    /*********CIRA*********/
+    /!*********CIRA*********!/
     $mdThemingProvider.theme('cira')
       .primaryPalette('red', {
         'default': '500',
@@ -100,9 +101,9 @@ angular.module('flujogenico20App')
       .accentPalette('purple', {
         'default': '200'
       });
-    /*********END CIRA*********/
+    /!*********END CIRA*********!/
 
-    /*********ESCALA*********/
+    /!*********ESCALA*********!/
     $mdThemingProvider.theme('escala')
       .primaryPalette('blue', {
         'default': '500',
@@ -116,9 +117,9 @@ angular.module('flujogenico20App')
       .backgroundPalette('blue',{
         'default':'500'
       });
-    /*********END SCALA*********/
+    /!*********END SCALA*********!/
 
-    /*********SETTINGS*********/
+    /!*********SETTINGS*********!/
     $mdThemingProvider.theme('settings')
       .primaryPalette('purple', {
         'default': '500',
@@ -132,5 +133,6 @@ angular.module('flujogenico20App')
       .backgroundPalette('purple',{
         'default':'500'
       });
-    /*********END SETTINGS*********/
+    /!*********END SETTINGS*********!/
   });
+*/

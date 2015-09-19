@@ -8,7 +8,8 @@ angular.module('flujogenico20App', [
   'ui.router',
   'ngMaterial',
   'ngMessages',
-  'mdThemeColors'
+  'bw.paging'
+  //'mdThemeColors'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

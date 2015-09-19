@@ -34,7 +34,7 @@ angular.module('flujogenico20App')
       {section:'app',name:'spSearchDescript',es:'Elige una especie',en:'Select a farming species'},
       {section:'app',name:'spSearchStep',es:'Especie seleccionada',en:'Selected species'},
       {section:'app',name:'scientificname',es:'nombre científico',en:'scientific name'},
-      {section:'app',name:'required',es:'<b>Debes</b> ingresar un nombre cientifico',en:'You <b>must</b> a scientific name.'},
+      {section:'app',name:'required',es:'<b>Debes</b> ingresar un nombre cientifico',en:'You <b>have</b> put a scientific name.'},
       {section:'app',name:'reachTitle',es:'¿A qué nivel deseas analizar la especie cultivada?',en:'What level you want to analyze the cultivated species?'},
       {section:'app',name:'reachDescript',es:'',en:''},
       {section:'app',name:'reachStep',es:'Alcance del análisis',en:'Reach of analysis'},
@@ -52,8 +52,11 @@ angular.module('flujogenico20App')
       {section:'app',name:'noData',es:'Sin información en la base de datos',en:'No information in the data base'},
       {section:'app',name:'riskScale',es:'Escala de riesgo',en:'Risk scale'},
       {section:'app',name:'riskIndex',es:'Índice de riesgo',en:'Risk index'},
-      {section:'app',name:'resultTitleLocal',es:'Resultados a nivel local',en:'Local scale results'}
-
+      {section:'app',name:'resultTitleLocal',es:'Resultados a nivel local',en:'Local scale results'},
+      {section:'flora',name:'mainTitle',es:'Flora vascular chilena',en:'Chilean vascular flora'},
+      //{section:'flora',name:'mainSubTitle',es:'Recopilacion de ',en:'Calculation of Environmental Risk Index'},
+      {section:'flora',name:'sideTitle',es:'Flora vascular chilena',en:'Chilean vascular flora'},
+      {section:'flora',name:'searchDescript',es:'Dentro de nuestra base de datos puedes encontrar especies chilenas con informacion taxonomica y biologica',en:'In our data base yo can find taxonomic and biological information about chilean vascular flora'}
 
     ];
 

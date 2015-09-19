@@ -7,10 +7,40 @@ var RiskIndex = require('./RiskCalc/risk-index');
 
 // Get list of floras
 exports.index = function(req, res) {
-  Flora.find(function (err, floras) {
+  Flora.find().skip(600).limit(10).exec(function (err, floras) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(floras);
   });
+};
+
+//pagination flora
+exports.pagination = function(req, res) {
+  var items = req.params.items;
+  var page = req.params.page;
+  var type = req.params.type;
+  var find = {};
+  if(type==='cultivated'){find={'type.id':1}; }
+  if(type==='transgenic'){find={'type.id':4}; }
+  if(type==='introduced'){find={'type.id':2}; }
+  if(type==='native'){find={'type.id':3}; }
+
+  q.all(
+    [
+      Flora.find(find).count().exec(),
+      Flora.find(find).sort('name').skip(items*(page-1)).limit(items).exec()
+    ])
+    .spread(function(count,currPageCont){
+      //console.log(count);
+      var respuesta = {
+        totalItems:count,
+        items:items,
+        totalPages:Math.ceil(count/items),
+        currentPage:page,
+        flora:currPageCont
+      };
+      res.status(200).json(respuesta);
+    })
+    .fail(function(err){ console.log(err);});
 };
 
 // Get a single flora
@@ -57,6 +87,30 @@ exports.destroy = function(req, res) {
   });
 };
 */
+
+
+
+var evalTypeToPropertyQuery = function (et){
+  var type = {};
+  if(et==='coex'){
+    type = {"properties.id":"cultc"};
+  }else if(et==='bio'){
+    type = {$or:[
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else if(et ==='all'){
+    type = {$or:[
+      {"properties.id":"cultc"},
+      {"properties.id":"in"},
+      {"properties.id":"nati"}
+    ]};
+  }else{
+    return false;
+  }
+
+  return type;
+};
 // Search in name field
 // Get a single flora
 exports.search = function(req, res) {
@@ -96,7 +150,7 @@ exports.matchById = function(req, res) {
 
       donor = flora.toObject();
       var genus = donor.general.taxonomy.local.filter(function(s){
-        return s.id=="gen";
+        return s.id==="gen";
       })[0].name;
       //console.log(genus);
       //return res.json(genus);
@@ -135,7 +189,7 @@ exports.matchById = function(req, res) {
       var ides = ids;
       if(err){return handleError(res,err);}
       if(!ides) { res.status(404).send('The variable is false, not set or undefined'); }
-      if(ides.length==0){
+      if(ides.length===0){
         res.status(200).json([]);
         return 'empty';
       }else{
@@ -153,7 +207,7 @@ exports.matchById = function(req, res) {
       if(err){return handleError(res,err);}
 
       //return res.json(receptors);
-      return res.json(RiskIndex(donor,receptors));
+      return res.json(new RiskIndex(donor,receptors));
 
     });
 
@@ -296,27 +350,7 @@ function handleError(res, err) {
   return res.status(500).send(err);
 }
 
-var evalTypeToPropertyQuery = function (et){
-  var type = {};
-  if(et==='coex'){
-    type = {"properties.id":"cultc"};
-  }else if(et==='bio'){
-    type = {$or:[
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else if(et ==='all'){
-    type = {$or:[
-      {"properties.id":"cultc"},
-      {"properties.id":"in"},
-      {"properties.id":"nati"}
-    ]};
-  }else{
-    return false;
-  }
 
-  return type;
-};
 
 
 

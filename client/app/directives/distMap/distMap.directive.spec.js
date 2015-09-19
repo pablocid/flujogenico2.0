@@ -2,7 +2,7 @@
 
 describe('Directive: distMap', function () {
 
-  // load the directive's module and view
+/*  // load the directive's module and view
   beforeEach(module('flujogenico20App'));
   beforeEach(module('app/directives/distMap/distMap.html'));
 
@@ -17,5 +17,5 @@ describe('Directive: distMap', function () {
     element = $compile(element)(scope);
     scope.$apply();
     expect(element.text()).toBe('this is the distMap directive');
-  }));
+  }));*/
 });

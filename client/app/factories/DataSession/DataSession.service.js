@@ -25,21 +25,21 @@ angular.module('flujogenico20App')
       },
       addStep:function(step){
         var index = this.steps.map(function (e){return e.id;}).indexOf(step.id);
-        if(index!=-1){
+        if(index!==-1){
           this.steps[index]= step;
         }else{
           this.steps.push(step);
         }
       },
       getId:function(){
-        return this.steps.filter(function(e){return e.id==2;})[0].nameVar._id;
+        return this.steps.filter(function(e){return e.id===2;})[0].nameVar._id;
       },
       getEvalType:function(){
-        return this.steps.filter(function(e){return e.id==1;})[0].nameVar;
+        return this.steps.filter(function(e){return e.id===1;})[0].nameVar;
       },
       goToResult:function(){
-        if(!this.steps.filter(function(a){return a.id===3 })[0].nameVar){ return;}
-        var resultType = this.steps.filter(function(a){return a.id===3})[0].nameVar;
+        if(!this.steps.filter(function(a){return a.id===3; })[0].nameVar){ return;}
+        var resultType = this.steps.filter(function(a){return a.id===3;})[0].nameVar;
         var id = this.getId();
         var evalType = this.getEvalType();
 
@@ -50,20 +50,20 @@ angular.module('flujogenico20App')
         Flora
           .getMatchSp(id,evalType)
           .then(function(a){
-            if(a.length==0){
+            if(a.length===0){
               self.resultMatch = false;
             }else{
               self.resultMatch= true;
             }
             self.results = a;
-            console.log( self.results)
+            console.log( self.results);
 
             self.resultsIntroducidas = a.filter(function(b){
               var r = b.properties.filter(function(c){
                 return c.id==='in';
               }).length;
 
-              if(r==1){return true}else{return false;}
+              if(r===1){return true;}else{return false;}
 
             });
             self.resultsNativas = a.filter(function(b){
@@ -71,15 +71,15 @@ angular.module('flujogenico20App')
                 return c.id==='nati';
               }).length;
 
-              if(r==1){return true}else{return false;}
+              if(r===1){return true;}else{return false;}
 
             });
             self.progressBar = false;
             //console.log(a)
         });
 
-        if(resultType=='reachCtry'){ goTo('main.application.result-nationalscale');}
-        if(resultType=='reachLocal'){ goTo('main.application.result-local');}
+        if(resultType==='reachCtry'){ goTo('main.application.result-nationalscale');}
+        if(resultType==='reachLocal'){ goTo('main.application.result-local');}
       }
     };
   });

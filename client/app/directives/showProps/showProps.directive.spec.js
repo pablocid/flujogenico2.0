@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Directive: vectorIcon', function () {
-/*
+describe('Directive: showProps', function () {
+
   // load the directive's module
-  beforeEach(module('flujogenicoApp'));
+/*  beforeEach(module('flujogenico20App'));
 
   var element,
     scope;
@@ -13,8 +13,8 @@ describe('Directive: vectorIcon', function () {
   }));
 
   it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<vector-icon></vector-icon>');
+    element = angular.element('<show-props></show-props>');
     element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the vectorIcon directive');
+    expect(element.text()).toBe('this is the showProps directive');
   }));*/
 });

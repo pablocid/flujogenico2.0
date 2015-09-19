@@ -2,7 +2,7 @@
 
 describe('Service: IconService', function () {
 
-  // load the service's module
+/*  // load the service's module
   beforeEach(module('flujogenicoApp'));
 
   // instantiate service
@@ -13,6 +13,6 @@ describe('Service: IconService', function () {
 
   it('should do something', function () {
     expect(!!IconService).toBe(true);
-  });
+  });*/
 
 });

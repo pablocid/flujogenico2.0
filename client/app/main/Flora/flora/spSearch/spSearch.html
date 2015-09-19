@@ -1,0 +1,43 @@
+<div class="titlesec">{{mainCtrl.tc.flora.toolTitle}}</div>
+<div layout="row" layout-align="center center">
+  <vector-icon flex="50"  name="cira" fill="{{mainCtrl.colors.cira}}"></vector-icon>
+</div>
+<div layout="row" layout-align="center start" class="paragraphsec">
+  <div flex-gt-sm="75" flex-sm="100">
+    <p>{{mainCtrl.tc.flora.searchDescript}}</p>
+    <md-content class="md-padding md-margin" >
+      <form ng-submit="fspSCtrl.submitSpSearch()" name="searchForm" novalidate>
+        <md-input-container layout="row" layout-align="center center" layout-wrap>
+          <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="true"
+                           required
+                           md-input-name="autocompleteField"
+                           md-no-cache="fspSCtrl.noCache"
+                           md-selected-item="fspSCtrl.spDonorSelected"
+                           md-search-text="fspSCtrl.searchText"
+                           md-search-text-change="null"
+                           md-items="item in fspSCtrl.querySearch(fspSCtrl.searchText)"
+                           md-item-text="item.name"
+                           md-floating-label="{{mainCtrl.tc.app.scientificname}}">
+            <md-item-template>
+              <span md-highlight-text="fspSCtrl.searchText">{{item.name}}</span>
+            </md-item-template>
+            <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+              <div ng-message="required"><span ng-bind-html="mainCtrl.tc.app.required"></span></div>
+            </div>
+          </md-autocomplete>
+          <md-button flex=50 flex-gt-md="10" class=" md-primary">
+            <md-icon md-font-library="material-icons">search</md-icon>
+          </md-button>
+
+        </md-input-container>
+
+      </form>
+    </md-content>
+    <md-content>
+      <h2>{{fspSCtrl.selectedSp.name}}</h2>
+      <h3><show-props sp="fspSCtrl.selectedSp"></show-props></h3>
+    </md-content>
+  </div>
+</div>
+
+
