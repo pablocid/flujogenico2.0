@@ -1,13 +1,10 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .factory('TextContent', function () {
-    // Service logic
-    // ...
+  .factory('TextContent', function ($http) {
 
-    var meaningOfLife = 42;
     var defaultLang = 'es';
-    var content = [
+    /*var content = [
       {section:'std',name:'moreinfo',es:'más información',en:'more information'},
       {section:'std',name:'enter',es:'entrar',en:'go'},
       {section:'std',name:'cira',es:'CIRA',en:'CERI'},
@@ -58,29 +55,26 @@ angular.module('flujogenico20App')
       {section:'flora',name:'sideTitle',es:'Flora vascular chilena',en:'Chilean vascular flora'},
       {section:'flora',name:'searchDescript',es:'Dentro de nuestra base de datos puedes encontrar especies chilenas con informacion taxonomica y biologica',en:'In our data base yo can find taxonomic and biological information about chilean vascular flora'}
 
-    ];
+    ];*/
 
     // Public API here
     return {
-      someMethod: function () {
-        return meaningOfLife;
-      },
       setLang: function(langStr){
         var self = this;
         if(!langStr){
           langStr = defaultLang;
         }
-        content.forEach(function(p){
-
-          if(!self[p.section]){ self[p.section]={};}
-
-          if(p[langStr]){
-            self[p.section][p.name] = p[langStr];
-          }else{
-            self[p.section][p.name] = p[defaultLang];
-          }
-
+        $http.get('/api/text-content').success(function (content) {
+          content.forEach(function(p){
+            if(!self[p.section]){ self[p.section]={};}
+            if(p[langStr]){
+              self[p.section][p.name] = p[langStr];
+            }else{
+              self[p.section][p.name] = p[defaultLang];
+            }
+          });
         });
+
       }
     };
   });

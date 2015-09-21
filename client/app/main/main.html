@@ -67,7 +67,7 @@
     <md-content layout-padding >
 
       <md-list>
-        <md-list-item md-no-ink="false" class="md-2-line" ng-repeat="item in mainCtrl.todos" ui-sref-active="md-whiteframe-z1" ng-click="mainCtrl.close('left'); mainCtrl.goToState(item.sref)">
+        <md-list-item md-no-ink="false" class="md-2-line" ng-repeat="item in mainCtrl.sections" ui-sref-active="md-whiteframe-z1" ng-click="mainCtrl.close('left'); mainCtrl.goToState(item.sref)">
           <vector-icon layout="row" class="md-avatar" layout-align="center center" name="{{item.icon}}" fill="{{item.color}}"></vector-icon>
           <div class="md-list-item-text">
             <p>{{ item.title }}</p>

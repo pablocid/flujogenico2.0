@@ -18,6 +18,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/pollinators/pollinators.socket').register(socket);
+  require('../api/textContent/textContent.socket').register(socket);
   require('../api/flora/flora.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
 }

@@ -20,7 +20,24 @@
 </paging>
 
 -->
+<style>
+  .paginas li{
+    display: block;
+    float: left;
+    color: #5ea25a;
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-right: 3px;
+    border-radius: 16px;
 
+  }
+  .activeclass{
+    background: #ffffff;
+  }
+  .disablepag span{
+    color: lightgrey;
+  }
+</style>
 
 
 <div ng-hide="ftSCtrl.cultivated.sp && ftSCtrl.transgenic.sp && ftSCtrl.introduced.sp && ftSCtrl.native.sp" layout="row" layout-sm="column" layout-align="space-around">
@@ -142,24 +159,7 @@
 
 
 
-<style>
-  .paginas li{
-    display: block;
-    float: left;
-    color: #5ea25a;
-    text-decoration: none;
-    padding: 5px 10px;
-    margin-right: 3px;
-    border-radius: 16px;
 
-  }
-  .activeclass{
-    background: #ffffff;
-  }
-  .disablepag span{
-    color: lightgrey;
-  }
-</style>
 
 
 

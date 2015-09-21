@@ -1,0 +1,48 @@
+<md-content
+  layout="row"
+  md-theme="fauna">
+  <div
+    flex="33"
+    flex-sm="20"
+    style="background-image: url('assets/images/whitedots.png');
+    background-size: cover;
+    background-position: right">
+  </div>
+  <div flex="5"></div>
+  <div flex class="whitefont padding15">
+    <div class="title">{{mainCtrl.tc.fauna.title}}</div>
+  </div>
+</md-content>
+
+<div layout="row" layout-align="center start">
+  <div flex-gt-lg="100" flex="100">
+    <div layout="row"  layout-wrap>
+      <!-- SECCIONES -->
+
+      <!--SIDE-->
+      <md-content flex-sm="100" flex-md="50" flex-gt-md="33" class="padding25" md-theme="fauna">
+        <div layout="column" layout-align="start center" class="whitefont">
+          <!--<div class="titlesec">{{mainCtrl.tc.flora.sideTitle}}</div>-->
+          <div layout="row" layout-align="center center">
+            <vector-icon flex-gt-md="50" flex="50" flex="x"  name="fauna" fill="{{mainCtrl.colors.fauna}}"></vector-icon>
+          </div>
+          <div flex="100" flex-sm="75" class="paragraphsec">{{mainCtrl.tc.fauna.aboutContent}}</div>
+        </div>
+        <md-content >
+          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.spsearch')">Buscador de especies</md-button>
+          <br/>
+          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.tables')">Lista de especies</md-button>
+        </md-content>
+      </md-content>
+
+      <!-- MAIN -->
+      <md-content flex-sm="100" flex-md="50" flex-gt-md="66" class="padding25" md-theme="tool">
+        <div layout="column" layout-align="center center" ui-view="mainfauna">
+
+        </div>
+      </md-content>
+
+      <!-- FIN SECCIONES -->
+    </div>
+  </div>
+</div>

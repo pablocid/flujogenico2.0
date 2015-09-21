@@ -45,7 +45,7 @@
           </div>
           <div layout="row" layout-align="center start" class="paragraphsec">
             <div flex-gt-sm="75" flex-sm="100">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad dolores maxime nisi odit quas repellendus sapiente. Aperiam atque beatae blanditiis culpa cupiditate distinctio, ea excepturi minus repellat repudiandae sit tempore?
+              {{mainCtrl.tc.home.gotToapp}}
             </div>
           </div>
           <div class="">
@@ -63,7 +63,7 @@
           <div class="titlesec">{{mainCtrl.tc.flora.title}}</div>
           <div flex="100" flex-sm="75"  class="paragraphsec">{{mainCtrl.tc.flora.descriptHome}}</div>
           <div class="">
-            <md-button > {{mainCtrl.tc.std.enter}} </md-button>
+            <md-button ng-click="mainCtrl.goToState('main.flora.tables')"> {{mainCtrl.tc.std.enter}} </md-button>
           </div>
         </div>
       </md-content>
@@ -77,7 +77,7 @@
           <div class="titlesec">{{mainCtrl.tc.fauna.title}}</div>
           <div flex="100" flex-sm="75" class="paragraphsec">{{mainCtrl.tc.fauna.descriptHome}}</div>
           <div class="">
-            <md-button > {{mainCtrl.tc.std.enter}} </md-button>
+            <md-button ng-click="mainCtrl.goToState('main.fauna')"> {{mainCtrl.tc.std.enter}} </md-button>
           </div>
         </div>
       </md-content>
@@ -91,7 +91,7 @@
           <div class="titlesec">{{mainCtrl.tc.escala.title}}</div>
           <div flex="100" flex-sm="75"  class="paragraphsec">{{mainCtrl.tc.escala.descriptHome}}</div>
           <div class="">
-            <md-button > {{mainCtrl.tc.std.enter}} </md-button>
+            <md-button ng-click="mainCtrl.goToState('main.escala')"> {{mainCtrl.tc.std.enter}} </md-button>
           </div>
         </div>
       </md-content>
@@ -105,12 +105,10 @@
           <div class="titlesec">{{mainCtrl.tc.settings.title}}</div>
           <div flex="100" flex-sm="75"  class="paragraphsec">{{mainCtrl.tc.settings.descriptHome}}</div>
           <div class="">
-            <md-button > {{mainCtrl.tc.std.enter}} </md-button>
+            <md-button ng-click="mainCtrl.goToState('main.settings')"> {{mainCtrl.tc.std.enter}} </md-button>
           </div>
         </div>
       </md-content>
-
-
 
       <!-- FIN SECCIONES -->
     </div>

@@ -7,7 +7,7 @@ var RiskIndex = require('./RiskCalc/risk-index');
 
 // Get list of floras
 exports.index = function(req, res) {
-  Flora.find().skip(600).limit(10).exec(function (err, floras) {
+  Flora.find().limit(100).exec(function (err, floras) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(floras);
   });

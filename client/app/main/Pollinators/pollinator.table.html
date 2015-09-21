@@ -1,0 +1,65 @@
+<style>
+  .paginas li{
+    display: block;
+    float: left;
+    color: #5ea25a;
+    text-decoration: none;
+    padding: 5px 10px;
+    margin-right: 3px;
+    border-radius: 16px;
+
+  }
+  .activeclass{
+    background: #ffffff;
+  }
+  .disablepag span{
+    color: lightgrey;
+  }
+</style>
+
+
+<div ng-hide="ptCtrl.Pollinators.sp" layout="row" layout-sm="column" layout-align="space-around">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+
+<div ng-show="ptCtrl.Pollinators.sp">
+  <md-content class="md-padding">
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="Polinizadores">
+        <md-content class="md-padding">
+          <h1 class="md-display-2">Lista de insectos polinizadores de Chile</h1>
+          <md-list>
+            <md-subheader class="md-no-sticky">{{ptCtrl.Pollinators.totalItems}} especies cultivadas</md-subheader>
+            <md-list-item class="md-2-line" ng-repeat="item in ptCtrl.Pollinators.sp">
+              <div class="md-list-item-text">
+                <h3>{{ item.name }}</h3>
+                <h4><show-props sp="item" ></show-props></h4>
+              </div>
+              <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+          </md-list>
+          <paging
+            class="paginas"
+            active-class="activeclass"
+            disabled-class="disablepag"
+            show-prev-next=true
+            scroll-top=true
+            page="ptCtrl.Pollinators.currentPage"
+            page-size="ptCtrl.pageSize"
+            total="ptCtrl.Pollinators.totalItems"
+            paging-action="ptCtrl.getPage(page)">
+          </paging>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>
+
+
+
+
+
+
+
+
+
