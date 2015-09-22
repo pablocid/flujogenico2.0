@@ -202,7 +202,7 @@ exports.matchById = function(req, res) {
       return Flora.find(query).exec();
     })
     .then(function(receptors, err){
-
+      //console.log(receptors);
       if(!receptors){return;}
       if(err){return handleError(res,err);}
 

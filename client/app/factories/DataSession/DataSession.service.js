@@ -38,7 +38,8 @@ angular.module('flujogenico20App')
         return this.steps.filter(function(e){return e.id===1;})[0].nameVar;
       },
       goToResult:function(){
-        if(!this.steps.filter(function(a){return a.id===3; })[0].nameVar){ return;}
+        //console.log('Ejecucion de goToResult');
+        if(!this.steps.filter(function(a){return a.id===3; })[0].nameVar){ console.log('Error en if'); return;}
         var resultType = this.steps.filter(function(a){return a.id===3;})[0].nameVar;
         var id = this.getId();
         var evalType = this.getEvalType();
@@ -47,16 +48,23 @@ angular.module('flujogenico20App')
 
         self.progressBar = true;
         self.resultMatch = true;
+        //console.log('Entrando a la llamada match');
+        //console.log('Valores de la llamada');
+        //console.log('id '+id);
+        //console.log('evaltype');
+        //console.log(evalType);
         Flora
           .getMatchSp(id,evalType)
           .then(function(a){
+            //console.log(a);
             if(a.length===0){
+              //console.log('Array length = 0');
               self.resultMatch = false;
             }else{
               self.resultMatch= true;
             }
             self.results = a;
-            console.log( self.results);
+            //console.log( self.results);
 
             self.resultsIntroducidas = a.filter(function(b){
               var r = b.properties.filter(function(c){

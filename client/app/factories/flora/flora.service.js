@@ -65,7 +65,7 @@ angular.module('flujogenico20App')
         return deferred.promise;
       },
       getMatchSp : function(id,type){
-
+        //console.log('Dentro de getmatchsp');
         var deferred = $q.defer();
         $http.get('/api/flora/match/'+id+'/'+type)
           .success(function(data){

@@ -11,22 +11,31 @@ var Nativa = new RiskModel(NatCult);
 function RiskIndex (donor, receptors){
   return receptors.map(function(r){
     var recept = r.toObject();
-    recept.indexes = setIndexes(donor,recept);
+    //console.log(recept);
+    if(setIndexes(donor,recept)){
+      recept.indexes = setIndexes(donor,recept);
+    }else{
+      console.log('error');
+    }
+
     return recept;
   });
 }
 
 function setIndexes(donor, receptor){
+
   var RRI = setRRI(receptor);
   var DRI = setDRI(donor);
   var SS = sameSp(donor,receptor);
   var RI = setRI(RRI,DRI,SS);
+
   return {
-    RRI:RRI,
-    DRI:DRI,
-    SS:SS,
-    RI:RI
+      RRI:RRI,
+      DRI:DRI,
+      SS:SS,
+      RI:RI
   };
+
 }
 
 function setRI(RRI,DRI,SS){
@@ -51,19 +60,27 @@ function setRIresult(RRI,DRI,SS){
 
 
 function setRRI(sp){
+
   var ReceptorIndex ={};
 
   if(_.some(sp.properties, {id:'in'})){
+    //console.log('En introducidas');
     ReceptorIndex.introducida = Introducida.RRI(sp);
-  }else{sp.RRI.introducida =false;}
+  }else{
+    ReceptorIndex.introducida =false;
+  }
 
   if(_.some(sp.properties, {id:'cultc'})){
+    //console.log('En cultivadas');
     ReceptorIndex.cultivada = Cultivo.RRI(sp);
   }else{ReceptorIndex.cultivada =false;}
 
+
   if(_.some(sp.properties, {id:'nati'})){
+    //console.log('En nativas');
     ReceptorIndex.nativa = Nativa.RRI(sp);
-  }else{ReceptorIndex.nativa =false; }
+  }else{ReceptorIndex.nativa =false;}
+
 
   return ReceptorIndex;
 }

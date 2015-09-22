@@ -19,9 +19,11 @@
       <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{item.name}}</h3>
-        <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.cultivada *100 | number:0}}</h4>
-        <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</p>
-        <p>{{item.indexes.RI.cultivada}}</p>
+        <!--<h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.cultivada *100 | number:0}}</h4>-->
+        <h5>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</h5>
+        <br/>
+        <p>Información sobre {{item.name}} </p>
+        <show-props sp="item"></show-props>
       </div>
     </md-list-item>
     <!-- no props -->
@@ -37,9 +39,9 @@
       <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{item.name}}</h3>
-        <h4>Indice de riesgo:{{item.indexes.RI.cultivada *100 | number:0}}</h4>
         <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</p>
-        <p>{{item.indexes.RI.cultivada}}</p>
+        <p>Información sobre {{item.name}} </p>
+        <show-props sp="item"></show-props>
       </div>
     </md-list-item>
     <md-divider ></md-divider>
@@ -56,9 +58,9 @@
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.introducida)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
-          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.introducida *100 | number:0}}</h4>
           <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.introducida)]}}</p>
-          <p>{{item.indexes.RI.introducida}}</p>
+          <p>Información sobre {{item.name}} </p>
+          <show-props sp="item"></show-props>
         </div>
       </md-list-item>
 
@@ -79,9 +81,9 @@
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
-          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.nativa *100 | number:0}}</h4>
           <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.nativa)]}}</p>
-          <p>{{item.indexes.RI.nativa}}</p>
+          <p>Información sobre {{item.name}} </p>
+          <show-props sp="item"></show-props>
         </div>
       </md-list-item>
 
@@ -90,9 +92,9 @@
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
-          <h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.nativa *100 | number:0}}</h4>
           <p>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.nativa)]}}</p>
-          <p>{{item.indexes.RI.nativa}}</p>
+          <p>Información sobre {{item.name}} </p>
+          <show-props sp="item"></show-props>
         </div>
       </md-list-item>
 

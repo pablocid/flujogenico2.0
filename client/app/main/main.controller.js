@@ -1,5 +1,11 @@
 'use strict';
-
+/**
+ * @ngdoc controller
+ * @name flujogenico20App.controller:MainCtrl
+ * @description
+ * Este es el controlador padre de toda la aplicación. Desde acá se obtiene tode el contenido en texto, settings de colores y themes, funcion para cambios de estado y manejo del menú lateral.
+ *
+ */
 angular.module('flujogenico20App')
   .controller('MainCtrl', function ($mdIcon,$mdSidenav,$mdUtil, $timeout, $log, $http, $q,$state, TextContent, $mdTheming,mdThemeColors) {
     var self = this;
@@ -54,6 +60,16 @@ angular.module('flujogenico20App')
     self.openMenu = function(){
       $mdSidenav('left').toggle();
     };
+    /**
+     * @ngdoc method
+     * @name flujogenico20App.method:goToState
+     * @methodOf flujogenico20App.controller.MainCtrl
+     * @description
+     * Describe the method here...
+     *
+     * @param {string} Description of parameter
+     * @returns {Array} The returned item...
+     */
     self.goToState = function(state){
       console.log('active');
       $state.go(state);

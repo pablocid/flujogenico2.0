@@ -45,17 +45,17 @@
 </div>
 
 <div ng-show="ftSCtrl.cultivated.sp && ftSCtrl.transgenic.sp && ftSCtrl.introduced.sp && ftSCtrl.native.sp">
-  <md-content class="md-padding">
-    <md-tabs md-dynamic-height md-border-bottom>
+  <md-content class="md-padding" >
+    <md-tabs md-dynamic-height md-border-bottom >
       <md-tab label="{{mainCtrl.tc.tableTab.cult}}">
         <md-content class="md-padding">
           <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleCult}}</h1>
           <md-list>
             <md-subheader class="md-no-sticky">{{ftSCtrl.cultivated.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
-            <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.cultivated.sp">
+            <md-list-item class="md-3-line" ng-repeat="item in ftSCtrl.cultivated.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
-                <h4><show-props sp="item" ></show-props></h4>
+                <show-props sp="item" ></show-props>
               </div>
               <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
@@ -78,10 +78,10 @@
           <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleTrans}}</h1>
           <md-list>
             <md-subheader class="md-no-sticky">{{ftSCtrl.transgenic.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
-            <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.transgenic.sp">
+            <md-list-item class="md-3-line" ng-repeat="item in ftSCtrl.transgenic.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
-                <h4><show-props sp="item" ></show-props></h4>
+                <show-props sp="item" ></show-props>
               </div>
               <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
@@ -107,7 +107,7 @@
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.introduced.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
-                <h4><show-props sp="item" ></show-props></h4>
+                <show-props sp="item" ></show-props>
               </div>
               <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
@@ -133,7 +133,7 @@
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.native.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
-                <h4><show-props sp="item" ></show-props></h4>
+                <show-props sp="item" ></show-props>
               </div>
               <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
