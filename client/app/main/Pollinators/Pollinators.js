@@ -37,5 +37,29 @@ angular.module('flujogenico20App')
             controllerAs:'ptCtrl'
           }
         }
+      })
+      .state('main.fauna.search',{
+        url:'/search',
+        views:{
+          mainfauna:{
+            templateUrl:'app/main/Pollinators/pollinator.search.html',
+            controller: function (Pollinator) {
+              var self= this;
+              this.querySearch = function(name){
+                if(name.length===0){ return [];}
+                //console.log(name);
+                return Pollinator.searchSN(name);
+              };
+              this.submitSpSearch = function(){
+                var item = self.spDonorSelected;
+                //console.log(item);
+                Pollinator.get({id:item._id}).then(function(sp){
+                  self.selectedSp = sp;
+                });
+              };
+            },
+            controllerAs:'psCtrl'
+          }
+        }
       });
   });

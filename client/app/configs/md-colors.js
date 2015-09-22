@@ -109,6 +109,9 @@ angular.module('flujogenico20App')
 
     /*********TOOL*********/
     $mdThemingProvider.theme('tool')
+      .primaryPalette('grey',{
+        'default':'500'
+      })
       .backgroundPalette('grey',{
         'default':'200'
       });

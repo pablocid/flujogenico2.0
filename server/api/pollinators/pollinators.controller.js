@@ -32,10 +32,23 @@ exports.pagination = function(req, res) {
 
 // Get list of pollinatorss
 exports.index = function(req, res) {
-  Pollinators.find().limit(10).exec(function (err, pollinatorss) {
+  Pollinators.find().limit(10).exec(function (err, pollinators) {
     if(err) { return handleError(res, err); }
-    return res.status(200).json(pollinatorss);
+    return res.status(200).json(pollinators);
   });
+};
+
+exports.search = function(req, res) {
+  var name = new RegExp(req.params.name, "i");
+  var query = Pollinators.find({taxa: name});
+  query.limit(8);
+  query.select('_id taxa');
+  query.exec(function(err, pollinators){
+    if(err){return handleError(res,err);}
+    if(!pollinators) { return res.send(404); }
+    return res.json(pollinators);
+  });
+
 };
 
 // Get a single pollinators

@@ -6,6 +6,7 @@ angular.module('flujogenico20App')
     var setCommingData = function (dat) {
 
       var obj = {
+        _id:dat._id,
         general:{
           taxonomy:{
             local:[]
@@ -13,6 +14,7 @@ angular.module('flujogenico20App')
         },
         properties:[]
       };
+
         for(var d in dat){
           switch(d){
             case 'orden':
@@ -64,6 +66,38 @@ angular.module('flujogenico20App')
             console.error(msg,code);
           });
         return deferred.promise;
+      },
+      searchSN : function(name){
+        var deferred = $q.defer();
+        $http.get('/api/fauna/search/'+name)
+          .success(function(data){
+            deferred.resolve(data.map(function(a){
+              return {
+                _id: a._id,
+                name: a.taxa
+              };
+            }));
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.error(msg,code);
+          });
+        return deferred.promise;
+      },
+      get:function(id3){
+        var id =id3.id;
+        var deferred = $q.defer();
+        $http.get('/api/fauna/'+id)
+          .success(function(data){
+            //console.log(data);
+            deferred.resolve(setCommingData(data));
+          })
+          .error(function(msg,code){
+            deferred.reject(msg);
+            console.error(msg,code);
+          });
+        return deferred.promise;
+
       }
     };
   });

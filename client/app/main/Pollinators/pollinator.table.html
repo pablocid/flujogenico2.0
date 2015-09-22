@@ -25,11 +25,11 @@
 <div ng-show="ptCtrl.Pollinators.sp">
   <md-content class="md-padding">
     <md-tabs md-dynamic-height md-border-bottom>
-      <md-tab label="Polinizadores">
+      <md-tab label="{{mainCtrl.tc.tableTab.pol}}">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Lista de insectos polinizadores de Chile</h1>
+          <h1 class="md-display-2">{{mainCtrl.tc.tableText.titlePol}}</h1>
           <md-list>
-            <md-subheader class="md-no-sticky">{{ptCtrl.Pollinators.totalItems}} especies cultivadas</md-subheader>
+            <md-subheader class="md-no-sticky">{{ptCtrl.Pollinators.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
             <md-list-item class="md-2-line" ng-repeat="item in ptCtrl.Pollinators.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>

@@ -5,6 +5,7 @@ var controller = require('./pollinators.controller');
 
 var router = express.Router();
 
+router.get('/search/:name', controller.search);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/:page/:items', controller.pagination);

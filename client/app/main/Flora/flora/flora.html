@@ -14,7 +14,6 @@
     <div class="subtitle">{{mainCtrl.tc.flora.mainSubTitle}}</div>
   </div>
 </md-content>
-
 <div layout="row" layout-align="center start">
   <div flex-gt-lg="100" flex="100">
     <div layout="row"  layout-wrap>
@@ -30,9 +29,9 @@
           <div flex="100" flex-sm="75" class="paragraphsec">{{mainCtrl.tc.flora.aboutContent}}</div>
         </div>
         <md-content >
-          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.spsearch')">Buscador de especies</md-button>
+          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.spsearch')">{{mainCtrl.tc.tableText.btnSearch}}</md-button>
           <br/>
-          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.tables')">Lista de especies</md-button>
+          <md-button md-theme="other" class="md-raised" ng-click="mainCtrl.goToState('main.flora.tables')">{{mainCtrl.tc.tableText.btnList}}</md-button>
         </md-content>
       </md-content>
 

@@ -19,23 +19,24 @@ angular.module('flujogenico20App')
           scope.sp.general.taxonomy.local.forEach(function(t){
             if(t.id==='gen'||t.id==='sp'){return;}
             var toolTextt = t.name;
-            var aa = '<md-button md-no-ink class="md-fab"> '+t.id+' <md-tooltip >'+toolTextt+'</md-tooltip></md-button>';
+            var aa = '<md-button md-no-ink class="md-fab"  style="background-color: gray;"> '+t.id+' <md-tooltip >'+toolTextt+'</md-tooltip></md-button>';
             var sa = angular.element(aa);
             span.append(sa);
           });
 
           scope.sp.properties.forEach(function(prop){
-            if(prop.id==='cultc'||prop.id==='gffs'||prop.id==='gffc'||prop.id==='sb'|| prop.id==='fg'){return;}
-
-            var toolText = prop.altName || prop.name;
-            if(prop.weight){toolText+=': '+prop.weight;}
-            var pp = '<md-button md-no-ink class="md-fab"> '+prop.id+' <md-tooltip >'+toolText+'</md-tooltip></md-button>';
+            if(prop.id==='cultc'||prop.id==='gffs'||prop.id==='gffc'||prop.id==='sb'|| prop.id==='fg'|| prop.id==='reg'){return;}
+            var toolText = '{{mainCtrl.tc.table.'+prop.id+' || "'+prop.altName+'"||"'+prop.name+'"}}';//prop.altName || prop.name;
+            //if(prop.id==='aus'){toolText='Ausente en Chile';}
+            //{{mainCtrl.tc.table[prop.id] prop.altName || prop.name}}
+            //if(prop.weight){toolText+=': '+prop.weight;}
+            var pp = '<md-button md-no-ink class="md-fab" style="background-color: gray;"> '+prop.id+' <md-tooltip >'+toolText+'</md-tooltip></md-button>';
             var ep = angular.element(pp);
             span.append(ep);
 
           });
 
-          $compile(span)(scope);
+          $compile(span)(scope.$parent);
           element.append(span);
         });
         //TODO: traducir las propiedades y leyendas

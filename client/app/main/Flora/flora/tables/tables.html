@@ -47,11 +47,11 @@
 <div ng-show="ftSCtrl.cultivated.sp && ftSCtrl.transgenic.sp && ftSCtrl.introduced.sp && ftSCtrl.native.sp">
   <md-content class="md-padding">
     <md-tabs md-dynamic-height md-border-bottom>
-      <md-tab label="Cultivadas">
+      <md-tab label="{{mainCtrl.tc.tableTab.cult}}">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Lista de especies cultivadas</h1>
+          <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleCult}}</h1>
           <md-list>
-            <md-subheader class="md-no-sticky">{{ftSCtrl.cultivated.totalItems}} especies cultivadas</md-subheader>
+            <md-subheader class="md-no-sticky">{{ftSCtrl.cultivated.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.cultivated.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
@@ -73,11 +73,11 @@
           </paging>
         </md-content>
       </md-tab>
-      <md-tab label="Transgenicas">
+      <md-tab label="{{mainCtrl.tc.tableTab.trans}}">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Lista de especies transgénicas</h1>
+          <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleTrans}}</h1>
           <md-list>
-            <md-subheader class="md-no-sticky">{{ftSCtrl.transgenic.totalItems}} especies cultivadas</md-subheader>
+            <md-subheader class="md-no-sticky">{{ftSCtrl.transgenic.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.transgenic.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
@@ -99,11 +99,11 @@
           </paging>
         </md-content>
       </md-tab>
-      <md-tab label="Introducidas">
+      <md-tab label="{{mainCtrl.tc.tableTab.in}}">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Lista de especies introducidas</h1>
+          <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleIn}}</h1>
           <md-list>
-            <md-subheader class="md-no-sticky">{{ftSCtrl.introduced.totalItems}} especies cultivadas</md-subheader>
+            <md-subheader class="md-no-sticky">{{ftSCtrl.introduced.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.introduced.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
@@ -125,11 +125,11 @@
           </paging>
         </md-content>
       </md-tab>
-      <md-tab label="Nativas">
+      <md-tab label="{{mainCtrl.tc.tableTab.nati}}">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Lista de especies nativas</h1>
+          <h1 class="md-display-2">{{mainCtrl.tc.tableText.titleNati}}</h1>
           <md-list>
-            <md-subheader class="md-no-sticky">{{ftSCtrl.native.totalItems}} especies cultivadas</md-subheader>
+            <md-subheader class="md-no-sticky">{{ftSCtrl.native.totalItems}} {{mainCtrl.tc.tableText.spcount}}</md-subheader>
             <md-list-item class="md-2-line" ng-repeat="item in ftSCtrl.native.sp">
               <div class="md-list-item-text">
                 <h3>{{ item.name }}</h3>
