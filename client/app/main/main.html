@@ -27,9 +27,9 @@
   </md-button>
 
 </md-toolbar>
-
 <!--Main content-->
-<div ui-view class="ubuntu" autoscroll="true"></div>
+<div ng-show="mainCtrl.tc" ui-view class="ubuntu"></div>
+<md-progress-circular ng-hide="mainCtrl.tc" md-mode="indeterminate"></md-progress-circular>
 
 <!-- footer -->
 <md-content md-theme="footer">

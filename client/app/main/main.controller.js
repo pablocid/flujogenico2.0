@@ -7,7 +7,7 @@
  *
  */
 angular.module('flujogenico20App')
-  .controller('MainCtrl', function ($mdIcon,$mdSidenav,$mdUtil, $timeout, $log, $http, $q,$state, TextContent, $mdTheming,mdThemeColors) {
+  .controller('MainCtrl', function ($scope, $mdIcon,$mdSidenav,$mdUtil, $timeout, $log, $http, $q,$state, TextContent, $mdTheming,mdThemeColors,$sce) {
     var self = this;
 
     self.isOpen = false;
@@ -18,8 +18,12 @@ angular.module('flujogenico20App')
     };
     //content
     TextContent.setLang();
-
+    self.apply= function () {
+      $scope.$apply();
+    };
     self.tc = TextContent;
+
+    //console.log(TextContent);
 
     // colors
     self.colors = {
@@ -46,6 +50,7 @@ angular.module('flujogenico20App')
       },300);
       return debounceFn;
     }
+
     self.toggleLeft = buildToggler('left');
     self.toggleRight = buildToggler('right');
 
@@ -63,7 +68,7 @@ angular.module('flujogenico20App')
     /**
      * @ngdoc method
      * @name flujogenico20App.method:goToState
-     * @methodOf flujogenico20App.controller.MainCtrl
+     * @methodOf flujogenico20App.controller:MainCtrl
      * @description
      * Describe the method here...
      *
@@ -71,18 +76,21 @@ angular.module('flujogenico20App')
      * @returns {Array} The returned item...
      */
     self.goToState = function(state){
-      console.log('active');
+      //console.log('active');
       $state.go(state);
     };
+//console.log(self.tc.home);
+    TextContent.content().then(function () {
+      self.sections = [
+        {title:'Home', description:'', icon:'home',sref:'main.home', color:self.colors.main},
+        {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
+        {title:self.tc.flora.title, description:'La descripcion', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
+        {title:self.tc.fauna.title, description:'La descripcion', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
+        {title:self.tc.escala.mainTitle, description:'La descripcion', icon:'escala',sref:'main.escala', color:self.colors.escala},
+        {title:self.tc.settings.mainTitle, description:'La descripcion', icon:'settings',sref:'main.settings', color:self.colors.settings}
+      ];
+    });
 
-    self.sections = [
-      {title:'Home', description:'', icon:'home',sref:'main.home', color:self.colors.main},
-      {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
-      {title:'Flora vascular chilena', description:'La descripcion', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
-      {title:'Fauna de polinizadores chilenos', description:'La descripcion', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
-      {title:'Clasificaciones y escala de riesgo', description:'La descripcion', icon:'escala',sref:'main.escala', color:self.colors.escala},
-      {title:'Sobre el sistema computacional', description:'La descripcion', icon:'settings',sref:'main.settings', color:self.colors.settings}
-    ];
 
     self.close = function (id) {
       $mdSidenav(id).close()
@@ -94,4 +102,36 @@ angular.module('flujogenico20App')
       TextContent.setLang(lang);
     };
     self.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+
+    self.iframes ={
+      about: $sce.trustAsResourceUrl("https://docs.google.com/document/d/11EawVdD5l2ZglEdqgSGO-Rm7I0QnDW1zZdRrkzkuERs/pub?embedded=true"),
+      escala:$sce.trustAsResourceUrl("https://docs.google.com/document/d/1K8vxWtqW1MFmijxi6lR9zj5DI8yK--F6w76i78VGVzA/pub?embedded=true"),
+      settings:$sce.trustAsResourceUrl("https://docs.google.com/document/d/1xa2oatimRHzyBvZ6FKlldIlL68lAxJGRKmxvzIEp1FA/pub?embedded=true")
+    };
+
+    $http
+      .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
+      .success(function (data) {
+        var newArr = [];
+        function kaka(ds) {
+          var arr = ds.split(", ");
+          var obj={};
+          arr.map(function (a) {
+
+            var na = a.split(": ");
+            obj[na[0]]=na[1];
+            return na;
+          });
+          return obj;
+        }
+
+        data.feed.entry.forEach(function (d) {
+          var dato = "section: "+d.title.$t+", "+d.content.$t;
+          newArr.push(kaka(dato));
+          //r[d.title.$t] =d.content.$t;
+        });
+        //console.log(newArr);
+      });
+
+
   });

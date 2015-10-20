@@ -28,9 +28,17 @@ angular.module('flujogenico20App')
 
         species = scope.species;
 
+        function latitud(geojson){
+          console.log(geojson)
+          var boundingBox = window.Turf(geojson);
+          console.log(boundingBox);
+          return (boundingBox[1]+boundingBox[3])/2;
+        }
+
          map.on('selectionChange', function(e) {
            scope.selection = e.species;
            scope.$apply();
+           console.log(latitud(e.geom));
            //console.log(new Date(), e.species);
          });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .factory('TextContent', function ($http) {
+  .factory('TextContent', function ($http, $q) {
 
     var defaultLang = 'es';
     /*var content = [
@@ -56,15 +56,26 @@ angular.module('flujogenico20App')
       {section:'flora',name:'searchDescript',es:'Dentro de nuestra base de datos puedes encontrar especies chilenas con informacion taxonomica y biologica',en:'In our data base yo can find taxonomic and biological information about chilean vascular flora'}
 
     ];*/
-
+    var self = this;
     // Public API here
+    function kaka(ds) {
+      var arr = ds.split(", ");
+      var obj={};
+      arr.map(function (a) {
+
+        var na = a.split(": ");
+        obj[na[0]]=na[1];
+        return na;
+      });
+      return obj;
+    }
     return {
       setLang: function(langStr){
         var self = this;
         if(!langStr){
-          langStr = defaultLang;
+          self.langStr = defaultLang;
         }
-        $http.get('/api/text-content').success(function (content) {
+/*        $http.get('/api/text-content').success(function (content) {
           content.forEach(function(p){
             if(!self[p.section]){ self[p.section]={};}
             if(p[langStr]){
@@ -73,8 +84,70 @@ angular.module('flujogenico20App')
               self[p.section][p.name] = p[defaultLang];
             }
           });
-        });
+        });*/
 
+        $http
+          .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
+          .success(function (data) {
+            var r ={};
+            var newArr = [];
+            function kaka(ds) {
+              var arr = ds.split(", ");
+              var obj={};
+              arr.map(function (a) {
+
+                var na = a.split(": ");
+                obj[na[0]]=na[1];
+                return na;
+              });
+              return obj;
+            }
+
+            data.feed.entry.forEach(function (d) {
+              var dato = "section: "+d.title.$t+", "+d.content.$t;
+              newArr.push(kaka(dato));
+              //r[d.title.$t] =d.content.$t;
+            });
+
+            newArr.forEach(function(p){
+              if(!self[p.section]){ self[p.section]={};}
+              if(p[langStr]){
+                self[p.section][p.name] = p[langStr];
+              }else{
+                self[p.section][p.name] = p[defaultLang];
+              }
+            });
+
+          })
+          .error(function (err) {
+            console.log("FUQUIN ERROR");
+          });
+      },
+      content: function () {
+        var deferred = $q.defer();
+        $http
+          .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
+          .success(function (data) {
+            var selfi = {};
+            var newArr = [];
+
+            data.feed.entry.forEach(function (d) {
+              var dato = "section: "+d.title.$t+", "+d.content.$t;
+              newArr.push(kaka(dato));
+            });
+
+             newArr.forEach(function(p){
+             if(!selfi[p.section]){ selfi[p.section]={};}
+             if(p[self.langStr]){
+             selfi[p.section][p.name] = p[self.langStr];
+             }else{
+             selfi[p.section][p.name] = p[defaultLang];
+             }
+             });
+            deferred.resolve(selfi);
+          });
+
+        return deferred.promise;
       }
     };
   });
