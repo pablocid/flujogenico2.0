@@ -3,7 +3,13 @@
  * @ngdoc controller
  * @name flujogenico20App.controller:MainCtrl
  * @description
- * Este es el controlador padre de toda la aplicación. Desde acá se obtiene tode el contenido en texto, settings de colores y themes, funcion para cambios de estado y manejo del menú lateral.
+ * Este es el controlador padre de toda la aplicación. Desde acá se obtiene el contenido en texto, settings de colores y themes, funcion para cambios de estado y manejo del menú lateral.
+ *
+ * #Tareas:
+ * - Estraer html desde un iframe y arreglar formato
+ * - Utilizar googlespreadsheet con cell en vez de list
+ * - Hacer una directiva con el menu lateral
+ * - Hacer una factoria con funciones auxiliares
  *
  */
 angular.module('flujogenico20App')
@@ -22,8 +28,6 @@ angular.module('flujogenico20App')
       $scope.$apply();
     };
     self.tc = TextContent;
-
-    //console.log(TextContent);
 
     // colors
     self.colors = {
@@ -70,24 +74,22 @@ angular.module('flujogenico20App')
      * @name flujogenico20App.method:goToState
      * @methodOf flujogenico20App.controller:MainCtrl
      * @description
-     * Describe the method here...
+     * Función que permite cambiar de estado
      *
-     * @param {string} Description of parameter
-     * @returns {Array} The returned item...
+     * @param {string} State_name nombre del estado
      */
     self.goToState = function(state){
-      //console.log('active');
       $state.go(state);
     };
-//console.log(self.tc.home);
+
     TextContent.content().then(function () {
       self.sections = [
-        {title:'Home', description:'', icon:'home',sref:'main.home', color:self.colors.main},
-        {title:'APP', description:'Cálculo del índice de riesgo ambiental',icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
-        {title:self.tc.flora.title, description:'La descripcion', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
-        {title:self.tc.fauna.title, description:'La descripcion', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
-        {title:self.tc.escala.mainTitle, description:'La descripcion', icon:'escala',sref:'main.escala', color:self.colors.escala},
-        {title:self.tc.settings.mainTitle, description:'La descripcion', icon:'settings',sref:'main.settings', color:self.colors.settings}
+        {title:'Home', icon:'home',sref:'main.home', color:self.colors.main},
+        {title:'APP', icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
+        {title:self.tc.flora.title, icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
+        {title:self.tc.fauna.title, icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
+        {title:self.tc.escala.mainTitle, icon:'escala',sref:'main.escala', color:self.colors.escala},
+        {title:self.tc.settings.mainTitle, icon:'settings',sref:'main.settings', color:self.colors.settings}
       ];
     });
 
