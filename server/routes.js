@@ -9,6 +9,7 @@ var errors = require('./components/errors');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/iframes', require('./api/iframe'));
   app.use('/api/fauna', require('./api/pollinators'));
   app.use('/api/text-content', require('./api/textContent'));
   app.use('/api/flora', require('./api/flora'));
