@@ -7,11 +7,7 @@ angular.module('flujogenico20App')
       scope:{},
       restrict: 'EA',
       link: function (scope, element, attrs) {
-        console.log('iniciado cFrame directive');
-        //
         element.find('#cframe-div').empty();
-        //var progressBar = angular.element('<md-progress-circular />').attr({'md-mode':'indeterminate'});
-        //element.append(progressBar);
 
         attrs.$observe('src', function (value) {
           element.find('md-progress-linear').css({'display':'block'});

@@ -4,15 +4,15 @@
   class="md-whiteframe-z2">
   <div class="md-toolbar-tools" layout="row" layout-align="center">
     <md-menu md-theme="other">
-      <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+      <md-button id="langBtn" aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
         <vector-icon name="translate" class="md-avatar" fill="#2196F3"></vector-icon>
       </md-button>
       <md-menu-content width="2">
         <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('es')">Español</md-button>
+          <md-button id="langBtnES" ng-click="mainCtrl.setLang('es')">Español</md-button>
         </md-menu-item>
         <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('en')">English</md-button>
+          <md-button class="langBtnEN"  ng-click="mainCtrl.setLang('en')">English</md-button>
         </md-menu-item>
       </md-menu-content>
     </md-menu>
@@ -35,16 +35,6 @@
 <md-content md-theme="footer">
   <footer layout="row">
     <div style="height: 100px"></div>
-    <!--
-    <md-button class="md-primary md-hue-1">Primary 1</md-button>
-    <md-button class="md-primary md-hue-2">Primary 2</md-button>
-    <md-button class="md-primary md-hue-3">Primary 3</md-button>
-    <md-button class="md-warn md-hue-1 md-raised">Warn 1</md-button>
-    <md-button class="md-warn md-hue-2 md-raised">Warn 2</md-button>
-    <md-button class="md-warn md-hue-3">Warn 3</md-button>
-    <md-button class="md-accent md-hue-1">Accent 1</md-button>
-    <md-button class="md-accent md-hue-2">Accent 2</md-button>
-    <md-button class="md-accent md-hue-3">Accent 3</md-button>-->
   </footer>
 </md-content>
 
