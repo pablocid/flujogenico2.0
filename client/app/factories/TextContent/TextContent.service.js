@@ -87,11 +87,12 @@ angular.module('flujogenico20App')
         });*/
 
         $http
-          .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
+          .get('https://spreadsheets.google.com/feeds/cells/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
           .success(function (data) {
             var r ={};
             var newArr = [];
-            function kaka(ds) {
+            var result = [];
+        /*    function kaka(ds) {
               var arr = ds.split(", ");
               var obj={};
               arr.map(function (a) {
@@ -101,15 +102,32 @@ angular.module('flujogenico20App')
                 return na;
               });
               return obj;
-            }
+            }*/
+            data.feed.entry.forEach(function (n) {
+              var v = n.title.$t[0];
+              var p = n.title.$t.replace(/\w/,'');
+              var c = n.content.$t;
+              var key;
 
-            data.feed.entry.forEach(function (d) {
+              if(v==='A'){key='section';}
+              if(v==='B'){key='name';}
+              if(v==='C'){key='es';}
+              if(v==='D'){key='en';}
+
+              //inicializar
+              if(!result[p]){result[p]={};}
+
+              result[p][key]=c;
+
+            });
+
+/*            data.feed.entry.forEach(function (d) {
               var dato = "section: "+d.title.$t+", "+d.content.$t;
               newArr.push(kaka(dato));
               //r[d.title.$t] =d.content.$t;
-            });
+            });*/
 
-            newArr.forEach(function(p){
+            result.forEach(function(p){
               if(!self[p.section]){ self[p.section]={};}
               if(p[langStr]){
                 self[p.section][p.name] = p[langStr];
@@ -126,17 +144,37 @@ angular.module('flujogenico20App')
       content: function () {
         var deferred = $q.defer();
         $http
-          .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
+          .get('https://spreadsheets.google.com/feeds/cells/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
           .success(function (data) {
             var selfi = {};
             var newArr = [];
+            var result = [];
+            var headers = ['section', 'name', 'es', 'en'];
 
             data.feed.entry.forEach(function (d) {
               var dato = "section: "+d.title.$t+", "+d.content.$t;
               newArr.push(kaka(dato));
             });
 
-             newArr.forEach(function(p){
+            data.feed.entry.forEach(function (n) {
+              var v = n.title.$t[0];
+              var p = n.title.$t[1];
+              var c = n.content.$t;
+              var key;
+
+              if(v==='A'){key='section'};
+              if(v==='B'){key='name'};
+              if(v==='C'){key='es'};
+              if(v==='D'){key='en'};
+
+              //inicializar
+              if(!result[p]){result[p]={};}
+
+              result[p][key]=c;
+
+            });
+
+            result.forEach(function(p){
              if(!selfi[p.section]){ selfi[p.section]={};}
              if(p[self.langStr]){
              selfi[p.section][p.name] = p[self.langStr];
