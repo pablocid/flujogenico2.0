@@ -49,7 +49,7 @@ angular.module('flujogenico20App')
         $mdSidenav(navID)
           .toggle()
           .then(function () {
-            $log.debug('toggle ' + navID + ' is done');
+            //$log.debug('toggle ' + navID + ' is done');
           });
       },300);
       return debounceFn;
@@ -82,17 +82,6 @@ angular.module('flujogenico20App')
       $state.go(state);
     };
 
-    TextContent.content().then(function () {
-      self.sections = [
-        {title:'home', icon:'home',sref:'main.home', color:self.colors.main},
-        {title:'app', icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
-        {title:'flora', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
-        {title:'fauna', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
-        {title:'escala', icon:'escala',sref:'main.escala', color:self.colors.escala},
-        {title:'settings', icon:'settings',sref:'main.settings', color:self.colors.settings}
-      ];
-    });
-
 
     self.close = function (id) {
       $mdSidenav(id).close()
@@ -105,35 +94,12 @@ angular.module('flujogenico20App')
     };
     self.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
-    self.iframes ={
-      about: $sce.trustAsResourceUrl("https://docs.google.com/document/d/11EawVdD5l2ZglEdqgSGO-Rm7I0QnDW1zZdRrkzkuERs/pub?embedded=true"),
-      escala:$sce.trustAsResourceUrl("https://docs.google.com/document/d/1K8vxWtqW1MFmijxi6lR9zj5DI8yK--F6w76i78VGVzA/pub?embedded=true"),
-      settings:$sce.trustAsResourceUrl("https://docs.google.com/document/d/1xa2oatimRHzyBvZ6FKlldIlL68lAxJGRKmxvzIEp1FA/pub?embedded=true")
-    };
-
-    $http
-      .get('https://spreadsheets.google.com/feeds/list/1VmziNKfbmyMgtmZVC-7IjvkNNnxw0UssD_NL8I1H6GE/od6/public/basic?alt=json')
-      .success(function (data) {
-        var newArr = [];
-        function kaka(ds) {
-          var arr = ds.split(", ");
-          var obj={};
-          arr.map(function (a) {
-
-            var na = a.split(": ");
-            obj[na[0]]=na[1];
-            return na;
-          });
-          return obj;
-        }
-
-        data.feed.entry.forEach(function (d) {
-          var dato = "section: "+d.title.$t+", "+d.content.$t;
-          newArr.push(kaka(dato));
-          //r[d.title.$t] =d.content.$t;
-        });
-        //console.log(newArr);
-      });
-
-
+    self.sections = [
+      {title:'home', icon:'home',sref:'main.home', color:self.colors.main},
+      {title:'app', icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
+      {title:'flora', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
+      {title:'fauna', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
+      {title:'escala', icon:'escala',sref:'main.escala', color:self.colors.escala},
+      {title:'settings', icon:'settings',sref:'main.settings', color:self.colors.settings}
+    ];
   });
