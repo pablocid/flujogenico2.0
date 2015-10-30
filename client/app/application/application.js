@@ -4,7 +4,7 @@ angular.module('flujogenico20App')
   .config(function ($stateProvider) {
     $stateProvider
       .state('main.application', {
-        url: '/application',
+        url: '/application/:evalType',
         templateUrl: 'app/application/application.html',
         controller: 'ApplicationCtrl',
         controllerAs:'appCtrl'

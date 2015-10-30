@@ -1,9 +1,16 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .controller('ApplicationCtrl', function (DataSession, Flora, $state) {
+  .controller('ApplicationCtrl', function (DataSession, Flora, $state,$stateParams) {
     var self = this;
     self.state = $state;
+    var param = $stateParams.evalType;
+    if(param && (param==='coexistencia' || param==='biodiversidad')){
+      var tipo;
+      if(param==='coexistencia'){tipo='coex';}
+      if(param==='biodiversidad'){tipo='bio'}
+      DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
+    }
 
     self.starAgain = function(){
       self.spDonorSelected='';
