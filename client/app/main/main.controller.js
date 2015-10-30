@@ -93,4 +93,13 @@ angular.module('flujogenico20App')
       TextContent.setLang(lang);
     };
     self.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+
+    self.sections = [
+      {title:'home', icon:'home',sref:'main.home', color:self.colors.main},
+      {title:'app', icon:'cira',sref:'main.application.evalType', color:self.colors.cira},
+      {title:'flora', icon:'flora',sref:'main.flora.tables', color:self.colors.flora},
+      {title:'fauna', icon:'fauna',sref:'main.fauna.table', color:self.colors.fauna},
+      {title:'escala', icon:'escala',sref:'main.escala', color:self.colors.escala},
+      {title:'settings', icon:'settings',sref:'main.settings', color:self.colors.settings}
+    ];
   });
