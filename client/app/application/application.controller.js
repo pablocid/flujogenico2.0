@@ -9,7 +9,9 @@ angular.module('flujogenico20App')
       var tipo;
       if(param==='coexistencia'){tipo='coex';}
       if(param==='biodiversidad'){tipo='bio'}
-      DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
+      if(tipo){
+        DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
+      }
     }
 
     self.starAgain = function(){
