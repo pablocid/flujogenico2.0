@@ -16,12 +16,13 @@ angular.module('flujogenico20App')
         var map, species;
         //var num = "distribution-map-"+Math.floor((Math.random() * 10000) + 1);
         var width = scope.dmWidth || '100%';
-        var height = scope.dmHeight || '350px';
+        var height = scope.dmHeight || '450px';
 
          map = new window.DMap({
          container: 'map',
-         host: 'http://flujogenico.cswlabs.cl'  // donde se encuentran los modelos
+         host: 'http://servidor-modelos.cswlabs.cl'  // donde se encuentran los modelos
          });
+
 
         element.find('#map').css('height',height);
         element.find('#map').css('width',width);
@@ -29,7 +30,7 @@ angular.module('flujogenico20App')
         species = scope.species;
 
         function latitud(geojson){
-          console.log(geojson)
+          //console.log(geojson);
           var boundingBox = window.Turf(geojson);
           console.log(boundingBox);
           return (boundingBox[1]+boundingBox[3])/2;
