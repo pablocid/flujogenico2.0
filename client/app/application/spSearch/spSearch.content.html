@@ -1,18 +1,18 @@
 <md-content class="md-padding" >
-  <form ng-submit="appCtrl.submitSpSearch()" name="searchForm">
+  <form ng-submit="spSearchContentCtrl.submitSpSearch()" name="searchForm">
     <div layout="row" layout-align="center center" layout-wrap>
       <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="true"
                        required
                        md-input-name="autocompleteField"
-                       md-no-cache="appCtrl.noCache"
-                       md-selected-item="appCtrl.spDonorSelected"
-                       md-search-text="appCtrl.searchText"
+                       md-no-cache="spSearchContentCtrl.noCache"
+                       md-selected-item="spSearchContentCtrl.spDonorSelected"
+                       md-search-text="spSearchContentCtrl.searchText"
                        md-search-text-change="null"
-                       md-items="item in appCtrl.querySearch(appCtrl.searchText)"
+                       md-items="item in spSearchContentCtrl.querySearch(spSearchContentCtrl.searchText)"
                        md-item-text="item.name"
                        md-floating-label="{{mainCtrl.tc.app.scientificname}}">
         <md-item-template>
-          <span md-highlight-text="appCtrl.searchText">{{item.name}}</span>
+          <span md-highlight-text="spSearchContentCtrl.searchText">{{item.name}}</span>
         </md-item-template>
         <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
           <div ng-message="required"><span ng-bind-html="mainCtrl.tc.app.required"></span></div>
@@ -21,8 +21,6 @@
         <md-button flex=50 flex-gt-md="10" class=" md-primary">
           <md-icon md-font-library="material-icons">search</md-icon>
         </md-button>
-
     </div>
-
   </form>
 </md-content>

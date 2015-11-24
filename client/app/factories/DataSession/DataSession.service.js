@@ -1,16 +1,85 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .factory('DataSession', function ($state, Flora) {
-    function goTo(state){
-      var es = state || 'main.application.evalType';
-      $state.go(es);
-    }
-
+  .factory('DataSession', function ($state, Flora,$q) {
     return {
       steps:[],
       results:'',
-      pushStep:function(step){
+      underscoreResults: '',
+      setStep: function (id,content) {
+        var stepIndex = this.steps.map(function(a){return a.id}).indexOf(id);
+        if(stepIndex===-1){
+          var obj = {};
+          obj.id= id;
+          obj.value=content;
+          this.steps.push(obj);
+        }else{
+          this.steps[stepIndex].value= content;
+        }
+        return true;
+      },
+      getStep: function (id) {
+        var stepIndex = this.steps.map(function(a){return a.id}).indexOf(id);
+        if(stepIndex===-1){return;}
+        return this.steps[stepIndex].value;
+      },
+      eraseSteps:function () {
+        this.steps=[];
+        this.results = '';
+      },
+      makeResult: function () {
+        var deffered = $q.defer();
+        var self = this;
+        var idIndex = this.steps.map(function(a){return a.id}).indexOf('spSearch');
+        var etIndex = this.steps.map(function(a){return a.id}).indexOf('evalType');
+        if(idIndex===-1 ||etIndex===-1 ){return;}
+
+        var id = this.steps[idIndex].value._id;
+        console.log(id);
+        var evalType = this.steps[etIndex].value;
+
+        Flora.getMatchSp({id:id,type:evalType}).$promise.then(function (data) {
+          if(data.length===0){self.resultMatch = false;}
+          else{self.resultMatch= true;}
+          self.results = data;
+          self.resultsIntroducidas = data.filter(function(b){
+            var r = b.properties.filter(function(c){
+              return c.id==='in';
+            }).length;
+
+            if(r===1){return true;}else{return false;}
+
+          });
+          self.resultsNativas = data.filter(function(b){
+            var r = b.properties.filter(function(c){
+              return c.id==='nati';
+            }).length;
+
+            if(r===1){return true;}else{return false;}
+
+          });
+          self.progressBar = false;
+          self.underscoreResults = data.map(function(a){return a.underscoreSp();});
+
+          console.log(self.underscoreResults);
+          deffered.resolve('OK');
+        });
+
+        return deffered.promise;
+
+      },
+      getEvalType:function(){
+        //return this.steps.filter(function(e){return e.id==='evalType';})[0].value;
+        var index = this.steps.map(function(a){return a.id}).indexOf('evalType');
+        if(index===-1){return;}
+        return this.steps[index].value;
+      },
+      getReach: function () {
+        var index = this.steps.map(function(a){return a.id}).indexOf('reach');
+        if(index===-1){return}
+        return this.steps[index].value;
+      }
+/*      pushStep:function(step){
         if(!step){
           goTo();
         }else{
@@ -88,6 +157,6 @@ angular.module('flujogenico20App')
 
         if(resultType==='reachCtry'){ goTo('main.application.result-nationalscale');}
         if(resultType==='reachLocal'){ goTo('main.application.result-local');}
-      }
+      }*/
     };
   });

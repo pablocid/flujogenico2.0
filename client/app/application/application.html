@@ -12,7 +12,7 @@
           </div>
           <div flex="100" flex-sm="75">
             <ol>
-              <li ng-repeat="paso in appCtrl.DS.steps">{{mainCtrl.tc.app[paso.title]}}: <b>{{paso.name || mainCtrl.tc.app[paso.nameVar]}}</b> </li>
+              <li ng-repeat="paso in appCtrl.DS.steps">{{mainCtrl.tc.app[paso.id]}}: <b>{{paso.value}}</b> </li>
             </ol>
           </div>
           <div flex="100" flex-sm="75">

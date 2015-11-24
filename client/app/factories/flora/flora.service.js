@@ -1,17 +1,51 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .factory('Flora', function ($http,$q) {
-    // Service logic
-    // ...
+  .factory('Flora', function ($resource) {
+    var FloraService = $resource('/api/flora/:id',
+      {id: '@_id'},
+      {
+        searchSN:{
+          method:'GET',
+          url:'/api/flora/search/:name',
+          isArray:true
+        },
+        getMatchSp:{
+          method:'GET',
+          url:'/api/flora/match/:id/:type',
+          isArray:true
+        },
+        paginate:{
+          method:'GET',
+          url:'/api/flora/:type/pagination/:p/:i',
+          isArray:false,
+          transformResponse: function(data, header) {
+            var wrapped = angular.fromJson(data);
+            var flora =  wrapped.flora.map(function (a) {
+              return new FloraService(a);
+            });
+            wrapped.flora = flora;
+            return wrapped;
+          }
+        }
+      }
+    );
 
-    var meaningOfLife = 42;
+    FloraService.prototype.underscoreSp = function () {
+      var genIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('gen');
+      var spIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('sp');
+      var varIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('var');
+      var sppIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('spp');
 
-    // Public API here
-    return {
-      someMethod: function () {
-        return meaningOfLife;
-      },
+      var undeSp ='';
+      if(genIndex!==-1){undeSp += this.general.taxonomy.local[genIndex].name}
+      if(spIndex!==-1){undeSp += '_'+this.general.taxonomy.local[spIndex].name}
+      if(varIndex!==-1){undeSp += '_'+this.general.taxonomy.local[varIndex].name}
+      if(sppIndex!==-1){undeSp += '_'+this.general.taxonomy.local[sppIndex].name}
+      return undeSp;
+    };
+    return FloraService;
+/*    return {
       paginate:function(type,p, i){
         var deferred = $q.defer();
         $http.get('/api/flora/'+type+'/pagination/'+p+'/'+i)
@@ -77,5 +111,5 @@ angular.module('flujogenico20App')
           });
         return deferred.promise;
       }
-    };
+    };*/
   });

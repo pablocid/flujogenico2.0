@@ -1,5 +1,5 @@
 <!--<ul>
-  <li ng-repeat="item in appCtrl.DS.results | orderBy:'-cultivada' ">
+  <li ng-repeat="item in nationalContentCtrl.DS.results | orderBy:'-cultivada' ">
     <div layout="row">
       <vector-icon flex="5" name="warn" fill="black" style="width: 50px"></vector-icon>
       <span flex>{{item.name}}: {{item.cultivada}}</span>
@@ -7,22 +7,22 @@
   </li>
 </ul>
 -->
-<md-content ng-show="appCtrl.DS.resultMatch">
+<md-content ng-show="nationalContentCtrl.DS.resultMatch">
 
   <!-- IF is Coex analysis -->
-  <md-list ng-show="appCtrl.DS.getEvalType()==='coex'">
+  <md-list ng-show="nationalContentCtrl.DS.getEvalType()==='coex'">
     <h3>Análisis de coexistencia agrícola</h3>
-    <md-subheader class="md-no-sticky">Hay {{appCtrl.DS.results.length}} resultados</md-subheader>
+    <md-subheader class="md-no-sticky">Hay {{nationalContentCtrl.DS.results.length}} resultados</md-subheader>
     <md-divider ></md-divider>
     <md-subheader class="md-no-sticky">Especies cultivadas emparentadas: {{cultivated.length}} resultados </md-subheader>
-    <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.results | orderBy:'-indexes.RI.cultivada' | filter:{indexes:{RI:{cultivada:'!noProp'}}} as cultivated ">
+    <md-list-item class="md-3-line" ng-repeat="item in nationalContentCtrl.DS.results | orderBy:'-indexes.RI.cultivada' | filter:{indexes:{RI:{cultivada:'!noProp'}}} as cultivated ">
       <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{item.name}}</h3>
         <!--<h4>{{mainCtrl.tc.app.riskIndex}}: {{item.indexes.RI.cultivada *100 | number:0}}</h4>-->
         <h5>{{mainCtrl.tc.app.riskScale}}: {{mainCtrl.tc.app[appCtrl.indexScale(item.indexes.RI.cultivada)]}}</h5>
         <br/>
-        <p>Información sobre {{item.name}} </p>
+        <p>Información sobre {{item.name}}: </p>
         <show-props sp="item"></show-props>
       </div>
     </md-list-item>
@@ -35,7 +35,7 @@
     <md-list-item
       class="md-3-line"
       ng-show="cultivatedNoProp.length>0"
-      ng-repeat="item in appCtrl.DS.results | orderBy:'name' | filter:{indexes:{RI:{cultivada:'noProp'}}} as cultivatedNoProp">
+      ng-repeat="item in nationalContentCtrl.DS.results | orderBy:'name' | filter:{indexes:{RI:{cultivada:'noProp'}}} as cultivatedNoProp">
       <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.cultivada)}}"></vector-icon>
       <div class="md-list-item-text" layout="column">
         <h3>{{item.name}}</h3>
@@ -49,12 +49,12 @@
   </md-list>
 
   <!-- IF is Bio analysis -->
-  <div ng-show="appCtrl.DS.getEvalType()==='bio'">
+  <div ng-show="nationalContentCtrl.DS.getEvalType()==='bio'">
     <h3>Análisis de riesgo para la biodiversidad</h3>
     <md-list >
       <md-divider ></md-divider>
       <md-subheader class="md-no-sticky">Especies introducidas: {{introduced.length}} resultados </md-subheader><!--| filter:{introducida:'!noProp'}-->
-      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsIntroducidas | orderBy:'-indexes.RI.introducida' | filter:{indexes:{RI:{introducida:'!noProp'}}} as introduced ">
+      <md-list-item class="md-3-line" ng-repeat="item in nationalContentCtrl.DS.resultsIntroducidas | orderBy:'-indexes.RI.introducida' | filter:{indexes:{RI:{introducida:'!noProp'}}} as introduced ">
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.introducida)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
@@ -65,7 +65,7 @@
       </md-list-item>
 
       <md-subheader class="md-no-sticky">Especies introducidas emparentadas sin información: {{introducedNoProp.length}} resultados</md-subheader>
-      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsIntroducidas | orderBy:'name' | filter:{indexes:{RI:{introducida:'noProp'}}} as introducedNoProp">
+      <md-list-item class="md-3-line" ng-repeat="item in nationalContentCtrl.DS.resultsIntroducidas | orderBy:'name' | filter:{indexes:{RI:{introducida:'noProp'}}} as introducedNoProp">
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.introducida)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
@@ -77,7 +77,7 @@
 
       <md-divider ></md-divider>
       <md-subheader class="md-no-sticky">Especies nativas: {{natives.length}} resultados </md-subheader><!--| filter:{introducida:'!noProp'}-->
-      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsNativas | orderBy:'-indexes.RI.nativa' | filter:{indexes:{RI:{nativa:'!noProp'}}} as natives ">
+      <md-list-item class="md-3-line" ng-repeat="item in nationalContentCtrl.DS.resultsNativas | orderBy:'-indexes.RI.nativa' | filter:{indexes:{RI:{nativa:'!noProp'}}} as natives ">
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
@@ -88,7 +88,7 @@
       </md-list-item>
 
       <md-subheader class="md-no-sticky">Especies nativas emparentadas sin información: {{nativesNoProp.length}} resultados</md-subheader>
-      <md-list-item class="md-3-line" ng-repeat="item in appCtrl.DS.resultsNativas | orderBy:'name' | filter:{indexes:{RI:{nativa:'noProp'}}} as nativesNoProp">
+      <md-list-item class="md-3-line" ng-repeat="item in nationalContentCtrl.DS.resultsNativas | orderBy:'name' | filter:{indexes:{RI:{nativa:'noProp'}}} as nativesNoProp">
         <vector-icon class="md-avatar"  name="warn" fill="{{appCtrl.indexColor(item.indexes.RI.nativa)}}"></vector-icon>
         <div class="md-list-item-text" layout="column">
           <h3>{{item.name}}</h3>
@@ -103,6 +103,6 @@
 </md-content>
 
 
-<h1 ng-hide="appCtrl.DS.resultMatch">{{mainCtrl.tc.app.noResults}}</h1>
+<h1 ng-hide="nationalContentCtrl.DS.resultMatch">{{mainCtrl.tc.app.noResults}}</h1>
 
-<md-progress-circular ng-show="appCtrl.DS.progressBar" md-mode="indeterminate"></md-progress-circular>
+<md-progress-circular ng-show="nationalContentCtrl.DS.progressBar" md-mode="indeterminate"></md-progress-circular>
