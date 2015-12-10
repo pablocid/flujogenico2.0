@@ -43,10 +43,14 @@ angular.module('flujogenico20App')
           },
           content:{
             templateUrl:'app/application/spSearch/spSearch.content.html',
-            controller: function ($state,Flora,DataSession) {
+            controller: function ($state,Flora,DataSession,$timeout) {
               var self = this;
-              this.submitSpSearch = function(){
-                DataSession.setStep('spSearch',self.spDonorSelected);
+              this.submitSpSearch = function(obj){
+                if(obj){
+                  DataSession.setStep('spSearch',obj);
+                }else{
+                  DataSession.setStep('spSearch',self.spDonorSelected);
+                }
                 console.log(DataSession.steps);
                 $state.go('main.application.reach');
               };
@@ -54,6 +58,13 @@ angular.module('flujogenico20App')
                 if(name.length===0){ return [];}
                 return Flora.searchSN({name:name}).$promise
               };
+              Flora.getList({type:4}).$promise.then(function (data) {
+                self.transgenic = data;
+              });
+              Flora.getList({type:1}).$promise.then(function (data) {
+                self.cultivated = data;
+              });
+
             },
             controllerAs:'spSearchContentCtrl'
           }
@@ -133,6 +144,19 @@ angular.module('flujogenico20App')
             templateUrl:'app/application/results/results.local.html',
             controller:'resultsLocalController',
             controllerAs:'resultLocalCtrl'
+          }
+        }
+      })
+      .state('main.application.noresult',{
+        url:'/no-result',
+        views:{
+          title:{
+            template:'<h2>No results</h2>'
+          },
+          content:{
+            controller: function ($state) {
+
+            }
           }
         }
       });

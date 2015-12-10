@@ -27,6 +27,11 @@ angular.module('flujogenico20App')
             wrapped.flora = flora;
             return wrapped;
           }
+        },
+        getList:{
+          method:'GET',
+          url:'/api/flora/list/:type',
+          isArray:true
         }
       }
     );
@@ -42,7 +47,30 @@ angular.module('flujogenico20App')
       if(spIndex!==-1){undeSp += '_'+this.general.taxonomy.local[spIndex].name}
       if(varIndex!==-1){undeSp += '_'+this.general.taxonomy.local[varIndex].name}
       if(sppIndex!==-1){undeSp += '_'+this.general.taxonomy.local[sppIndex].name}
-      return undeSp;
+      return undeSp.toLowerCase();
+    };
+    FloraService.prototype.getTax = function (id) {
+      var Index = this.general.taxonomy.local.map(function(a){return a.id}).indexOf(id);
+      var resp = '';
+      if(Index!==-1){
+        resp = this.general.taxonomy.local[Index].name;
+        resp = resp[0].toUpperCase() + resp.substring(1);
+      }
+      return resp;
+    };
+    FloraService.prototype.getVernacular = function () {
+      var self = this;
+      if(!this.general.vernacularNames || this.general.vernacularNames.length === 0){return;}
+      var response='';
+      this.general.vernacularNames.forEach(function (name, index) {
+        response+=name.name;
+        if(self.general.vernacularNames.length -1 !==index){
+          response+=', ';
+        }else{
+          response+='.'
+        }
+      });
+      return response;
     };
     return FloraService;
 /*    return {

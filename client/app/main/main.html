@@ -1,32 +1,5 @@
 <!--Barra de menú-->
-<md-toolbar
-  md-theme="tool"
-  class="md-whiteframe-z2">
-  <div class="md-toolbar-tools" layout="row" layout-align="center">
-    <md-menu md-theme="other">
-      <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-        <vector-icon name="translate" class="md-avatar" fill="#2196F3"></vector-icon>
-      </md-button>
-      <md-menu-content width="2">
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('es')">Español</md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('en')">English</md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-  </div>
-  <md-button
-    ng-click="mainCtrl.toggleLeft()"
-    class=" md-fab md-fab-top-left"
-    style="background-color: #FFC107" >
-
-    <md-icon class="material-icons">menu</md-icon>
-
-  </md-button>
-
-</md-toolbar>
+<menu-bar-pc></menu-bar-pc>
 <!--Main content-->
 <div ng-show="mainCtrl.tc" ui-view class="ubuntu"></div>
 <md-progress-circular ng-hide="mainCtrl.tc" md-mode="indeterminate"></md-progress-circular>

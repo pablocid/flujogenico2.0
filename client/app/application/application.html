@@ -18,10 +18,11 @@
           <div flex="100" flex-sm="75">
             <div ui-view="info"></div>
           </div>
-          <div flex="100" flex-sm="75" ng-show="appCtrl.localResults">
+          <div flex="100" flex-sm="75" ng-show="appCtrl.DS.localResults">
             <h3>Especies presentes en tu seleccion</h3>
             <ul>
-              <li ng-repeat="(k,v) in appCtrl.localResults">{{k}}: <br/>Probabilidada de presencia {{v}}%</li>
+              <!--<li ng-repeat="(k,v) in appCtrl.localResults">{{k}}: <br/>Probabilidada de presencia {{v}}%</li>-->
+              <li ng-repeat="item in appCtrl.DS.localResults | orderBy:'-localResult' ">{{item.name}}: {{item.localResult *100}}%</li>
             </ul>
           </div>
           <div class="paddingbtn">

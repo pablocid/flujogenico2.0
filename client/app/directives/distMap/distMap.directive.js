@@ -10,7 +10,7 @@ angular.module('flujogenico20App')
         dmWidth:'@dmWidth',
         dmHeight:'@dmHeight',
         species:'=species',
-        selection:'='
+        selection:'&'
       },
       link: function (scope, element) {
         var map, species;
@@ -37,7 +37,7 @@ angular.module('flujogenico20App')
         }
 
          map.on('selectionChange', function(e) {
-           scope.selection = e.species;
+           scope.selection({sp:e});
            scope.$apply();
            console.log(latitud(e.geom));
            //console.log(new Date(), e.species);

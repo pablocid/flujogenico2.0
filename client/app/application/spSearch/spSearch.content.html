@@ -1,7 +1,8 @@
-<md-content class="md-padding" >
+
+<md-content class="md-padding" ng-cloak>
   <form ng-submit="spSearchContentCtrl.submitSpSearch()" name="searchForm">
     <div layout="row" layout-align="center center" layout-wrap>
-      <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="true"
+      <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="false"
                        required
                        md-input-name="autocompleteField"
                        md-no-cache="spSearchContentCtrl.noCache"
@@ -23,4 +24,45 @@
         </md-button>
     </div>
   </form>
+
+  <md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="{{mainCtrl.tc.tableTab.trans}}">
+      <md-content class="md-padding">
+        <h5 class="md-display-1">{{mainCtrl.tc.tableText.titleTrans}}</h5>
+        <md-list>
+        <md-virtual-repeat-container style="height: 350px">
+          <md-list-item class="md-3-line" md-virtual-repeat="item in spSearchContentCtrl.transgenic | orderBy: 'name' " ng-click="spSearchContentCtrl.submitSpSearch({_id:item._id,name:item.name})">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.name }}</h3>
+              <h4>{{mainCtrl.tc.app.vern}}: {{item.getVernacular()}}</h4>
+              <p>{{mainCtrl.tc.app.fam}}: {{ item.getTax('fam')}}</p>
+            </div>
+          </md-list-item>
+        </md-virtual-repeat-container>
+        </md-list>
+      </md-content>
+    </md-tab>
+    <md-tab label="{{mainCtrl.tc.tableTab.cult}}">
+      <md-content class="md-padding">
+        <h5 class="md-display-1">{{mainCtrl.tc.tableText.titleCult}}</h5>
+        <md-list>
+          <md-virtual-repeat-container style="height: 350px">
+            <md-list-item class="md-3-line" md-virtual-repeat="item in spSearchContentCtrl.cultivated | orderBy: 'name' " ng-click="spSearchContentCtrl.submitSpSearch({_id:item._id,name:item.name})">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{ item.name }}</h3>
+                <h4>{{mainCtrl.tc.app.vern}}: {{item.getVernacular()}}</h4>
+                <p>{{mainCtrl.tc.app.fam}}: {{ item.getTax('fam')}}</p>
+              </div>
+            </md-list-item>
+          </md-virtual-repeat-container>
+        </md-list>
+      </md-content>
+    </md-tab>
+  </md-tabs>
 </md-content>
+
+
+<!-- <div md-virtual-repeat="item in spSearchContentCtrl.transgenic"
+               class="repeated-item" flex>
+
+          </div>-->

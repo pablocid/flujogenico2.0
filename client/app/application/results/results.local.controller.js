@@ -1,67 +1,70 @@
 'use strict';
 
 angular.module('flujogenico20App')
-    .controller('resultsLocalController', function ($scope,DataSession) {
+    .controller('resultsLocalController', function ($scope,DataSession, $http,$state) {
     var self = this;
-    //self.species = ['brassica_napus','brassica_rapa','brassica_cretica','brassica_oleracea', 'brassica_carinata', 'brassica_juncea', 'brassica_oleracea_capitata'];//['agrostis_capillaris', 'agrostis_leptotricha', 'agrostis_magellanica','brassica_napus'];
-    //self.species =['zea_mais_rugosa'];
 
-/*    if(DataSession.results && DataSession.results.length){
-      console.log('ok');
-      self.species =DataSession.underscoreResults();
+    function ifMatch(res,serv){
+      if(!res || !serv || res.length===0 || serv.length===0){return;}
+      for(var i =0;i<res.length;i++){
+        for(var j=0; j<serv.length;j++){
+          if(res[i].underscoreSp()===serv[j].id){
+            return true;
+          }
+        }
+      }
+
     }
-    $scope.DS= DataSession;
-    $scope.results = $scope.DS.results;
-    */
-
     self.species =DataSession.underscoreResults;
+    self.results = DataSession.results;
 
-    /*self.species = ['agrostis_arvensis',
-      'agrostis_meyenii',
-      'agrostis_capillaris',
-      'agrostis_nebulosa',
-      'agrostis_stolonifera',
-      'agrostis_stolonifera',
-      'agrostis_tenuis',
-      'agrostis_gigantea',
-      'agrostis_mertensii',
-      'agrostis_serranoi',
-      'agrostis_exasperata',
-      'agrostis_serranoi',
-      'agrostis_brachyathera',
-      'agrostis_breviculmis',
-      'agrostis_castellana',
-      'agrostis_serranoi',
-      'agrostis_glabra_glabra',
-      'agrostis_glabra_melanthes',
-      'agrostis_imberbis',
-      'agrostis_inconspicua',
-      'agrostis_kuntzei',
-      'agrostis_masafuerana',
-      'agrostis_leptotricha',
-      'agrostis_tolucensis',
-      'agrostis_scabra',
-      'agrostis_magellanica',
-      'agrostis_mertensii',
-      'agrostis_meyenii',
-      'agrostis_stolonifera',
-      'agrostis_perennans',
-      'agrostis_philippiana',
-      'agrostis_umbellata',
-      'agrostis_uliginosa',
-      'agrostis_vidalii'];*/
-
-    /*
-    DataSession.results.forEach(function (a) {
-      console.log(a);
+    var genus = DataSession.getStep('spSearch').name.split(" ")[0].toLowerCase();
+    self.show=false;
+    $http.get('http://servidor-modelos.cswlabs.cl/models?genero='+genus).success(function (data) {
+      if(ifMatch(self.results,data)){
+        self.show=true;
+        console.log('match');
+      }else{
+        $state.go('main.application.noresult');
+      }
     });
 
-     self.selectionInfo = function(a){
-     self.showSelection = a;
-     };
-     $interval( function(){
-     console.log(self.showSelection);
-     }, 500);
-     */
+    self.localResults = function (sp) {
+      DataSession.localResults =[];
+      for(var s in sp.species){
+        if(sp.species[s]){
+          //console.log(findSp(self.results,s));
+          DataSession.localResults.push(findSp(self.results,s,sp.species[s]));
+        }
+      }
+    };
+    function findSp(arr,e,val){
+      console.log(val)
+      var index = arr.map(function (a) {return a.underscoreSp();}).indexOf(e);
+      if(index ===-1){return;}
+      var esp = angular.copy(arr[index]);
+      if(!esp.indexes || !esp.indexes.RI){
+        esp.localResult = 'no info';
+        return esp;
+      }
+      var RIs =[];
+      for(var k in esp.indexes.RI){
+        if(esp.indexes.RI[k] && esp.indexes.RI[k]!=='noProp'){
+          RIs.push(esp.indexes.RI[k]);
+        }
+      }
+      if(RIs.sort(function(a, b){return b-a})[0] && val>=1){
+        var result = RIs.sort(function(a, b){return b-a})[0];
+        result = Math.round(result);
+        //if(!result){result=1; }
+        esp.localResult =result* val/100;
+      }else{
+        esp.localResult = 0;
+      }
+
+
+      console.log(esp.localResult);
+      return esp;
+    }
 
   });

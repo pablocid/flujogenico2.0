@@ -26,6 +26,9 @@ angular.module('flujogenico20App')
       eraseSteps:function () {
         this.steps=[];
         this.results = '';
+        this.underscoreResults='';
+        this.localResults =[];
+
       },
       makeResult: function () {
         var deffered = $q.defer();
