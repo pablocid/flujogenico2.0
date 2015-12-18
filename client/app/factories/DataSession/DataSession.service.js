@@ -38,7 +38,7 @@ angular.module('flujogenico20App')
         if(idIndex===-1 ||etIndex===-1 ){return;}
 
         var id = this.steps[idIndex].value._id;
-        console.log(id);
+        //console.log(id);
         var evalType = this.steps[etIndex].value;
 
         Flora.getMatchSp({id:id,type:evalType}).$promise.then(function (data) {
@@ -64,12 +64,10 @@ angular.module('flujogenico20App')
           self.progressBar = false;
           self.underscoreResults = data.map(function(a){return a.underscoreSp();});
 
-          console.log(self.underscoreResults);
           deffered.resolve('OK');
         });
 
         return deffered.promise;
-
       },
       getEvalType:function(){
         //return this.steps.filter(function(e){return e.id==='evalType';})[0].value;

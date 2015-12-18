@@ -25,7 +25,7 @@
     </div>
   </form>
 
-  <md-tabs md-dynamic-height md-border-bottom>
+  <md-tabs ng-show="spSearchContentCtrl.transgenic" md-dynamic-height md-border-bottom>
     <md-tab label="{{mainCtrl.tc.tableTab.trans}}">
       <md-content class="md-padding">
         <h5 class="md-display-1">{{mainCtrl.tc.tableText.titleTrans}}</h5>
@@ -59,6 +59,10 @@
       </md-content>
     </md-tab>
   </md-tabs>
+
+  <div ng-hide="spSearchContentCtrl.transgenic" layout="row" layout-sm="column" layout-align="space-around">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+  </div>
 </md-content>
 
 

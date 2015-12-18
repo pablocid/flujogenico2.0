@@ -39,7 +39,7 @@ angular.module('flujogenico20App')
       }
     };
     function findSp(arr,e,val){
-      console.log(val)
+      //console.log(val);
       var index = arr.map(function (a) {return a.underscoreSp();}).indexOf(e);
       if(index ===-1){return;}
       var esp = angular.copy(arr[index]);
@@ -61,9 +61,8 @@ angular.module('flujogenico20App')
       }else{
         esp.localResult = 0;
       }
-
-
-      console.log(esp.localResult);
+      esp.proPres = val;
+      //console.log(esp.localResult);
       return esp;
     }
 

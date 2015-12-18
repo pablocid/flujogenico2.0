@@ -12,7 +12,9 @@
           </div>
           <div flex="100" flex-sm="75">
             <ol>
-              <li ng-repeat="paso in appCtrl.DS.steps">{{mainCtrl.tc.app[paso.id]}}: <b>{{paso.value}}</b> </li>
+              <li ng-repeat="paso in appCtrl.DS.steps">
+                {{mainCtrl.tc.app[paso.id]}}: <b> {{paso.value.name || mainCtrl.tc.app[paso.value]}} </b>
+              </li>
             </ol>
           </div>
           <div flex="100" flex-sm="75">
@@ -22,7 +24,7 @@
             <h3>Especies presentes en tu seleccion</h3>
             <ul>
               <!--<li ng-repeat="(k,v) in appCtrl.localResults">{{k}}: <br/>Probabilidada de presencia {{v}}%</li>-->
-              <li ng-repeat="item in appCtrl.DS.localResults | orderBy:'-localResult' ">{{item.name}}: {{item.localResult *100}}%</li>
+              <li ng-repeat="item in appCtrl.DS.localResults | orderBy:'-localResult' "> <b>{{item.name}}</b> :<br/>{{mainCtrl.tc.app.probPres}}: {{item.proPres}}% <br/> {{mainCtrl.tc.app.ocp}}: {{item.localResult *100}}%</li>
             </ul>
           </div>
           <div class="paddingbtn">

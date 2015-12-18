@@ -23,7 +23,6 @@ angular.module('flujogenico20App')
     self.DS = DataSession;
 
     //if(DataSession.steps.length===0){self.starAgain();}
-
 /*    this.evalTypeSelected = function(tipo){
       DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
     };
