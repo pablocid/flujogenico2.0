@@ -12,6 +12,7 @@ angular.module('flujogenico20App')
       link: function (scope, element) {
 
         scope.$watch('sp',function(sp){
+          element.empty();
           if(!sp){return;}
           var span = angular.element('<span />');
           //console.log(sp);
