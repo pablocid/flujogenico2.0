@@ -383,6 +383,12 @@ module.exports = function (grunt) {
           branch: 'master'
         }
       },
+      devDeploy:{
+        options:{
+          remote:'https://github.com/pablocid/devtestflujo.git',
+          branch:'dev'
+        }
+      },
       openshift: {
         options: {
           remote: 'openshift',

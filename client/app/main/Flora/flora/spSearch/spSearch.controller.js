@@ -6,13 +6,14 @@ angular.module('flujogenico20App')
     this.querySearch = function(name){
       if(name.length===0){ return [];}
       //console.log(name);
-      return Flora.searchSN(name);
+      return Flora.searchSN({name:name}).$promise;
     };
     this.submitSpSearch = function(){
       var item = self.spDonorSelected;
-      Flora.get({id:item._id}).then(function(sp){
+      Flora.get({id:item._id}).$promise.then(function(sp){
+        self.selectedSp="";
         self.selectedSp = sp;
+        console.log(sp);
       });
-      console.log(self.selectedSp);
     };
   });

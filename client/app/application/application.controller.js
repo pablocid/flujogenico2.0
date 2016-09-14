@@ -1,22 +1,29 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .controller('ApplicationCtrl', function (DataSession, Flora, $state) {
+  .controller('ApplicationCtrl', function (DataSession,$state) {
     var self = this;
-    self.state = $state;
+    //self.state = $state;
+/*    var param = $stateParams.evalType;
+    if(param && (param==='coexistencia' || param==='biodiversidad')){
+      var tipo;
+      if(param==='coexistencia'){tipo='coex';}
+      if(param==='biodiversidad'){tipo='bio'}
+      if(tipo){
+        DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
+      }
+    }*/
 
     self.starAgain = function(){
-      self.spDonorSelected='';
-      self.searchText = '';
       DataSession.eraseSteps();
-      self.localResults =false;
+      $state.go('main.application.evalType');
     };
 
+    // para mostrar tabla de avance
     self.DS = DataSession;
 
-    if(DataSession.steps.length===0){self.starAgain();}
-
-    this.evalTypeSelected = function(tipo){
+    //if(DataSession.steps.length===0){self.starAgain();}
+/*    this.evalTypeSelected = function(tipo){
       DataSession.pushStep({id:1,title:'evalTypeStep', nameVar:tipo,to:'main.application.spsearch'});
     };
 
@@ -34,9 +41,7 @@ angular.module('flujogenico20App')
 
     this.selectedReach = function(string){
       DataSession.pushStep({id:3,title:'reachStep', nameVar:string, to:'main.application.result'});
-    };
-
-    this.DS = DataSession;
+    };*/
 
     this.indexColor = function(idx){
       if(idx<=0.2){return '#0b620a';}
@@ -48,11 +53,11 @@ angular.module('flujogenico20App')
       }
     };
     this.indexScale = function(idx){
-      if(idx<=0.2){return 'veryLow';}
-      if(idx>0.2 && idx<=0.4){return 'low';}
-      if(idx>0.4 && idx<=0.6){return 'medium';}
-      if(idx>0.6 && idx<=0.8){return 'high';}
-      if(idx<0.8 ){return 'veryHigh';}else{
+      if(idx<=0.2){return 'Very low';}
+      if(idx>0.2 && idx<=0.4){return 'Low';}
+      if(idx>0.4 && idx<=0.6){return 'Medium';}
+      if(idx>0.6 && idx<=0.8){return 'High';}
+      if(idx<0.8 ){return 'Very high';}else{
         return 'noData';
       }
     };

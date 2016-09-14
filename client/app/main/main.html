@@ -1,32 +1,5 @@
 <!--Barra de menú-->
-<md-toolbar
-  md-theme="tool"
-  class="md-whiteframe-z2">
-  <div class="md-toolbar-tools" layout="row" layout-align="center">
-    <md-menu md-theme="other">
-      <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-        <vector-icon name="translate" class="md-avatar" fill="#2196F3"></vector-icon>
-      </md-button>
-      <md-menu-content width="2">
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('es')">Español</md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.setLang('en')">English</md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-  </div>
-  <md-button
-    ng-click="mainCtrl.toggleLeft()"
-    class=" md-fab md-fab-top-left"
-    style="background-color: #FFC107" >
-
-    <md-icon class="material-icons">menu</md-icon>
-
-  </md-button>
-
-</md-toolbar>
+<menu-bar-pc></menu-bar-pc>
 <!--Main content-->
 <div ng-show="mainCtrl.tc" ui-view class="ubuntu"></div>
 <md-progress-circular ng-hide="mainCtrl.tc" md-mode="indeterminate"></md-progress-circular>
@@ -50,35 +23,4 @@
 
 
 <!-- sidenav -->
-  <md-sidenav
-    id="misidenav"
-    class="md-sidenav-left md-whiteframe-z2"
-    md-component-id="left"
-    md-swipe-left="mainCtrl.toggleLeft()">
-
-    <md-toolbar md-theme="main" layout="row" layout-align="center center">
-      <p class="md-title">Menú</p>
-
-      <md-button ng-click="mainCtrl.toggleLeft()" hide-gt-md>
-        <md-icon md-font-library="material-icons" >close</md-icon>
-      </md-button>
-    </md-toolbar>
-
-    <md-content layout-padding >
-
-      <md-list>
-        <md-list-item md-no-ink="false" class="md-2-line" ng-repeat="item in mainCtrl.sections" ui-sref-active="md-whiteframe-z1" ng-click="mainCtrl.close('left'); mainCtrl.goToState(item.sref)">
-          <vector-icon layout="row" class="md-avatar" layout-align="center center" name="{{item.icon}}" fill="{{item.color}}"></vector-icon>
-          <div class="md-list-item-text">
-            <p>{{ item.title }}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-
-      <md-button ng-click="mainCtrl.close('left')" class=" md-raised" hide-gt-md>
-        Close
-      </md-button>
-
-    </md-content>
-
-  </md-sidenav>
+  <sidebar-menu-app></sidebar-menu-app>

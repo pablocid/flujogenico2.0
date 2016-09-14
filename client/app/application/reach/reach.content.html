@@ -4,7 +4,7 @@
       <vector-icon flex="33" name="nacional" fill="{{mainCtrl.colors.reachIcon}}"></vector-icon>
     </div>
 
-    <md-button flex class="md-primary md-button" ng-click="appCtrl.selectedReach('reachCtry')">{{mainCtrl.tc.app.reachCtry}}</md-button>
+    <md-button flex class="md-primary md-button" ng-click="reachContentCtrl.selection('reachCtry')">{{mainCtrl.tc.app.reachCtry}}</md-button>
   </div>
 
   <div flex layout="column" >
@@ -12,7 +12,7 @@
       <vector-icon flex="33" name="local" fill="{{mainCtrl.colors.reachIcon}}"></vector-icon>
     </div>
 
-    <md-button flex class="md-primary" ng-click="appCtrl.selectedReach('reachLocal')">{{mainCtrl.tc.app.reachLocal}}</md-button>
+    <md-button flex class="md-primary" ng-click="reachContentCtrl.selection('reachLocal')">{{mainCtrl.tc.app.reachLocal}}</md-button>
   </div>
 
 </md-content>

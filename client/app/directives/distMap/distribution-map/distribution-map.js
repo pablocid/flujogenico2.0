@@ -305,22 +305,6 @@
 
 		function createNewSlider(element, options) {
 
-			/*
-				The internal state object is used to store data about the current 'state' of slider.
-
-				This includes values such as the `value`, `enabled`, etc...
-			*/
-			this._state = {
-				value: null,
-				enabled: null,
-				offset: null,
-				size: null,
-				percentage: null,
-				inDrag: null,
-				over: null
-			};
-
-
 			if(typeof element === "string") {
 				this.element = document.querySelector(element);
 			} else if(element instanceof HTMLElement) {
@@ -350,23 +334,6 @@
 					this.options = {};
 				}
 				this.options[optName] = val;
-			}
-
-			/*
-				Validate `tooltip_position` against 'orientation`
-				- if `tooltip_position` is incompatible with orientation, swith it to a default compatible with specified `orientation`
-					-- default for "vertical" -> "right"
-					-- default for "horizontal" -> "left"
-			*/
-			if(this.options.orientation === "vertical" && (this.options.tooltip_position === "top" || this.options.tooltip_position === "bottom")) {
-
-				this.options.tooltip_position	= "right";
-
-			}
-			else if(this.options.orientation === "horizontal" && (this.options.tooltip_position === "left" || this.options.tooltip_position === "right")) {
-
-				this.options.tooltip_position	= "top";
-
 			}
 
 			function getDataAttrib(element, optName) {
@@ -564,19 +531,38 @@
 
 			if(this.options.orientation === 'vertical') {
 				this._addClass(this.sliderElem,'slider-vertical');
+
 				this.stylePos = 'top';
 				this.mousePos = 'pageY';
 				this.sizePos = 'offsetHeight';
+
+				this._addClass(this.tooltip, 'right');
+				this.tooltip.style.left = '100%';
+
+				this._addClass(this.tooltip_min, 'right');
+				this.tooltip_min.style.left = '100%';
+
+				this._addClass(this.tooltip_max, 'right');
+				this.tooltip_max.style.left = '100%';
 			} else {
 				this._addClass(this.sliderElem, 'slider-horizontal');
 				this.sliderElem.style.width = origWidth;
+
 				this.options.orientation = 'horizontal';
 				this.stylePos = 'left';
 				this.mousePos = 'pageX';
 				this.sizePos = 'offsetWidth';
 
+				this._addClass(this.tooltip, 'top');
+				this.tooltip.style.top = -this.tooltip.outerHeight - 14 + 'px';
+
+				this._addClass(this.tooltip_min, 'top');
+				this.tooltip_min.style.top = -this.tooltip_min.outerHeight - 14 + 'px';
+
+				this._addClass(this.tooltip_max, 'top');
+				this.tooltip_max.style.top = -this.tooltip_max.outerHeight - 14 + 'px';
 			}
-			this._setTooltipPosition();
+
 			/* In case ticks are specified, overwrite the min and max bounds */
 			if (Array.isArray(this.options.ticks) && this.options.ticks.length > 0) {
 					this.options.max = Math.max.apply(Math, this.options.ticks);
@@ -585,14 +571,9 @@
 
 			if (Array.isArray(this.options.value)) {
 				this.options.range = true;
-				this._state.value = this.options.value;
-			}
-			else if (this.options.range) {
+			} else if (this.options.range) {
 				// User wants a range, but value is not an array
-				this._state.value = [this.options.value, this.options.max];
-			}
-			else {
-				this._state.value = this.options.value;
+				this.options.value = [this.options.value, this.options.max];
 			}
 
 			this.trackLow = sliderTrackLow || this.trackLow;
@@ -629,9 +610,9 @@
 				}
 			}
 
-			this._state.offset = this._offset(this.sliderElem);
-			this._state.size = this.sliderElem[this.sizePos];
-			this.setValue(this._state.value);
+			this.offset = this._offset(this.sliderElem);
+			this.size = this.sliderElem[this.sizePos];
+			this.setValue(this.options.value);
 
 			/******************************************
 
@@ -659,12 +640,10 @@
 				this._addClass(this.tooltip, 'hide');
 				this._addClass(this.tooltip_min, 'hide');
 				this._addClass(this.tooltip_max, 'hide');
-			}
-			else if(this.options.tooltip === 'always') {
+			} else if(this.options.tooltip === 'always') {
 				this._showTooltip();
 				this._alwaysShowTooltip = true;
-			}
-			else {
+			} else {
 				this.showTooltip = this._showTooltip.bind(this);
 				this.hideTooltip = this._hideTooltip.bind(this);
 
@@ -702,7 +681,7 @@
 
 			defaultOptions: {
 				id: "",
-			  min: 0,
+			  	min: 0,
 				max: 10,
 				step: 1,
 				precision: 0,
@@ -728,21 +707,18 @@
 				ticks_labels: [],
 				ticks_snap_bounds: 0,
 				scale: 'linear',
-				focus: false,
-				tooltip_position: null
+				focus: false
 			},
 
-			getElement: function() {
-				return this.sliderElem;
-			},
+			over: false,
+
+			inDrag: false,
 
 			getValue: function() {
 				if (this.options.range) {
-					return this._state.value;
+					return this.options.value;
 				}
-				else {
-					return this._state.value[0];
-				}
+				return this.options.value[0];
 			},
 
 			setValue: function(val, triggerSlideEvent, triggerChangeEvent) {
@@ -750,39 +726,38 @@
 					val = 0;
 				}
 				var oldValue = this.getValue();
-				this._state.value = this._validateInputValue(val);
+				this.options.value = this._validateInputValue(val);
 				var applyPrecision = this._applyPrecision.bind(this);
 
 				if (this.options.range) {
-					this._state.value[0] = applyPrecision(this._state.value[0]);
-					this._state.value[1] = applyPrecision(this._state.value[1]);
+					this.options.value[0] = applyPrecision(this.options.value[0]);
+					this.options.value[1] = applyPrecision(this.options.value[1]);
 
-					this._state.value[0] = Math.max(this.options.min, Math.min(this.options.max, this._state.value[0]));
-					this._state.value[1] = Math.max(this.options.min, Math.min(this.options.max, this._state.value[1]));
-				}
-				else {
-					this._state.value = applyPrecision(this._state.value);
-					this._state.value = [ Math.max(this.options.min, Math.min(this.options.max, this._state.value))];
+					this.options.value[0] = Math.max(this.options.min, Math.min(this.options.max, this.options.value[0]));
+					this.options.value[1] = Math.max(this.options.min, Math.min(this.options.max, this.options.value[1]));
+				} else {
+					this.options.value = applyPrecision(this.options.value);
+					this.options.value = [ Math.max(this.options.min, Math.min(this.options.max, this.options.value))];
 					this._addClass(this.handle2, 'hide');
 					if (this.options.selection === 'after') {
-						this._state.value[1] = this.options.max;
+						this.options.value[1] = this.options.max;
 					} else {
-						this._state.value[1] = this.options.min;
+						this.options.value[1] = this.options.min;
 					}
 				}
 
 				if (this.options.max > this.options.min) {
-					this._state.percentage = [
-						this._toPercentage(this._state.value[0]),
-						this._toPercentage(this._state.value[1]),
+					this.percentage = [
+						this._toPercentage(this.options.value[0]),
+						this._toPercentage(this.options.value[1]),
 						this.options.step * 100 / (this.options.max - this.options.min)
 					];
 				} else {
-					this._state.percentage = [0, 0, 100];
+					this.percentage = [0, 0, 100];
 				}
 
 				this._layout();
-				var newValue = this.options.range ? this._state.value : this._state.value[0];
+				var newValue = this.options.range ? this.options.value : this.options.value[0];
 
 				if(triggerSlideEvent === true) {
 					this._trigger('slide', newValue);
@@ -821,7 +796,7 @@
 			},
 
 			disable: function() {
-				this._state.enabled = false;
+				this.options.enabled = false;
 				this.handle1.removeAttribute("tabindex");
 				this.handle2.removeAttribute("tabindex");
 				this._addClass(this.sliderElem, 'slider-disabled');
@@ -831,7 +806,7 @@
 			},
 
 			enable: function() {
-				this._state.enabled = true;
+				this.options.enabled = true;
 				this.handle1.setAttribute("tabindex", 0);
 				this.handle2.setAttribute("tabindex", 0);
 				this._removeClass(this.sliderElem, 'slider-disabled');
@@ -841,7 +816,7 @@
 			},
 
 			toggle: function() {
-				if(this._state.enabled) {
+				if(this.options.enabled) {
 					this.disable();
 				} else {
 					this.enable();
@@ -850,7 +825,7 @@
 			},
 
 			isEnabled: function() {
-				return this._state.enabled;
+				return this.options.enabled;
 			},
 
 			on: function(evt, callback) {
@@ -948,32 +923,31 @@
 			},
 			_showTooltip: function() {
 				if (this.options.tooltip_split === false ){
-        	this._addClass(this.tooltip, 'in');
-        	this.tooltip_min.style.display = 'none';
-        	this.tooltip_max.style.display = 'none';
-		    } else {
-          this._addClass(this.tooltip_min, 'in');
-          this._addClass(this.tooltip_max, 'in');
-          this.tooltip.style.display = 'none';
-		    }
-				this._state.over = true;
+	            	this._addClass(this.tooltip, 'in');
+	            	this.tooltip_min.style.display = 'none';
+	            	this.tooltip_max.style.display = 'none';
+		        } else {
+		            this._addClass(this.tooltip_min, 'in');
+		            this._addClass(this.tooltip_max, 'in');
+		            this.tooltip.style.display = 'none';
+		        }
+				this.over = true;
 			},
 			_hideTooltip: function() {
-				if (this._state.inDrag === false && this.alwaysShowTooltip !== true) {
+				if (this.inDrag === false && this.alwaysShowTooltip !== true) {
 					this._removeClass(this.tooltip, 'in');
 					this._removeClass(this.tooltip_min, 'in');
 					this._removeClass(this.tooltip_max, 'in');
 				}
-				this._state.over = false;
+				this.over = false;
 			},
 			_layout: function() {
 				var positionPercentages;
 
 				if(this.options.reversed) {
-					positionPercentages = [ 100 - this._state.percentage[0], this.options.range ? 100 - this._state.percentage[1] : this._state.percentage[1]];
-				}
-				else {
-					positionPercentages = [ this._state.percentage[0], this._state.percentage[1] ];
+					positionPercentages = [ 100 - this.percentage[0], this.percentage[1] ];
+				} else {
+					positionPercentages = [ this.percentage[0], this.percentage[1] ];
 				}
 
 				this.handle1.style[this.stylePos] = positionPercentages[0]+'%';
@@ -986,7 +960,7 @@
 
 					var styleSize = this.options.orientation === 'vertical' ? 'height' : 'width';
 					var styleMargin = this.options.orientation === 'vertical' ? 'marginTop' : 'marginLeft';
-					var labelSize = this._state.size / (this.options.ticks.length - 1);
+					var labelSize = this.size / (this.options.ticks.length - 1);
 
 					if (this.tickLabelContainer) {
 						var extraMargin = 0;
@@ -1045,8 +1019,7 @@
 
 					this.trackHigh.style.bottom = '0';
 					this.trackHigh.style.height = (100 - Math.min(positionPercentages[0], positionPercentages[1]) - Math.abs(positionPercentages[0] - positionPercentages[1])) +'%';
-				}
-				else {
+				} else {
 					this.trackLow.style.left = '0';
 					this.trackLow.style.width = Math.min(positionPercentages[0], positionPercentages[1]) +'%';
 
@@ -1073,7 +1046,7 @@
 				var formattedTooltipVal;
 
 				if (this.options.range) {
-					formattedTooltipVal = this.options.formatter(this._state.value);
+					formattedTooltipVal = this.options.formatter(this.options.value);
 					this._setText(this.tooltipInner, formattedTooltipVal);
 					this.tooltip.style[this.stylePos] = (positionPercentages[1] + positionPercentages[0])/2 + '%';
 
@@ -1089,10 +1062,10 @@
 						this._css(this.tooltip, 'margin-left', -this.tooltip.offsetWidth / 2 + 'px');
 					}
 
-					var innerTooltipMinText = this.options.formatter(this._state.value[0]);
+					var innerTooltipMinText = this.options.formatter(this.options.value[0]);
 					this._setText(this.tooltipInner_min, innerTooltipMinText);
 
-					var innerTooltipMaxText = this.options.formatter(this._state.value[1]);
+					var innerTooltipMaxText = this.options.formatter(this.options.value[1]);
 					this._setText(this.tooltipInner_max, innerTooltipMaxText);
 
 					this.tooltip_min.style[this.stylePos] = positionPercentages[0] + '%';
@@ -1111,7 +1084,7 @@
 						this._css(this.tooltip_max, 'margin-left', -this.tooltip_max.offsetWidth / 2 + 'px');
 					}
 				} else {
-					formattedTooltipVal = this.options.formatter(this._state.value[0]);
+					formattedTooltipVal = this.options.formatter(this.options.value[0]);
 					this._setText(this.tooltipInner, formattedTooltipVal);
 
 					this.tooltip.style[this.stylePos] = positionPercentages[0] + '%';
@@ -1130,24 +1103,24 @@
 				}
 			},
 			_mousedown: function(ev) {
-				if(!this._state.enabled) {
+				if(!this.options.enabled) {
 					return false;
 				}
 
-				this._state.offset = this._offset(this.sliderElem);
-				this._state.size = this.sliderElem[this.sizePos];
+				this.offset = this._offset(this.sliderElem);
+				this.size = this.sliderElem[this.sizePos];
 
 				var percentage = this._getPercentage(ev);
 
 				if (this.options.range) {
-					var diff1 = Math.abs(this._state.percentage[0] - percentage);
-					var diff2 = Math.abs(this._state.percentage[1] - percentage);
-					this._state.dragged = (diff1 < diff2) ? 0 : 1;
+					var diff1 = Math.abs(this.percentage[0] - percentage);
+					var diff2 = Math.abs(this.percentage[1] - percentage);
+					this.dragged = (diff1 < diff2) ? 0 : 1;
 				} else {
-					this._state.dragged = 0;
+					this.dragged = 0;
 				}
 
-				this._state.percentage[this._state.dragged] = percentage;
+				this.percentage[this.dragged] = this.options.reversed ? 100 - percentage : percentage;
 				this._layout();
 
 				if (this.touchCapable) {
@@ -1174,7 +1147,7 @@
 				document.addEventListener("mousemove", this.mousemove, false);
 				document.addEventListener("mouseup", this.mouseup, false);
 
-				this._state.inDrag = true;
+				this.inDrag = true;
 				var newValue = this._calculateValue();
 
 				this._trigger('slideStart', newValue);
@@ -1185,7 +1158,7 @@
 				this._pauseEvent(ev);
 
 				if (this.options.focus) {
-					this._triggerFocusOnHandle(this._state.dragged);
+					this._triggerFocusOnHandle(this.dragged);
 				}
 
 				return true;
@@ -1199,7 +1172,7 @@
 				}
 			},
 			_keydown: function(handleIdx, ev) {
-				if(!this._state.enabled) {
+				if(!this.options.enabled) {
 					return false;
 				}
 
@@ -1228,18 +1201,18 @@
 					}
 				}
 
-				var val = this._state.value[handleIdx] + dir * this.options.step;
+				var val = this.options.value[handleIdx] + dir * this.options.step;
 				if (this.options.range) {
-					val = [ (!handleIdx) ? val : this._state.value[0],
-						    ( handleIdx) ? val : this._state.value[1]];
+					val = [ (!handleIdx) ? val : this.options.value[0],
+						    ( handleIdx) ? val : this.options.value[1]];
 				}
 
 				this._trigger('slideStart', val);
 				this._setDataVal(val);
 				this.setValue(val, true, true);
 
-				this._setDataVal(val);
 				this._trigger('slideStop', val);
+				this._setDataVal(val);
 				this._layout();
 
 				this._pauseEvent(ev);
@@ -1257,13 +1230,13 @@
 			    ev.returnValue=false;
 			},
 			_mousemove: function(ev) {
-				if(!this._state.enabled) {
+				if(!this.options.enabled) {
 					return false;
 				}
 
 				var percentage = this._getPercentage(ev);
 				this._adjustPercentageForRangeSliders(percentage);
-				this._state.percentage[this._state.dragged] = percentage;
+				this.percentage[this.dragged] = this.options.reversed ? 100 - percentage : percentage;
 				this._layout();
 
 				var val = this._calculateValue(true);
@@ -1276,17 +1249,17 @@
 					var precision = this._getNumDigitsAfterDecimalPlace(percentage);
 					precision = precision ? precision - 1 : 0;
 					var percentageWithAdjustedPrecision = this._applyToFixedAndParseFloat(percentage, precision);
-					if (this._state.dragged === 0 && this._applyToFixedAndParseFloat(this._state.percentage[1], precision) < percentageWithAdjustedPrecision) {
-						this._state.percentage[0] = this._state.percentage[1];
-						this._state.dragged = 1;
-					} else if (this._state.dragged === 1 && this._applyToFixedAndParseFloat(this._state.percentage[0], precision) > percentageWithAdjustedPrecision) {
-						this._state.percentage[1] = this._state.percentage[0];
-						this._state.dragged = 0;
+					if (this.dragged === 0 && this._applyToFixedAndParseFloat(this.percentage[1], precision) < percentageWithAdjustedPrecision) {
+						this.percentage[0] = this.percentage[1];
+						this.dragged = 1;
+					} else if (this.dragged === 1 && this._applyToFixedAndParseFloat(this.percentage[0], precision) > percentageWithAdjustedPrecision) {
+						this.percentage[1] = this.percentage[0];
+						this.dragged = 0;
 					}
 				}
 			},
 			_mouseup: function() {
-				if(!this._state.enabled) {
+				if(!this.options.enabled) {
 					return false;
 				}
 				if (this.touchCapable) {
@@ -1298,15 +1271,15 @@
                 document.removeEventListener("mousemove", this.mousemove, false);
                 document.removeEventListener("mouseup", this.mouseup, false);
 
-				this._state.inDrag = false;
-				if (this._state.over === false) {
+				this.inDrag = false;
+				if (this.over === false) {
 					this._hideTooltip();
 				}
 				var val = this._calculateValue(true);
 
 				this._layout();
-				this._setDataVal(val);
 				this._trigger('slideStop', val);
+				this._setDataVal(val);
 
 				return false;
 			},
@@ -1314,16 +1287,16 @@
 				var val;
 				if (this.options.range) {
 					val = [this.options.min,this.options.max];
-			        if (this._state.percentage[0] !== 0){
-			            val[0] = this._toValue(this._state.percentage[0]);
+			        if (this.percentage[0] !== 0){
+			            val[0] = this._toValue(this.percentage[0]);
 			            val[0] = this._applyPrecision(val[0]);
 			        }
-			        if (this._state.percentage[1] !== 100){
-			            val[1] = this._toValue(this._state.percentage[1]);
+			        if (this.percentage[1] !== 100){
+			            val[1] = this._toValue(this.percentage[1]);
 			            val[1] = this._applyPrecision(val[1]);
 			        }
 				} else {
-		            val = this._toValue(this._state.percentage[0]);
+		            val = this._toValue(this.percentage[0]);
 					val = parseFloat(val);
 					val = this._applyPrecision(val);
 				}
@@ -1366,14 +1339,11 @@
 				}
 
 				var eventPosition = ev[this.mousePos];
-				var sliderOffset = this._state.offset[this.stylePos];
+				var sliderOffset = this.offset[this.stylePos];
 				var distanceToSlide = eventPosition - sliderOffset;
 				// Calculate what percent of the length the slider handle has slid
-				var percentage = (distanceToSlide / this._state.size) * 100;
-				percentage = Math.round(percentage / this._state.percentage[2]) * this._state.percentage[2];
-				if (this.options.reversed) {
-					percentage = 100 - percentage;
-				}
+				var percentage = (distanceToSlide / this.size) * 100;
+				percentage = Math.round(percentage / this.percentage[2]) * this.percentage[2];
 
 				// Make sure the percent is within the bounds of the slider.
 				// 0% corresponds to the 'min' value of the slide
@@ -1400,7 +1370,7 @@
 				var value = "value: '" + val + "'";
 				this.element.setAttribute('data', value);
 				this.element.setAttribute('value', val);
-        this.element.value = val;
+                this.element.value = val;
 			},
 			_trigger: function(evt, val) {
 				val = (val || val === 0) ? val : undefined;
@@ -1466,7 +1436,11 @@
 				element.className = newClasses.trim();
 			},
 			_offsetLeft: function(obj){
-				return obj.getBoundingClientRect().left;
+				var offsetLeft = obj.offsetLeft;
+				while((obj = obj.offsetParent) && !isNaN(obj.offsetLeft)){
+					offsetLeft += obj.offsetLeft;
+				}
+				return offsetLeft;
 			},
 			_offsetTop: function(obj){
 				var offsetTop = obj.offsetTop;
@@ -1496,28 +1470,8 @@
 			},
 			_toPercentage: function(value) {
 				return this.options.scale.toPercentage.apply(this, [value]);
-			},
-			_setTooltipPosition: function(){
-				var tooltips = [this.tooltip, this.tooltip_min, this.tooltip_max];
-				if (this.options.orientation === 'vertical'){
-					var tooltipPos = this.options.tooltip_position || 'right';
-					var oppositeSide = (tooltipPos === 'left') ? 'right' : 'left';
-					tooltips.forEach(function(tooltip){
-						this._addClass(tooltip, tooltipPos);
-						tooltip.style[oppositeSide] = '100%';
-					}.bind(this));
-				} else if(this.options.tooltip_position === 'bottom') {
-					tooltips.forEach(function(tooltip){
-						this._addClass(tooltip, 'bottom');
-						tooltip.style.top = 22 + 'px';
-					}.bind(this));
-				} else {
-					tooltips.forEach(function(tooltip){
-						this._addClass(tooltip, 'top');
-						tooltip.style.top = -this.tooltip.outerHeight - 14 + 'px';
-					}.bind(this));
-				}
 			}
+
 		};
 
 		/*********************************
@@ -11311,6 +11265,683 @@ function isNative(value) {
 module.exports = getNative;
 
 },{}],8:[function(require,module,exports){
+'use strict';
+
+// lightweight Buffer shim for pbf browser build
+// based on code from github.com/feross/buffer (MIT-licensed)
+
+module.exports = Buffer;
+
+var ieee754 = require('ieee754');
+
+var BufferMethods;
+
+function Buffer(length) {
+    var arr;
+    if (length && length.length) {
+        arr = length;
+        length = arr.length;
+    }
+    var buf = new Uint8Array(length || 0);
+    if (arr) buf.set(arr);
+
+    buf.readUInt32LE = BufferMethods.readUInt32LE;
+    buf.writeUInt32LE = BufferMethods.writeUInt32LE;
+    buf.readInt32LE = BufferMethods.readInt32LE;
+    buf.writeInt32LE = BufferMethods.writeInt32LE;
+    buf.readFloatLE = BufferMethods.readFloatLE;
+    buf.writeFloatLE = BufferMethods.writeFloatLE;
+    buf.readDoubleLE = BufferMethods.readDoubleLE;
+    buf.writeDoubleLE = BufferMethods.writeDoubleLE;
+    buf.toString = BufferMethods.toString;
+    buf.write = BufferMethods.write;
+    buf.slice = BufferMethods.slice;
+    buf.copy = BufferMethods.copy;
+
+    buf._isBuffer = true;
+    return buf;
+}
+
+var lastStr, lastStrEncoded;
+
+BufferMethods = {
+    readUInt32LE: function(pos) {
+        return ((this[pos]) |
+            (this[pos + 1] << 8) |
+            (this[pos + 2] << 16)) +
+            (this[pos + 3] * 0x1000000);
+    },
+
+    writeUInt32LE: function(val, pos) {
+        this[pos] = val;
+        this[pos + 1] = (val >>> 8);
+        this[pos + 2] = (val >>> 16);
+        this[pos + 3] = (val >>> 24);
+    },
+
+    readInt32LE: function(pos) {
+        return ((this[pos]) |
+            (this[pos + 1] << 8) |
+            (this[pos + 2] << 16)) +
+            (this[pos + 3] << 24);
+    },
+
+    readFloatLE:  function(pos) { return ieee754.read(this, pos, true, 23, 4); },
+    readDoubleLE: function(pos) { return ieee754.read(this, pos, true, 52, 8); },
+
+    writeFloatLE:  function(val, pos) { return ieee754.write(this, val, pos, true, 23, 4); },
+    writeDoubleLE: function(val, pos) { return ieee754.write(this, val, pos, true, 52, 8); },
+
+    toString: function(encoding, start, end) {
+        var str = '',
+            tmp = '';
+
+        start = start || 0;
+        end = Math.min(this.length, end || this.length);
+
+        for (var i = start; i < end; i++) {
+            var ch = this[i];
+            if (ch <= 0x7F) {
+                str += decodeURIComponent(tmp) + String.fromCharCode(ch);
+                tmp = '';
+            } else {
+                tmp += '%' + ch.toString(16);
+            }
+        }
+
+        str += decodeURIComponent(tmp);
+
+        return str;
+    },
+
+    write: function(str, pos) {
+        var bytes = str === lastStr ? lastStrEncoded : encodeString(str);
+        for (var i = 0; i < bytes.length; i++) {
+            this[pos + i] = bytes[i];
+        }
+    },
+
+    slice: function(start, end) {
+        return this.subarray(start, end);
+    },
+
+    copy: function(buf, pos) {
+        pos = pos || 0;
+        for (var i = 0; i < this.length; i++) {
+            buf[pos + i] = this[i];
+        }
+    }
+};
+
+BufferMethods.writeInt32LE = BufferMethods.writeUInt32LE;
+
+Buffer.byteLength = function(str) {
+    lastStr = str;
+    lastStrEncoded = encodeString(str);
+    return lastStrEncoded.length;
+};
+
+Buffer.isBuffer = function(buf) {
+    return !!(buf && buf._isBuffer);
+};
+
+function encodeString(str) {
+    var length = str.length,
+        bytes = [];
+
+    for (var i = 0, c, lead; i < length; i++) {
+        c = str.charCodeAt(i); // code point
+
+        if (c > 0xD7FF && c < 0xE000) {
+
+            if (lead) {
+                if (c < 0xDC00) {
+                    bytes.push(0xEF, 0xBF, 0xBD);
+                    lead = c;
+                    continue;
+
+                } else {
+                    c = lead - 0xD800 << 10 | c - 0xDC00 | 0x10000;
+                    lead = null;
+                }
+
+            } else {
+                if (c > 0xDBFF || (i + 1 === length)) bytes.push(0xEF, 0xBF, 0xBD);
+                else lead = c;
+
+                continue;
+            }
+
+        } else if (lead) {
+            bytes.push(0xEF, 0xBF, 0xBD);
+            lead = null;
+        }
+
+        if (c < 0x80) bytes.push(c);
+        else if (c < 0x800) bytes.push(c >> 0x6 | 0xC0, c & 0x3F | 0x80);
+        else if (c < 0x10000) bytes.push(c >> 0xC | 0xE0, c >> 0x6 & 0x3F | 0x80, c & 0x3F | 0x80);
+        else bytes.push(c >> 0x12 | 0xF0, c >> 0xC & 0x3F | 0x80, c >> 0x6 & 0x3F | 0x80, c & 0x3F | 0x80);
+    }
+    return bytes;
+}
+
+},{"ieee754":10}],9:[function(require,module,exports){
+(function (global){
+'use strict';
+
+module.exports = Pbf;
+
+var Buffer = global.Buffer || require('./buffer');
+
+function Pbf(buf) {
+    this.buf = !Buffer.isBuffer(buf) ? new Buffer(buf || 0) : buf;
+    this.pos = 0;
+    this.length = this.buf.length;
+}
+
+Pbf.Varint  = 0; // varint: int32, int64, uint32, uint64, sint32, sint64, bool, enum
+Pbf.Fixed64 = 1; // 64-bit: double, fixed64, sfixed64
+Pbf.Bytes   = 2; // length-delimited: string, bytes, embedded messages, packed repeated fields
+Pbf.Fixed32 = 5; // 32-bit: float, fixed32, sfixed32
+
+var SHIFT_LEFT_32 = (1 << 16) * (1 << 16),
+    SHIFT_RIGHT_32 = 1 / SHIFT_LEFT_32,
+    POW_2_63 = Math.pow(2, 63);
+
+Pbf.prototype = {
+
+    destroy: function() {
+        this.buf = null;
+    },
+
+    // === READING =================================================================
+
+    readFields: function(readField, result, end) {
+        end = end || this.length;
+
+        while (this.pos < end) {
+            var val = this.readVarint(),
+                tag = val >> 3,
+                startPos = this.pos;
+
+            readField(tag, result, this);
+
+            if (this.pos === startPos) this.skip(val);
+        }
+        return result;
+    },
+
+    readMessage: function(readField, result) {
+        return this.readFields(readField, result, this.readVarint() + this.pos);
+    },
+
+    readFixed32: function() {
+        var val = this.buf.readUInt32LE(this.pos);
+        this.pos += 4;
+        return val;
+    },
+
+    readSFixed32: function() {
+        var val = this.buf.readInt32LE(this.pos);
+        this.pos += 4;
+        return val;
+    },
+
+    // 64-bit int handling is based on github.com/dpw/node-buffer-more-ints (MIT-licensed)
+
+    readFixed64: function() {
+        var val = this.buf.readUInt32LE(this.pos) + this.buf.readUInt32LE(this.pos + 4) * SHIFT_LEFT_32;
+        this.pos += 8;
+        return val;
+    },
+
+    readSFixed64: function() {
+        var val = this.buf.readUInt32LE(this.pos) + this.buf.readInt32LE(this.pos + 4) * SHIFT_LEFT_32;
+        this.pos += 8;
+        return val;
+    },
+
+    readFloat: function() {
+        var val = this.buf.readFloatLE(this.pos);
+        this.pos += 4;
+        return val;
+    },
+
+    readDouble: function() {
+        var val = this.buf.readDoubleLE(this.pos);
+        this.pos += 8;
+        return val;
+    },
+
+    readVarint: function() {
+        var buf = this.buf,
+            val, b, b0, b1, b2, b3;
+
+        b0 = buf[this.pos++]; if (b0 < 0x80) return b0;                 b0 = b0 & 0x7f;
+        b1 = buf[this.pos++]; if (b1 < 0x80) return b0 | b1 << 7;       b1 = (b1 & 0x7f) << 7;
+        b2 = buf[this.pos++]; if (b2 < 0x80) return b0 | b1 | b2 << 14; b2 = (b2 & 0x7f) << 14;
+        b3 = buf[this.pos++]; if (b3 < 0x80) return b0 | b1 | b2 | b3 << 21;
+
+        val = b0 | b1 | b2 | (b3 & 0x7f) << 21;
+
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x10000000;         if (b < 0x80) return val;
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x800000000;        if (b < 0x80) return val;
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x40000000000;      if (b < 0x80) return val;
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x2000000000000;    if (b < 0x80) return val;
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x100000000000000;  if (b < 0x80) return val;
+        b = buf[this.pos++]; val += (b & 0x7f) * 0x8000000000000000; if (b < 0x80) return val;
+
+        throw new Error('Expected varint not more than 10 bytes');
+    },
+
+    readVarint64: function() {
+        var startPos = this.pos,
+            val = this.readVarint();
+
+        if (val < POW_2_63) return val;
+
+        var pos = this.pos - 2;
+        while (this.buf[pos] === 0xff) pos--;
+        if (pos < startPos) pos = startPos;
+
+        val = 0;
+        for (var i = 0; i < pos - startPos + 1; i++) {
+            var b = ~this.buf[startPos + i] & 0x7f;
+            val += i < 4 ? b << i * 7 : b * Math.pow(2, i * 7);
+        }
+
+        return -val - 1;
+    },
+
+    readSVarint: function() {
+        var num = this.readVarint();
+        return num % 2 === 1 ? (num + 1) / -2 : num / 2; // zigzag encoding
+    },
+
+    readBoolean: function() {
+        return Boolean(this.readVarint());
+    },
+
+    readString: function() {
+        var end = this.readVarint() + this.pos,
+            str = this.buf.toString('utf8', this.pos, end);
+        this.pos = end;
+        return str;
+    },
+
+    readBytes: function() {
+        var end = this.readVarint() + this.pos,
+            buffer = this.buf.slice(this.pos, end);
+        this.pos = end;
+        return buffer;
+    },
+
+    // verbose for performance reasons; doesn't affect gzipped size
+
+    readPackedVarint: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readVarint());
+        return arr;
+    },
+    readPackedSVarint: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readSVarint());
+        return arr;
+    },
+    readPackedBoolean: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readBoolean());
+        return arr;
+    },
+    readPackedFloat: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readFloat());
+        return arr;
+    },
+    readPackedDouble: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readDouble());
+        return arr;
+    },
+    readPackedFixed32: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readFixed32());
+        return arr;
+    },
+    readPackedSFixed32: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readSFixed32());
+        return arr;
+    },
+    readPackedFixed64: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readFixed64());
+        return arr;
+    },
+    readPackedSFixed64: function() {
+        var end = this.readVarint() + this.pos, arr = [];
+        while (this.pos < end) arr.push(this.readSFixed64());
+        return arr;
+    },
+
+    skip: function(val) {
+        var type = val & 0x7;
+        if (type === Pbf.Varint) while (this.buf[this.pos++] > 0x7f) {}
+        else if (type === Pbf.Bytes) this.pos = this.readVarint() + this.pos;
+        else if (type === Pbf.Fixed32) this.pos += 4;
+        else if (type === Pbf.Fixed64) this.pos += 8;
+        else throw new Error('Unimplemented type: ' + type);
+    },
+
+    // === WRITING =================================================================
+
+    writeTag: function(tag, type) {
+        this.writeVarint((tag << 3) | type);
+    },
+
+    realloc: function(min) {
+        var length = this.length || 16;
+
+        while (length < this.pos + min) length *= 2;
+
+        if (length !== this.length) {
+            var buf = new Buffer(length);
+            this.buf.copy(buf);
+            this.buf = buf;
+            this.length = length;
+        }
+    },
+
+    finish: function() {
+        this.length = this.pos;
+        this.pos = 0;
+        return this.buf.slice(0, this.length);
+    },
+
+    writeFixed32: function(val) {
+        this.realloc(4);
+        this.buf.writeUInt32LE(val, this.pos);
+        this.pos += 4;
+    },
+
+    writeSFixed32: function(val) {
+        this.realloc(4);
+        this.buf.writeInt32LE(val, this.pos);
+        this.pos += 4;
+    },
+
+    writeFixed64: function(val) {
+        this.realloc(8);
+        this.buf.writeInt32LE(val & -1, this.pos);
+        this.buf.writeUInt32LE(Math.floor(val * SHIFT_RIGHT_32), this.pos + 4);
+        this.pos += 8;
+    },
+
+    writeSFixed64: function(val) {
+        this.realloc(8);
+        this.buf.writeInt32LE(val & -1, this.pos);
+        this.buf.writeInt32LE(Math.floor(val * SHIFT_RIGHT_32), this.pos + 4);
+        this.pos += 8;
+    },
+
+    writeVarint: function(val) {
+        val = +val;
+
+        if (val <= 0x7f) {
+            this.realloc(1);
+            this.buf[this.pos++] = val;
+
+        } else if (val <= 0x3fff) {
+            this.realloc(2);
+            this.buf[this.pos++] = ((val >>> 0) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 7) & 0x7f);
+
+        } else if (val <= 0x1fffff) {
+            this.realloc(3);
+            this.buf[this.pos++] = ((val >>> 0) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 7) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 14) & 0x7f);
+
+        } else if (val <= 0xfffffff) {
+            this.realloc(4);
+            this.buf[this.pos++] = ((val >>> 0) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 7) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 14) & 0x7f) | 0x80;
+            this.buf[this.pos++] = ((val >>> 21) & 0x7f);
+
+        } else {
+            var pos = this.pos;
+            while (val >= 0x80) {
+                this.realloc(1);
+                this.buf[this.pos++] = (val & 0xff) | 0x80;
+                val /= 0x80;
+            }
+            this.realloc(1);
+            this.buf[this.pos++] = val | 0;
+            if (this.pos - pos > 10) throw new Error('Given varint doesn\'t fit into 10 bytes');
+        }
+    },
+
+    writeSVarint: function(val) {
+        this.writeVarint(val < 0 ? -val * 2 - 1 : val * 2);
+    },
+
+    writeBoolean: function(val) {
+        this.writeVarint(Boolean(val));
+    },
+
+    writeString: function(str) {
+        str = String(str);
+        var bytes = Buffer.byteLength(str);
+        this.writeVarint(bytes);
+        this.realloc(bytes);
+        this.buf.write(str, this.pos);
+        this.pos += bytes;
+    },
+
+    writeFloat: function(val) {
+        this.realloc(4);
+        this.buf.writeFloatLE(val, this.pos);
+        this.pos += 4;
+    },
+
+    writeDouble: function(val) {
+        this.realloc(8);
+        this.buf.writeDoubleLE(val, this.pos);
+        this.pos += 8;
+    },
+
+    writeBytes: function(buffer) {
+        var len = buffer.length;
+        this.writeVarint(len);
+        this.realloc(len);
+        for (var i = 0; i < len; i++) this.buf[this.pos++] = buffer[i];
+    },
+
+    writeRawMessage: function(fn, obj) {
+        this.pos++; // reserve 1 byte for short message length
+
+        // write the message directly to the buffer and see how much was written
+        var startPos = this.pos;
+        fn(obj, this);
+        var len = this.pos - startPos;
+
+        var varintLen =
+            len <= 0x7f ? 1 :
+            len <= 0x3fff ? 2 :
+            len <= 0x1fffff ? 3 :
+            len <= 0xfffffff ? 4 : Math.ceil(Math.log(len) / (Math.LN2 * 7));
+
+        // if 1 byte isn't enough for encoding message length, shift the data to the right
+        if (varintLen > 1) {
+            this.realloc(varintLen - 1);
+            for (var i = this.pos - 1; i >= startPos; i--) this.buf[i + varintLen - 1] = this.buf[i];
+        }
+
+        // finally, write the message length in the reserved place and restore the position
+        this.pos = startPos - 1;
+        this.writeVarint(len);
+        this.pos += len;
+    },
+
+    writeMessage: function(tag, fn, obj) {
+        this.writeTag(tag, Pbf.Bytes);
+        this.writeRawMessage(fn, obj);
+    },
+
+    writePackedVarint:   function(tag, arr) { this.writeMessage(tag, writePackedVarint, arr);   },
+    writePackedSVarint:  function(tag, arr) { this.writeMessage(tag, writePackedSVarint, arr);  },
+    writePackedBoolean:  function(tag, arr) { this.writeMessage(tag, writePackedBoolean, arr);  },
+    writePackedFloat:    function(tag, arr) { this.writeMessage(tag, writePackedFloat, arr);    },
+    writePackedDouble:   function(tag, arr) { this.writeMessage(tag, writePackedDouble, arr);   },
+    writePackedFixed32:  function(tag, arr) { this.writeMessage(tag, writePackedFixed32, arr);  },
+    writePackedSFixed32: function(tag, arr) { this.writeMessage(tag, writePackedSFixed32, arr); },
+    writePackedFixed64:  function(tag, arr) { this.writeMessage(tag, writePackedFixed64, arr);  },
+    writePackedSFixed64: function(tag, arr) { this.writeMessage(tag, writePackedSFixed64, arr); },
+
+    writeBytesField: function(tag, buffer) {
+        this.writeTag(tag, Pbf.Bytes);
+        this.writeBytes(buffer);
+    },
+    writeFixed32Field: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed32);
+        this.writeFixed32(val);
+    },
+    writeSFixed32Field: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed32);
+        this.writeSFixed32(val);
+    },
+    writeFixed64Field: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed64);
+        this.writeFixed64(val);
+    },
+    writeSFixed64Field: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed64);
+        this.writeSFixed64(val);
+    },
+    writeVarintField: function(tag, val) {
+        this.writeTag(tag, Pbf.Varint);
+        this.writeVarint(val);
+    },
+    writeSVarintField: function(tag, val) {
+        this.writeTag(tag, Pbf.Varint);
+        this.writeSVarint(val);
+    },
+    writeStringField: function(tag, str) {
+        this.writeTag(tag, Pbf.Bytes);
+        this.writeString(str);
+    },
+    writeFloatField: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed32);
+        this.writeFloat(val);
+    },
+    writeDoubleField: function(tag, val) {
+        this.writeTag(tag, Pbf.Fixed64);
+        this.writeDouble(val);
+    },
+    writeBooleanField: function(tag, val) {
+        this.writeVarintField(tag, Boolean(val));
+    }
+};
+
+function writePackedVarint(arr, pbf)   { for (var i = 0; i < arr.length; i++) pbf.writeVarint(arr[i]);   }
+function writePackedSVarint(arr, pbf)  { for (var i = 0; i < arr.length; i++) pbf.writeSVarint(arr[i]);  }
+function writePackedFloat(arr, pbf)    { for (var i = 0; i < arr.length; i++) pbf.writeFloat(arr[i]);    }
+function writePackedDouble(arr, pbf)   { for (var i = 0; i < arr.length; i++) pbf.writeDouble(arr[i]);   }
+function writePackedBoolean(arr, pbf)  { for (var i = 0; i < arr.length; i++) pbf.writeBoolean(arr[i]);  }
+function writePackedFixed32(arr, pbf)  { for (var i = 0; i < arr.length; i++) pbf.writeFixed32(arr[i]);  }
+function writePackedSFixed32(arr, pbf) { for (var i = 0; i < arr.length; i++) pbf.writeSFixed32(arr[i]); }
+function writePackedFixed64(arr, pbf)  { for (var i = 0; i < arr.length; i++) pbf.writeFixed64(arr[i]);  }
+function writePackedSFixed64(arr, pbf) { for (var i = 0; i < arr.length; i++) pbf.writeSFixed64(arr[i]); }
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./buffer":8}],10:[function(require,module,exports){
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = (value * c - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+},{}],11:[function(require,module,exports){
 module.exports = function (point, vs) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -11330,7 +11961,395 @@ module.exports = function (point, vs) {
     return inside;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+module.exports.VectorTile = require('./lib/vectortile.js');
+module.exports.VectorTileFeature = require('./lib/vectortilefeature.js');
+module.exports.VectorTileLayer = require('./lib/vectortilelayer.js');
+
+},{"./lib/vectortile.js":13,"./lib/vectortilefeature.js":14,"./lib/vectortilelayer.js":15}],13:[function(require,module,exports){
+'use strict';
+
+var VectorTileLayer = require('./vectortilelayer');
+
+module.exports = VectorTile;
+
+function VectorTile(pbf, end) {
+    this.layers = pbf.readFields(readTile, {}, end);
+}
+
+function readTile(tag, layers, pbf) {
+    if (tag === 3) {
+        var layer = new VectorTileLayer(pbf, pbf.readVarint() + pbf.pos);
+        if (layer.length) layers[layer.name] = layer;
+    }
+}
+
+
+},{"./vectortilelayer":15}],14:[function(require,module,exports){
+'use strict';
+
+var Point = require('point-geometry');
+
+module.exports = VectorTileFeature;
+
+function VectorTileFeature(pbf, end, extent, keys, values) {
+    // Public
+    this.properties = {};
+    this.extent = extent;
+    this.type = 0;
+
+    // Private
+    this._pbf = pbf;
+    this._geometry = -1;
+    this._keys = keys;
+    this._values = values;
+
+    pbf.readFields(readFeature, this, end);
+}
+
+function readFeature(tag, feature, pbf) {
+    if (tag == 1) feature._id = pbf.readVarint();
+    else if (tag == 2) readTag(pbf, feature);
+    else if (tag == 3) feature.type = pbf.readVarint();
+    else if (tag == 4) feature._geometry = pbf.pos;
+}
+
+function readTag(pbf, feature) {
+    var end = pbf.readVarint() + pbf.pos;
+
+    while (pbf.pos < end) {
+        var key = feature._keys[pbf.readVarint()],
+            value = feature._values[pbf.readVarint()];
+        feature.properties[key] = value;
+    }
+}
+
+VectorTileFeature.types = ['Unknown', 'Point', 'LineString', 'Polygon'];
+
+VectorTileFeature.prototype.loadGeometry = function() {
+    var pbf = this._pbf;
+    pbf.pos = this._geometry;
+
+    var end = pbf.readVarint() + pbf.pos,
+        cmd = 1,
+        length = 0,
+        x = 0,
+        y = 0,
+        lines = [],
+        line;
+
+    while (pbf.pos < end) {
+        if (!length) {
+            var cmdLen = pbf.readVarint();
+            cmd = cmdLen & 0x7;
+            length = cmdLen >> 3;
+        }
+
+        length--;
+
+        if (cmd === 1 || cmd === 2) {
+            x += pbf.readSVarint();
+            y += pbf.readSVarint();
+
+            if (cmd === 1) { // moveTo
+                if (line) lines.push(line);
+                line = [];
+            }
+
+            line.push(new Point(x, y));
+
+        } else if (cmd === 7) {
+
+            // Workaround for https://github.com/mapbox/mapnik-vector-tile/issues/90
+            if (line) {
+                line.push(line[0].clone()); // closePolygon
+            }
+
+        } else {
+            throw new Error('unknown command ' + cmd);
+        }
+    }
+
+    if (line) lines.push(line);
+
+    return lines;
+};
+
+VectorTileFeature.prototype.bbox = function() {
+    var pbf = this._pbf;
+    pbf.pos = this._geometry;
+
+    var end = pbf.readVarint() + pbf.pos,
+        cmd = 1,
+        length = 0,
+        x = 0,
+        y = 0,
+        x1 = Infinity,
+        x2 = -Infinity,
+        y1 = Infinity,
+        y2 = -Infinity;
+
+    while (pbf.pos < end) {
+        if (!length) {
+            var cmdLen = pbf.readVarint();
+            cmd = cmdLen & 0x7;
+            length = cmdLen >> 3;
+        }
+
+        length--;
+
+        if (cmd === 1 || cmd === 2) {
+            x += pbf.readSVarint();
+            y += pbf.readSVarint();
+            if (x < x1) x1 = x;
+            if (x > x2) x2 = x;
+            if (y < y1) y1 = y;
+            if (y > y2) y2 = y;
+
+        } else if (cmd !== 7) {
+            throw new Error('unknown command ' + cmd);
+        }
+    }
+
+    return [x1, y1, x2, y2];
+};
+
+VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
+    var size = this.extent * Math.pow(2, z),
+        x0 = this.extent * x,
+        y0 = this.extent * y,
+        coords = this.loadGeometry(),
+        type = VectorTileFeature.types[this.type];
+
+    for (var i = 0; i < coords.length; i++) {
+        var line = coords[i];
+        for (var j = 0; j < line.length; j++) {
+            var p = line[j], y2 = 180 - (p.y + y0) * 360 / size;
+            line[j] = [
+                (p.x + x0) * 360 / size - 180,
+                360 / Math.PI * Math.atan(Math.exp(y2 * Math.PI / 180)) - 90
+            ];
+        }
+    }
+
+    if (type === 'Point' && coords.length === 1) {
+        coords = coords[0][0];
+    } else if (type === 'Point') {
+        coords = coords[0];
+        type = 'MultiPoint';
+    } else if (type === 'LineString' && coords.length === 1) {
+        coords = coords[0];
+    } else if (type === 'LineString') {
+        type = 'MultiLineString';
+    }
+
+    return {
+        type: "Feature",
+        geometry: {
+            type: type,
+            coordinates: coords
+        },
+        properties: this.properties
+    };
+};
+
+},{"point-geometry":16}],15:[function(require,module,exports){
+'use strict';
+
+var VectorTileFeature = require('./vectortilefeature.js');
+
+module.exports = VectorTileLayer;
+
+function VectorTileLayer(pbf, end) {
+    // Public
+    this.version = 1;
+    this.name = null;
+    this.extent = 4096;
+    this.length = 0;
+
+    // Private
+    this._pbf = pbf;
+    this._keys = [];
+    this._values = [];
+    this._features = [];
+
+    pbf.readFields(readLayer, this, end);
+
+    this.length = this._features.length;
+}
+
+function readLayer(tag, layer, pbf) {
+    if (tag === 15) layer.version = pbf.readVarint();
+    else if (tag === 1) layer.name = pbf.readString();
+    else if (tag === 5) layer.extent = pbf.readVarint();
+    else if (tag === 2) layer._features.push(pbf.pos);
+    else if (tag === 3) layer._keys.push(pbf.readString());
+    else if (tag === 4) layer._values.push(readValueMessage(pbf));
+}
+
+function readValueMessage(pbf) {
+    var value = null,
+        end = pbf.readVarint() + pbf.pos;
+
+    while (pbf.pos < end) {
+        var tag = pbf.readVarint() >> 3;
+
+        value = tag === 1 ? pbf.readString() :
+            tag === 2 ? pbf.readFloat() :
+            tag === 3 ? pbf.readDouble() :
+            tag === 4 ? pbf.readVarint64() :
+            tag === 5 ? pbf.readVarint() :
+            tag === 6 ? pbf.readSVarint() :
+            tag === 7 ? pbf.readBoolean() : null;
+    }
+
+    return value;
+}
+
+// return feature `i` from this layer as a `VectorTileFeature`
+VectorTileLayer.prototype.feature = function(i) {
+    if (i < 0 || i >= this._features.length) throw new Error('feature index out of bounds');
+
+    this._pbf.pos = this._features[i];
+
+    var end = this._pbf.readVarint() + this._pbf.pos;
+    return new VectorTileFeature(this._pbf, end, this.extent, this._keys, this._values);
+};
+
+},{"./vectortilefeature.js":14}],16:[function(require,module,exports){
+'use strict';
+
+module.exports = Point;
+
+function Point(x, y) {
+    this.x = x;
+    this.y = y;
+}
+
+Point.prototype = {
+    clone: function() { return new Point(this.x, this.y); },
+
+    add:     function(p) { return this.clone()._add(p);     },
+    sub:     function(p) { return this.clone()._sub(p);     },
+    mult:    function(k) { return this.clone()._mult(k);    },
+    div:     function(k) { return this.clone()._div(k);     },
+    rotate:  function(a) { return this.clone()._rotate(a);  },
+    matMult: function(m) { return this.clone()._matMult(m); },
+    unit:    function() { return this.clone()._unit(); },
+    perp:    function() { return this.clone()._perp(); },
+    round:   function() { return this.clone()._round(); },
+
+    mag: function() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    },
+
+    equals: function(p) {
+        return this.x === p.x &&
+               this.y === p.y;
+    },
+
+    dist: function(p) {
+        return Math.sqrt(this.distSqr(p));
+    },
+
+    distSqr: function(p) {
+        var dx = p.x - this.x,
+            dy = p.y - this.y;
+        return dx * dx + dy * dy;
+    },
+
+    angle: function() {
+        return Math.atan2(this.y, this.x);
+    },
+
+    angleTo: function(b) {
+        return Math.atan2(this.y - b.y, this.x - b.x);
+    },
+
+    angleWith: function(b) {
+        return this.angleWithSep(b.x, b.y);
+    },
+
+    // Find the angle of the two vectors, solving the formula for the cross product a x b = |a||b|sin(θ) for θ.
+    angleWithSep: function(x, y) {
+        return Math.atan2(
+            this.x * y - this.y * x,
+            this.x * x + this.y * y);
+    },
+
+    _matMult: function(m) {
+        var x = m[0] * this.x + m[1] * this.y,
+            y = m[2] * this.x + m[3] * this.y;
+        this.x = x;
+        this.y = y;
+        return this;
+    },
+
+    _add: function(p) {
+        this.x += p.x;
+        this.y += p.y;
+        return this;
+    },
+
+    _sub: function(p) {
+        this.x -= p.x;
+        this.y -= p.y;
+        return this;
+    },
+
+    _mult: function(k) {
+        this.x *= k;
+        this.y *= k;
+        return this;
+    },
+
+    _div: function(k) {
+        this.x /= k;
+        this.y /= k;
+        return this;
+    },
+
+    _unit: function() {
+        this._div(this.mag());
+        return this;
+    },
+
+    _perp: function() {
+        var y = this.y;
+        this.y = this.x;
+        this.x = -y;
+        return this;
+    },
+
+    _rotate: function(angle) {
+        var cos = Math.cos(angle),
+            sin = Math.sin(angle),
+            x = cos * this.x - sin * this.y,
+            y = sin * this.x + cos * this.y;
+        this.x = x;
+        this.y = y;
+        return this;
+    },
+
+    _round: function() {
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
+        return this;
+    }
+};
+
+// constructs Point from an array if necessary
+Point.convert = function (a) {
+    if (a instanceof Point) {
+        return a;
+    }
+    if (Array.isArray(a)) {
+        return new Point(a[0], a[1]);
+    }
+    return a;
+};
+
+},{}],17:[function(require,module,exports){
 'use strict';
 
 /* global XMLHttpRequest */
@@ -11340,6 +12359,8 @@ var throttle = require('lodash.throttle');
 var pointInPolygon = require('point-in-polygon');
 var SpecieLayer = require('./specieLayer');
 var groupMethods = require('./groupMethods');
+var VectorTile = require('vector-tile').VectorTile;
+var Protobuf = require('pbf');
 
 
 module.exports = L.TileLayer.Canvas.extend({
@@ -11502,8 +12523,11 @@ module.exports = L.TileLayer.Canvas.extend({
           return;
         }
 
-        data = JSON.parse(xhr.responseText);
-        rectangles = self._getRectangles(ctx, data);
+        var arrayBuffer = new Uint8Array(xhr.response);
+        var buf = new Protobuf(arrayBuffer);
+        var vt = new VectorTile(buf);
+
+        rectangles = self._getRectangles(ctx, vt);
         self._drawRectangles(ctx, rectangles);
       }
     };
@@ -11512,6 +12536,7 @@ module.exports = L.TileLayer.Canvas.extend({
       console.error('xhr error: ' + xhr.status);
     };
 
+    xhr.responseType = 'arraybuffer';
     xhr.open('GET', url, true); //async is true
     xhr.send();
   },
@@ -11591,23 +12616,31 @@ module.exports = L.TileLayer.Canvas.extend({
   _getRectFromFeature: function(ctx, feature) {
     var opts = this.options,
         s = opts.size * (opts.factors[ctx.zoom] || 1),
-        lng = feature[0] * s,
-        lat = feature[1] * s,
-        latlng1 = new L.LatLng(lat + s, lng),
-        latlng2 = new L.LatLng(lat, lng + s),
+        coords = feature.toGeoJSON(ctx.tilePoint.x, ctx.tilePoint.y, ctx.zoom).geometry.coordinates[0].map(function(p){return p.reverse();}),
+        bounds = L.latLngBounds(coords),
+        center = bounds.getCenter(),
+        lng = center.lng,
+        lat = center.lat,
+        latlng1 = bounds.getNorthWest(),
+        latlng2 = bounds.getSouthEast(),
         xy1 = this._latlngToTilePoint(ctx, latlng1),
         xy2 = this._latlngToTilePoint(ctx, latlng2),
         species = {},
         rect, i, n;
 
-    for (i = 0, n = opts.species.length; i < n; i++) {
-      species[opts.species[i]] = feature[2 + i];
+    if (opts.species.length === 1) {
+      species[opts.species[0]] = feature.properties.value;
+    } else {
+      for (i = 0, n = opts.species.length; i < n; i++) {
+        species[opts.species[i]] = feature.properties[opts.species[i]];
+      }      
     }
+
 
     rect = {
       x: xy1.x,
       y: xy1.y,
-      center: [lng + s / 2, lat + s / 2],
+      center: [lng, lat],
       width: xy2.x - xy1.x,
       height: xy2.y - xy1.y,
       species: species
@@ -11622,10 +12655,13 @@ module.exports = L.TileLayer.Canvas.extend({
   _calculeProb: function(rect) {
     var visibles = this.options.visibleSpecies,
         values = [],
-        i, n;
+        val, i, n;
 
     for (i = 0, n = visibles.length; i < n; i++) {
-      values.push(rect.species[visibles[i]]);
+      val = rect.species[visibles[i]];
+      if (typeof val === 'number') {
+        values.push(val);
+      }
     }
 
     return groupMethods[this.options.groupMethod](values);
@@ -11652,15 +12688,18 @@ module.exports = L.TileLayer.Canvas.extend({
     return selection && pointInPolygon(rect.center, selection);
   },
 
-  _getRectangles: function(ctx, layer) {
+  _getRectangles: function(ctx, vt) {
     var c = ctx.canvas,
-        rectangles, feature, i, n, r;
+        layer, rectangles, feature, i, n, r;
+
+    // primera capa
+    layer = vt.layers[Object.keys(vt.layers)[0]];
 
     if (!c._cachedRectangles) {
       rectangles = [];
 
       for (i = 0, n = layer.length; i < n; i++) {
-        feature = layer[i];
+        feature = layer.feature(i);
 
         r = this._getRectFromFeature(ctx, feature);
 
@@ -11834,7 +12873,7 @@ module.exports = L.TileLayer.Canvas.extend({
   }
 });
 
-},{"./groupMethods":10,"./specieLayer":13,"leaflet":4,"lodash.throttle":5,"point-in-polygon":8}],10:[function(require,module,exports){
+},{"./groupMethods":18,"./specieLayer":21,"leaflet":4,"lodash.throttle":5,"pbf":9,"point-in-polygon":11,"vector-tile":12}],18:[function(require,module,exports){
 'use strict';
 
 function median(values) {
@@ -11877,7 +12916,7 @@ module.exports = {
   mean: mean
 };
 
-},{}],11:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 var L = require('leaflet');
 var GridLayer = require('./gridLayer');
@@ -11890,13 +12929,14 @@ var Map = L.Class.extend({
   options: {
     container: 'map',
     zoom: 8,
+    maxZoom: 16,
     center: [-33.4, -70.4],
     probRange: [0, 100],
     controls: {
       rangeSelector: true,
       draw: true
     },
-    host: ''
+    host: 'http://servidor-modelos.cswlabs.cl'
   },
 
   includes: L.Mixin.Events,
@@ -11937,12 +12977,12 @@ var Map = L.Class.extend({
   _initMap: function() {
     var ops = this.options;
 
-    this.map = L.map(ops.container).setView(ops.center, ops.zoom);
+    this.map = L.map(ops.container, {maxZoom: ops.maxZoom || 16}).setView(ops.center, ops.zoom);
     this._defineBaseLayers();
     this._defineControls();
 
     this.grid = new GridLayer({
-      url: ops.host + '/distributions/{z}/{x}/{y}.json?especies={species}',
+      url: this.options.host + '/models/{z}/{x}/{y}.pbf?species={species}',
       range: ops.probRange
     }).addTo(this.map);
 
@@ -12087,7 +13127,7 @@ var Map = L.Class.extend({
 
 module.exports = Map;
 
-},{"./gridLayer":9,"./rangeSelector":12,"leaflet":4,"leaflet-draw":3}],12:[function(require,module,exports){
+},{"./gridLayer":17,"./rangeSelector":20,"leaflet":4,"leaflet-draw":3}],20:[function(require,module,exports){
 'use strict';
 
 var L = require('leaflet');
@@ -12130,7 +13170,7 @@ var RangeSelector = L.Control.extend({
 
 module.exports = RangeSelector;
 
-},{"bootstrap-slider":1,"domify":2,"leaflet":4}],13:[function(require,module,exports){
+},{"bootstrap-slider":1,"domify":2,"leaflet":4}],21:[function(require,module,exports){
 'use strict';
 
 var L = require('leaflet');
@@ -12151,5 +13191,5 @@ module.exports = L.Class.extend({
   }
 });
 
-},{"leaflet":4}]},{},[11])(11)
+},{"leaflet":4}]},{},[19])(19)
 });

@@ -5,7 +5,7 @@
         <vector-icon flex="50"  name="coexistencia" fill="#424242"></vector-icon>
       </div>
 
-      <md-button  class="" ng-click="appCtrl.evalTypeSelected('coex')">
+      <md-button ng-click="evalTypeContentCtrl.selection('coex')"><!--appCtrl.evalTypeSelected('coex')-->
         {{mainCtrl.tc.app.coex}}
       </md-button>
     </div>
@@ -13,7 +13,7 @@
       <div layout="row" layout-align="center center">
         <vector-icon flex="50"  name="biodiversidad" fill="#424242"></vector-icon>
       </div>
-      <md-button flex class="" ng-click="appCtrl.evalTypeSelected('bio')">
+      <md-button flex class="" ng-click="evalTypeContentCtrl.selection('bio')">
         {{mainCtrl.tc.app.bio}}
       </md-button>
     </div>

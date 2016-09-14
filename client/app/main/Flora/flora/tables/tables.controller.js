@@ -9,14 +9,14 @@ angular.module('flujogenico20App')
       if(!self[s]){self[s]={};}
       if(!self[s].currentPage){self[s].currentPage=1;}
 
-      Flora.paginate(s,p,self.pageSize).then(function(res){
+      Flora.paginate({type:s,p:p,i:self.pageSize},function(res){
+        //console.log(res);
         self[s].sp = res.flora;
         self[s].currentPage = res.currentPage;
         if(self[s].totalItems !== res.totalItems){
           self[s].totalItems = res.totalItems;
           //console.log(res.totalItems);
         }
-
       });
     };
     self.getPage('cultivated',1);

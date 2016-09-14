@@ -344,6 +344,15 @@ exports.matchByGenus = function(req, res) {
     });
 };
 
+exports.list = function(req, res) {
+  var typeVar = parseInt(req.params.type);
+  var query = {'type.id':typeVar};
+
+  Flora.find(query,{name:1,general:1},function (err, floras) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(floras);
+  });
+};
 
 function handleError(res, err) {
   console.log('Se ha ejecutado el handleError');

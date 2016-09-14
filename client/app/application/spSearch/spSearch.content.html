@@ -1,18 +1,19 @@
-<md-content class="md-padding" >
-  <form ng-submit="appCtrl.submitSpSearch()" name="searchForm">
+
+<md-content class="md-padding" ng-cloak>
+  <form ng-submit="spSearchContentCtrl.submitSpSearch()" name="searchForm">
     <div layout="row" layout-align="center center" layout-wrap>
-      <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="true"
+      <md-autocomplete flex=100 flex-gt-md="50" md-autofocus="false"
                        required
                        md-input-name="autocompleteField"
-                       md-no-cache="appCtrl.noCache"
-                       md-selected-item="appCtrl.spDonorSelected"
-                       md-search-text="appCtrl.searchText"
+                       md-no-cache="spSearchContentCtrl.noCache"
+                       md-selected-item="spSearchContentCtrl.spDonorSelected"
+                       md-search-text="spSearchContentCtrl.searchText"
                        md-search-text-change="null"
-                       md-items="item in appCtrl.querySearch(appCtrl.searchText)"
+                       md-items="item in spSearchContentCtrl.querySearch(spSearchContentCtrl.searchText)"
                        md-item-text="item.name"
                        md-floating-label="{{mainCtrl.tc.app.scientificname}}">
         <md-item-template>
-          <span md-highlight-text="appCtrl.searchText">{{item.name}}</span>
+          <span md-highlight-text="spSearchContentCtrl.searchText">{{item.name}}</span>
         </md-item-template>
         <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
           <div ng-message="required"><span ng-bind-html="mainCtrl.tc.app.required"></span></div>
@@ -21,8 +22,51 @@
         <md-button flex=50 flex-gt-md="10" class=" md-primary">
           <md-icon md-font-library="material-icons">search</md-icon>
         </md-button>
-
     </div>
-
   </form>
+
+  <md-tabs ng-show="spSearchContentCtrl.transgenic" md-dynamic-height md-border-bottom>
+    <md-tab label="{{mainCtrl.tc.tableTab.trans}}">
+      <md-content class="md-padding">
+        <h5 class="md-display-1">{{mainCtrl.tc.tableText.titleTrans}}</h5>
+        <md-list>
+        <md-virtual-repeat-container style="height: 350px">
+          <md-list-item class="md-3-line" md-virtual-repeat="item in spSearchContentCtrl.transgenic | orderBy: 'name' " ng-click="spSearchContentCtrl.submitSpSearch({_id:item._id,name:item.name})">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ item.name }}</h3>
+              <h4>{{mainCtrl.tc.app.vern}}: {{item.getVernacular()}}</h4>
+              <p>{{mainCtrl.tc.app.fam}}: {{ item.getTax('fam')}}</p>
+            </div>
+          </md-list-item>
+        </md-virtual-repeat-container>
+        </md-list>
+      </md-content>
+    </md-tab>
+    <md-tab label="{{mainCtrl.tc.tableTab.cult}}">
+      <md-content class="md-padding">
+        <h5 class="md-display-1">{{mainCtrl.tc.tableText.titleCult}}</h5>
+        <md-list>
+          <md-virtual-repeat-container style="height: 350px">
+            <md-list-item class="md-3-line" md-virtual-repeat="item in spSearchContentCtrl.cultivated | orderBy: 'name' " ng-click="spSearchContentCtrl.submitSpSearch({_id:item._id,name:item.name})">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{ item.name }}</h3>
+                <h4>{{mainCtrl.tc.app.vern}}: {{item.getVernacular()}}</h4>
+                <p>{{mainCtrl.tc.app.fam}}: {{ item.getTax('fam')}}</p>
+              </div>
+            </md-list-item>
+          </md-virtual-repeat-container>
+        </md-list>
+      </md-content>
+    </md-tab>
+  </md-tabs>
+
+  <div ng-hide="spSearchContentCtrl.transgenic" layout="row" layout-sm="column" layout-align="space-around">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+  </div>
 </md-content>
+
+
+<!-- <div md-virtual-repeat="item in spSearchContentCtrl.transgenic"
+               class="repeated-item" flex>
+
+          </div>-->

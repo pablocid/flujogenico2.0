@@ -1,17 +1,79 @@
 'use strict';
 
 angular.module('flujogenico20App')
-  .factory('Flora', function ($http,$q) {
-    // Service logic
-    // ...
+  .factory('Flora', function ($resource) {
+    var FloraService = $resource('/api/flora/:id',
+      {id: '@_id'},
+      {
+        searchSN:{
+          method:'GET',
+          url:'/api/flora/search/:name',
+          isArray:true
+        },
+        getMatchSp:{
+          method:'GET',
+          url:'/api/flora/match/:id/:type',
+          isArray:true
+        },
+        paginate:{
+          method:'GET',
+          url:'/api/flora/:type/pagination/:p/:i',
+          isArray:false,
+          transformResponse: function(data, header) {
+            var wrapped = angular.fromJson(data);
+            var flora =  wrapped.flora.map(function (a) {
+              return new FloraService(a);
+            });
+            wrapped.flora = flora;
+            return wrapped;
+          }
+        },
+        getList:{
+          method:'GET',
+          url:'/api/flora/list/:type',
+          isArray:true
+        }
+      }
+    );
 
-    var meaningOfLife = 42;
+    FloraService.prototype.underscoreSp = function () {
+      var genIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('gen');
+      var spIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('sp');
+      var varIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('var');
+      var sppIndex = this.general.taxonomy.local.map(function(a){return a.id}).indexOf('spp');
 
-    // Public API here
-    return {
-      someMethod: function () {
-        return meaningOfLife;
-      },
+      var undeSp ='';
+      if(genIndex!==-1){undeSp += this.general.taxonomy.local[genIndex].name}
+      if(spIndex!==-1){undeSp += '_'+this.general.taxonomy.local[spIndex].name}
+      if(varIndex!==-1){undeSp += '_'+this.general.taxonomy.local[varIndex].name}
+      if(sppIndex!==-1){undeSp += '_'+this.general.taxonomy.local[sppIndex].name}
+      return undeSp.toLowerCase();
+    };
+    FloraService.prototype.getTax = function (id) {
+      var Index = this.general.taxonomy.local.map(function(a){return a.id}).indexOf(id);
+      var resp = '';
+      if(Index!==-1){
+        resp = this.general.taxonomy.local[Index].name;
+        resp = resp[0].toUpperCase() + resp.substring(1);
+      }
+      return resp;
+    };
+    FloraService.prototype.getVernacular = function () {
+      var self = this;
+      if(!this.general.vernacularNames || this.general.vernacularNames.length === 0){return;}
+      var response='';
+      this.general.vernacularNames.forEach(function (name, index) {
+        response+=name.name;
+        if(self.general.vernacularNames.length -1 !==index){
+          response+=', ';
+        }else{
+          response+='.'
+        }
+      });
+      return response;
+    };
+    return FloraService;
+/*    return {
       paginate:function(type,p, i){
         var deferred = $q.defer();
         $http.get('/api/flora/'+type+'/pagination/'+p+'/'+i)
@@ -77,5 +139,5 @@ angular.module('flujogenico20App')
           });
         return deferred.promise;
       }
-    };
+    };*/
   });
