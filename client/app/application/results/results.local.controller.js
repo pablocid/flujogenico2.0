@@ -28,7 +28,10 @@ angular.module('flujogenico20App')
         $state.go('main.application.noresult');
       }
     });
-
+    self.rpi = function(indx){
+      console.log("El index es "+ indx)
+      DataSession.rpi = indx;
+    }
     self.localResults = function (sp) {
       DataSession.localResults =[];
       for(var s in sp.species){

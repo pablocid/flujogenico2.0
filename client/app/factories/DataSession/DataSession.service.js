@@ -5,6 +5,7 @@ angular.module('flujogenico20App')
     return {
       steps:[],
       results:'',
+      rpi:'',
       underscoreResults: '',
       setStep: function (id,content) {
         var stepIndex = this.steps.map(function(a){return a.id}).indexOf(id);
@@ -27,6 +28,7 @@ angular.module('flujogenico20App')
         this.steps=[];
         this.results = '';
         this.underscoreResults='';
+        this.rpi = '';
         this.localResults =[];
 
       },

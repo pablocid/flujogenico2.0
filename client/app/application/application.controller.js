@@ -53,11 +53,11 @@ angular.module('flujogenico20App')
       }
     };
     this.indexScale = function(idx){
-      if(idx<=0.2){return 'veryLow';}
-      if(idx>0.2 && idx<=0.4){return 'low';}
-      if(idx>0.4 && idx<=0.6){return 'medium';}
-      if(idx>0.6 && idx<=0.8){return 'high';}
-      if(idx<0.8 ){return 'veryHigh';}else{
+      if(idx<=0.2){return 'Very low';}
+      if(idx>0.2 && idx<=0.4){return 'Low';}
+      if(idx>0.4 && idx<=0.6){return 'Medium';}
+      if(idx>0.6 && idx<=0.8){return 'High';}
+      if(idx<0.8 ){return 'Very high';}else{
         return 'noData';
       }
     };
