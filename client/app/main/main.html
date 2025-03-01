@@ -50,35 +50,4 @@
 
 
 <!-- sidenav -->
-  <md-sidenav
-    id="misidenav"
-    class="md-sidenav-left md-whiteframe-z2"
-    md-component-id="left"
-    md-swipe-left="mainCtrl.toggleLeft()">
-
-    <md-toolbar md-theme="main" layout="row" layout-align="center center">
-      <p class="md-title">Menú</p>
-
-      <md-button ng-click="mainCtrl.toggleLeft()" hide-gt-md>
-        <md-icon md-font-library="material-icons" >close</md-icon>
-      </md-button>
-    </md-toolbar>
-
-    <md-content layout-padding >
-
-      <md-list>
-        <md-list-item md-no-ink="false" class="md-2-line" ng-repeat="item in mainCtrl.sections" ui-sref-active="md-whiteframe-z1" ng-click="mainCtrl.close('left'); mainCtrl.goToState(item.sref)">
-          <vector-icon layout="row" class="md-avatar" layout-align="center center" name="{{item.icon}}" fill="{{item.color}}"></vector-icon>
-          <div class="md-list-item-text">
-            <p>{{ item.title }}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-
-      <md-button ng-click="mainCtrl.close('left')" class=" md-raised" hide-gt-md>
-        Close
-      </md-button>
-
-    </md-content>
-
-  </md-sidenav>
+  <sidebar-menu-app></sidebar-menu-app>
